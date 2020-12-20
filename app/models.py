@@ -11,11 +11,14 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True) # adding columns to the database
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    role = db.Column(db.String(64), index=False, unique=False)
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    role = db.Column(db.Integer, index=False, unique=False)
+    posts = db.relationship('Post', backref='author', lazy='dynamic') # First part is calling it from the Post model, secret field is the backref (author)
+    reactions = db.relationship('Reactions', backref='reactor', lazy='dynamic') # This will show all the reactions that this user has made
+    teaches = db.relationship('Courses', backref='teacher', lazy='dynamic') # This will show all the courses that the user teaches
+    signups = db.relationship('Signups', backref='student', lazy='dynamic') # This will show all of the signups of that user
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<User {} {}>'.format(self.username, self.id)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -31,11 +34,38 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Taking the user ID from the user model, using backref of author will show you the actual user
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return '<Post {} {}>'.format(self.body, self.timestamp)
  
 @login.user_loader
 def load_user(id): 
         return User.query.get(int(id))
+
+class Reactions(db.Model): # A base class for all models from Flask SQLAlchemy
+    id = db.Column(db.Integer, primary_key=True) # every new database should have an ID so it knows how to organize the info passed in
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Taking the user ID from the user model, using the backref of reactor will show you the actual user
+    emotions = db.Column(db.Integer, index=False, unique=False) # Creating a new column in the database for emotions. Not unique and not indexable 
+    speed = db.Column(db.Integer, index=False, unique=False) # Creating a new column in the database for speed
+
+    def __repr__(self):
+        return '<Reaction {} {} {}>'.format(self.user_id, self.emotions, self.speed)
+
+class Courses(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) # Always need ID
+    course_name = db.Column(db.String(140), index=False, unique=False) # Not indexable or unique bc many people can have the same course
+    code = db.Column(db.Integer, index=True, unique=True) # Indexable to link it back to the course name
+    teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Taking the user ID from the user model, using backref of teacher will show you the actual teacher
+    signups = db.relationship('Signups', backref='course_id', lazy='dynamic') # This will show all the student signups for this course
+
+    def __repr__(self):
+        return '<Courses {} {} {} {}>'.format(self.id, self.course_name, self.code, self.teacher_id)
+
+class Signups(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # Always need ID
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Using the backref student will show you the actual student who signed up, inside of the foreign key should be lowercase
+    course = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using the backref course_id will show you the actual id of the course
+
+    def __repr__(self):
+        return '<Signups {} {} {}>'.format(self.id, self.user_id, self.course)

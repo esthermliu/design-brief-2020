@@ -13,7 +13,8 @@
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}">Login</a>
             {% else %}
-            <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+            <a href="{{ url_for('user', username=current_user.username) }}">Profile</a> <!-- Have to pass in what the username is here for the lik-->
+            <a href="{{ url_for('classes', username=current_user.username) }}">Classes</a>
             <a href="{{ url_for('logout') }}">Logout</a>
             {% endif %}
         </div>

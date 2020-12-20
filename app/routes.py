@@ -4,7 +4,7 @@ from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
 from flask_login import current_user, login_user
-from app.models import User
+from app.models import User, Reactions, Post, Courses, Signups
 from flask_login import logout_user
 from flask_login import login_required
 from flask import request
@@ -69,7 +69,7 @@ def register():
     print("label", form.role.label)
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/user/<username>')
+@app.route('/user/<username>') # User profile page
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -77,9 +77,34 @@ def user(username):
         {'author': user, 'body': 'Test post #1'},
         {'author': user, 'body': 'Test post #2'}
     ]
-    return render_template('user.html', user=user, posts=posts)
+    return render_template('user.html', user=user, posts=posts, title=username)
 
-@app.route('/database')
+@app.route('/user/<username>/classes') # User's classes/rooms
+@login_required
+def classes(username): # the word after def has to be the same as the text in the urlfor quotation marks 
+    user = User.query.filter_by(username=username).first_or_404()
+    user_signups = User.signups 
+    return render_template('classes.html', user=user, user_signups=user_signups, title="Classes")
+
+@app.route('/user/<username>/classes/add', methods=["POST"]) #This is a POST method
+def add(username):
+    # Add a new class
+    user = User.query.filter_by(username=username).first_or_404()
+    code = request.form.get("title") # This stores the user code that the student enters
+    course = Courses.query.filter_by(code=code).first_or_404() # Filter through courses by this code
+    new_signup = Signups(user_id = user.id, course=course.id) # Now that you have that course, take the course id and enter that into the course field
+    db.session.add(new_signup)
+    db.session.commit()
+    return redirect(url_for('classes', username=user.username))
+
+@app.route('/database') # Just so I can see all the databases
 def database():
-    user_all = User.query.all()
-    return render_template('database.html', user_all=user_all)
+    user_all = User.query.all() # All the users are stored in this variable, to be used in the HTML 
+    reactions_all = Reactions.query.all()
+    courses_all = Courses.query.all()
+    signups_all = Signups.query.all()
+    return render_template('database.html', user_all=user_all, reactions_all=reactions_all, courses_all=courses_all, signups_all=signups_all, title='Database') # Have to pass in your variables above in here
+
+@app.route('/image-reload')
+def reload():
+    return render_template('image-reload.html', title="Image Reload") 

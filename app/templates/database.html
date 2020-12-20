@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <!-- Users -->
+    <h2>Users</h2>
     <table>
     <tr>
         <th>ID</th>
@@ -15,9 +17,68 @@
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.password_hash }}</td>
-            <td>{{ user.role }}</td>
-            <td>{{ user.posts.id }}</td>
+            {% if user.role == 0 %}
+            <td>Teacher</td>
+            {% else %}
+            <td>Student</td>
+            {% endif %}
         </tr>
     {% endfor %}
     </table>
+    <br>
+    <!-- Reactions-->
+    <h2>Reactions</h2> 
+    <table>
+    <tr>
+        <th>ID</th>
+        <th>User ID</th>
+        <th>Emotions</th>
+        <th>Speed</th>
+    </tr>
+    {% for r in reactions_all %}
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.reactor }}</td>
+            <td>{{ r.emotions }}</td>
+            <td>{{ r.speed }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+    <!-- Courses -->
+    <h2>Courses</h2> 
+    <table>
+    <tr>
+        <th>ID</th>
+        <th>Course Name</th>
+        <th>Course Code</th>
+        <th>Teacher</th>
+    </tr>
+    {% for c in courses_all %}
+        <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.course_name }}</td>
+            <td>{{ c.code }}</td>
+            <td>{{ c.teacher }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+    <!-- Sign-ups -->
+    <h2>Sign-ups</h2> 
+    <table>
+    <tr>
+        <th>ID</th>
+        <th>User ID</th>
+        <th>Course</th>
+    </tr>
+    {% for s in signups_all %}
+        <tr>
+            <td>{{ s.id }}</td>
+            <td>{{ s.student }}</td>
+            <td>{{ s.course_id }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
 {% endblock %}

@@ -4,7 +4,11 @@
     <tr valign="top">
         <td><img src="{{ user.avatar(128) }}"></td>
         <td><h1>User: {{ user.username }}</h1></td>
-        <td><h1>Role: {{ user.role }}</h1></td>
+        {% if user.role == 0 %}
+        <td><h1>Role: Teacher</h1></td>
+        {% else %}
+        <td><h1>Role: Student</h1></td>
+        {% endif %}
     </tr>
     <hr>
     {% for post in posts %}

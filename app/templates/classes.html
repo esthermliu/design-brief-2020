@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi {{ user.username }}!</h1>
+    <div>
+        <form action="/user/{{ user.username }}/classes/add" method='post'> <!-- This form will execute the code in routes with the def add-->
+            <label for="title">Enroll in a Class</label>
+            <input type="text" name="title" placeholder="Enter Class Code...">
+            <br>
+            <button type="submit">Add</button>
+        </form> 
+    </div>
+    
+{% endblock %}
