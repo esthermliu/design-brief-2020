@@ -4,11 +4,30 @@
     <h1>Hi {{ user.username }}!</h1>
     <div>
         <form action="/user/{{ user.username }}/classes/add" method='post'> <!-- This form will execute the code in routes with the def add-->
-            <label for="title">Enroll in a Class</label>
-            <input type="text" name="title" placeholder="Enter Class Code...">
-            <br>
-            <button type="submit">Add</button>
+            {% if user.role == 1 %} <!-- If the user is a student, then show the enroll stuff -->
+                <label for="title">Enroll in a Class</label>
+                <input type="text" name="title" placeholder="Enter Class Code...">
+                <br>
+                <button type="submit">Add</button>
+            {% else %}
+                <a href = "{{ url_for('create', username = current_user.username) }}">Create a course</a>
+            {% endif %}
         </form> 
     </div>
-    
+    <!-- Students and their signups -->
+    {% for u in user_signups %}
+        {% if u.username == user.username %} <!-- This is to make sure that only this user's classes will show up, not other users' classes -->
+            {% for i in u.signups %}
+                    <p>{{ i.course_id.course_name }} | Teacher: {{ i.course_id.teacher.username }}</p>
+                    <a href = "{{ url_for('rooms', room_id=i.course) }}">Enter Room</a>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+    <!-- Teachers and their courses -->
+    {% for t in teacher_courses %} <!-- Loops through all of the courses that teacher teaches -->
+        <p>{{ t.course_name }} | Teacher: {{ t.teacher.username }} (you!)</p> <!-- Print out the course name and the teacher's username -->
+        <a href = "{{ url_for('rooms', room_id=t.id) }}">Enter Room</a><!-- Print out the course name and the teacher's username -->
+    {% endfor %}
+
 {% endblock %}

@@ -26,21 +26,50 @@
     {% endfor %}
     </table>
     <br>
-    <!-- Reactions-->
+    <!-- Reactions -->
     <h2>Reactions</h2> 
     <table>
     <tr>
         <th>ID</th>
         <th>User ID</th>
         <th>Emotions</th>
-        <th>Speed</th>
+        <th>Course ID</th>
     </tr>
     {% for r in reactions_all %}
         <tr>
             <td>{{ r.id }}</td>
             <td>{{ r.reactor }}</td>
-            <td>{{ r.emotions }}</td>
-            <td>{{ r.speed }}</td>
+            {% if r.emotions == 0 %} <!-- Just making it easier to see the different emotions and what they mean -->
+                <td>Good</td> 
+            {% elif r.emotions == 1 %}
+                <td>Okay</td> 
+            {% else %}
+                <td>Bad</td> 
+            {% endif %}
+            <td>{{ r.course_actual }}</td> <!-- r.reactions_course_id will show you the actual id, but course_actual is the backref so I can see the course in <Course> form-->
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+    <!-- Speed-->
+    <h2>Speed</h2> 
+    <table>
+    <tr>
+        <th>ID</th>
+        <th>User ID</th>
+        <th>Speed</th>
+        <th>Course ID</th>
+    </tr>
+    {% for s in speed_all %}
+        <tr>
+            <td>{{ s.id }}</td>
+            <td>{{ s.speeder }}</td>
+            {% if s.speed == 0 %} <!-- Just making it easier to see the different speeds and what they mean -->
+                <td>Faster</td> 
+            {% else %} 
+                <td>Slower</td> 
+            {% endif %}
+            <td>{{ s.course_s }}</td> <!-- s.speed_course_id will show you the actual id, but course_s is the backref so I can see the course in <Course> form-->
         </tr>
     {% endfor %}
     </table>
@@ -78,6 +107,33 @@
             <td>{{ s.student }}</td>
             <td>{{ s.course_id }}</td>
         </tr>
+    {% endfor %}
+    </table> 
+    <br>
+    <!-- User Sign-ups -->
+    <h2>User Courses</h2> 
+    <table>
+    <tr>
+        <th>User ID </th>
+        <th>Username</th>
+        <!--<th>User ID (from the Signups table, same as User ID)</th>-->
+        <th>Course <!--(from the Signups table, same as the Course ID) --></th>
+        <th>Course ID</th>
+        <th>Course Name</th>
+        <th>Teacher</th>
+    </tr>
+    {% for u in user_signups %} <!-- user_signups will give you the User object, like <User Cat 1> -->
+        {% for i in u.signups %} <!-- u.signups will return all of the Signup objects of that user, like <Signups 1 1 1> -->
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.username }}</td> 
+                <!--<td>{{ i.user_id }}</td>-->
+                <td>{{ i.course_id }}</td> <!-- i.course_id will return the Courses object like <Courses 1 Math> -->
+                <td>{{ i.course_id.id }}</td>
+                <td>{{ i.course_id.course_name }}</td> 
+                <td>{{ i.course_id.teacher.username }}</td> <!-- The .teacher part will return the user, like <User Cat 1>, and the .username will grab the User's username, like Cat -->
+            </tr>
+        {% endfor %}
     {% endfor %}
     </table>
     <br>

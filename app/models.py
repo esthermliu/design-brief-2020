@@ -11,11 +11,12 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True) # adding columns to the database
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    role = db.Column(db.Integer, index=False, unique=False)
+    role = db.Column(db.Integer, index=False, unique=False) # 0 is Teacher, 1 is Student
     posts = db.relationship('Post', backref='author', lazy='dynamic') # First part is calling it from the Post model, secret field is the backref (author)
     reactions = db.relationship('Reactions', backref='reactor', lazy='dynamic') # This will show all the reactions that this user has made
     teaches = db.relationship('Courses', backref='teacher', lazy='dynamic') # This will show all the courses that the user teaches
     signups = db.relationship('Signups', backref='student', lazy='dynamic') # This will show all of the signups of that user
+    speed = db.relationship('Speed', backref='speeder', lazy='dynamic') # This will show all the speed complaints of that user
 
     def __repr__(self):
         return '<User {} {}>'.format(self.username, self.id)
@@ -47,10 +48,20 @@ class Reactions(db.Model): # A base class for all models from Flask SQLAlchemy
     id = db.Column(db.Integer, primary_key=True) # every new database should have an ID so it knows how to organize the info passed in
     user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Taking the user ID from the user model, using the backref of reactor will show you the actual user
     emotions = db.Column(db.Integer, index=False, unique=False) # Creating a new column in the database for emotions. Not unique and not indexable 
-    speed = db.Column(db.Integer, index=False, unique=False) # Creating a new column in the database for speed
+    reactions_course_id = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using backref of course_actual will show you the actual course
+    #speed = db.Column(db.Integer, index=False, unique=False) # Creating a new column in the database for speed, will put in separate table actually
 
     def __repr__(self):
-        return '<Reaction {} {} {}>'.format(self.user_id, self.emotions, self.speed)
+        return '<Reaction {} {} {} {}>'.format(self.id, self.user_id, self.emotions, self.reactions_course_id)
+
+class Speed(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Use the backref of speeder will show you actual user
+    speed = db.Column(db.Integer, index=False, unique=False) # New column holding speed values, not unique nor indexable
+    speed_course_id = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using backref of course_s will show actual course
+    
+    def __repr__(self):
+        return '<Speed {} {} {} {}>'.format(self.id, self.user_id, self.speed, self.speed_course_id)
 
 class Courses(db.Model): 
     id = db.Column(db.Integer, primary_key=True) # Always need ID
@@ -58,6 +69,8 @@ class Courses(db.Model):
     code = db.Column(db.Integer, index=True, unique=True) # Indexable to link it back to the course name
     teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Taking the user ID from the user model, using backref of teacher will show you the actual teacher
     signups = db.relationship('Signups', backref='course_id', lazy='dynamic') # This will show all the student signups for this course
+    reactions = db.relationship('Reactions', backref='course_actual', lazy='dynamic') # This will show all the reactions for this course
+    speed = db.relationship('Speed', backref='course_s', lazy='dynamic') # This will show all the speed complaints for this course 
 
     def __repr__(self):
         return '<Courses {} {} {} {}>'.format(self.id, self.course_name, self.code, self.teacher_id)

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Welcome to {{ course.course_name }}, {{ current_user.username }}!</h1> 
+    {% if current_user.role == 0 %} <!-- If the user is a teacher -->
+        <h3>Time to teach these annoying little brats again</h3> 
+    {% endif %}
+    <h2>Reactions</h2>
+    <form action="/classes/rooms/{{ course.id }}/good" method='post'> <!-- Form for feeling good :) -->
+        <button type="submit">Good</button>
+    </form>
+    <form action="/classes/rooms/{{ course.id }}/okay" method='post'> <!-- Form for feeling meh :| -->
+        <button type="submit">Okay</button>
+    </form>
+    <form action="/classes/rooms/{{ course.id }}/bad" method='post'> <!-- Form for feeling sad :( -->
+        <button type="submit">Bad</button>
+    </form>
+
+    <h2>Speed</h2>
+    <form action="/classes/rooms/{{ course.id }}/fast" method='post'> <!-- Form for feeling good :) -->
+        <button type="submit">Faster</button>
+    </form>
+    <form action="/classes/rooms/{{ course.id }}/slow" method='post'> <!-- Form for feeling meh :| -->
+        <button type="submit">Slower</button>
+    </form>
+
+    <h2>Reaction Results: </h2> <!-- Shows the reaction results-->
+    {% for r in reactions_all %}
+        {% if r.reactions_course_id == course.id %} <!-- Only show emotions for this classroom -->
+            {% if r.emotions == 0 %}    <!-- Just making it esaier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
+                <p>Good | {{ r.reactor.username }}</p>
+            {% elif r.emotions == 1 %}
+                <p>Okay | {{ r.reactor.username }}</p>
+            {% else %}
+                <p>Bad | {{ r.reactor.username }}</p>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    <h2>Speed Results: </h2> <!-- Shows the speed results -->
+    {% for s in speeds_all %}
+        {% if s.speed_course_id == course.id %}
+            {% if s.speed == 0 %} <!-- Making it easier to see what each speed number represents, 0=faster, 1=slower-->
+                <p>Faster | {{ s.speeder.username }}</p>
+            {% else %}
+                <p>Slower | {{ s.speeder.username }}</p>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    
+{% endblock %}
