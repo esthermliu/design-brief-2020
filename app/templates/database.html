@@ -131,7 +131,7 @@
                 <td>{{ i.course_id }}</td> <!-- i.course_id will return the Courses object like <Courses 1 Math> -->
                 <td>{{ i.course_id.id }}</td>
                 <td>{{ i.course_id.course_name }}</td> 
-                <td>{{ i.course_id.teacher.username }}</td> <!-- The .teacher part will return the user, like <User Cat 1>, and the .username will grab the User's username, like Cat -->
+                <td>{{ i.course_id.teacher }}</td> <!-- The .teacher part will return the user, like <User Cat 1>, and the .username will grab the User's username, like Cat -->
             </tr>
         {% endfor %}
     {% endfor %}

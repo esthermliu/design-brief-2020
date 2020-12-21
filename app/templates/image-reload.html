@@ -1,5 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <img src = "../static/Dog.jpg">
+    <img src = "../static/Dog.jpg" id = "dogImage" >
+    <img src = "../static/Dog2.jpeg" id = "dogImage2" style = "display: none;">
+    <img src = "../static/Dog3.jpg" id = "dogImage3" style = "display: none;">
+    <script>
+        // Code that will reload the same image every 5 seconds
+        // setInterval(function() {
+        //     var dogImage =  document.getElementById('dogImage')
+        //     dogImage.src = '../static/Dog.jpg?rand=' + Math.random();
+        // }, 5000);
+        
+        // Loads different images every 5 seconds
+        let images = ['../static/Dog.jpg', '../static/Dog2.jpeg', '../static/Dog3.jpg']
+
+        let index = 0;
+        const imgElement = document.querySelector('#dogImage')
+
+        function change() {
+            imgElement.src = images[index]
+            index > 1 ? index = 0 : index++;
+        }
+
+        window.onload = function() {
+            setInterval(change, 5000);
+        }; 
+
+    </script>
 {% endblock %}

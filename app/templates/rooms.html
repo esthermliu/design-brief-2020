@@ -5,6 +5,7 @@
     {% if current_user.role == 0 %} <!-- If the user is a teacher -->
         <h3>Time to teach these annoying little brats again</h3> 
     {% endif %}
+    <!--<img style = "height: 250px;"src = "../../../static/Dog.jpg">-->
     <h2>Reactions</h2>
     <form action="/classes/rooms/{{ course.id }}/good" method='post'> <!-- Form for feeling good :) -->
         <button type="submit">Good</button>

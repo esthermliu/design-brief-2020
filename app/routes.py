@@ -4,7 +4,7 @@ from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
 from flask_login import current_user, login_user
-from app.models import User, Reactions, Post, Courses, Signups, Speed
+from app.models import User, Reactions, Post, Courses, Signups, Speed, Status
 from flask_login import logout_user
 from flask_login import login_required
 from flask import request
@@ -119,8 +119,14 @@ def add(username):
     code = request.form.get("title") # This stores the user code that the student enters
     course = Courses.query.filter_by(code=code).first_or_404() # Filter through courses by this code
     new_signup = Signups(user_id = user.id, course=course.id) # Now that you have that course, take the course id and enter that into the course field
-    db.session.add(new_signup)
-    db.session.commit()
+    signups_all = Signups.query.all() # Getting all of the sign-ups
+    already = False
+    for s in signups_all:
+        if new_signup.user_id == s.user_id and new_signup.course == s.course:
+            already = True
+    if already == False:
+        db.session.add(new_signup)
+        db.session.commit()
     return redirect(url_for('classes', username=user.username))
 
 @app.route('/classes/rooms/<room_id>') # The text inside the <> has to be the same as the parameter in the def room()

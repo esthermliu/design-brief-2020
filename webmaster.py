@@ -1,7 +1,7 @@
 from app import app, db
-from app.models import User, Post, Reactions, Courses, Signups, Speed
+from app.models import User, Post, Reactions, Courses, Signups, Speed, Status
 import random
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'User': User, 'Post': Post, 'Reactions': Reactions, 'Courses': Courses, 'Signups': Signups, 'Speed': Speed, 'random': random}
+    return {'db': db, 'User': User, 'Post': Post, 'Reactions': Reactions, 'Courses': Courses, 'Signups': Signups, 'Speed': Speed, 'random': random, 'Status': Status}

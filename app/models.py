@@ -71,9 +71,18 @@ class Courses(db.Model):
     signups = db.relationship('Signups', backref='course_id', lazy='dynamic') # This will show all the student signups for this course
     reactions = db.relationship('Reactions', backref='course_actual', lazy='dynamic') # This will show all the reactions for this course
     speed = db.relationship('Speed', backref='course_s', lazy='dynamic') # This will show all the speed complaints for this course 
+    status = db.relationship('Status', backref='s_course_id', lazy='dynamic') # This will show the status of the course, one-to-one relationship
 
     def __repr__(self):
         return '<Courses {} {} {} {}>'.format(self.id, self.course_name, self.code, self.teacher_id)
+
+class Status(db.Model): # Holds info abt whether each room is activated or not
+    id = db.Column(db.Integer, primary_key=True)
+    status_course_id = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using the backref of s_course_id will give you the actual id of the object
+    status = db.Column(db.Integer, index=False, unique=False) # Not indexable or unique, 0 is not activated, 1 is activated
+
+    def __repr__(self):
+        return '<Status {} {} {}>'.format(self.id, self.status_course_id, self.status) 
 
 class Signups(db.Model):
     id = db.Column(db.Integer, primary_key=True) # Always need ID
