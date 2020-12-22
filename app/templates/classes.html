@@ -17,18 +17,20 @@
     <!-- Students and their signups -->
     {% for u in user_signups %}
         {% if u.username == user.username %} <!-- This is to make sure that only this user's classes will show up, not other users' classes -->
-            {% for i in u.signups %}
-                    <p>{{ i.course_id.course_name }} | Teacher: {{ i.course_id.teacher.username }}</p>
+            {% for i in u.signups %} 
+                    <p>{{ i.course_id.course_name }} | Teacher: {{ i.course_id.teacher.username }} | Class Code: {{ i.course_id.code }}</p> <!-- i.course_id will allow you to access the fields in the Course table-->
                     <a href = "{{ url_for('rooms', room_id=i.course) }}">Enter Room</a>
             {% endfor %}
         {% endif %}
     {% endfor %}
 
-    <!-- Teachers and their courses -->
-    {% for t in teacher_courses %} <!-- Loops through all of the courses that teacher teaches -->
-        <p>{{ t.course_name }} | Teacher: {{ t.teacher.username }} (you!)</p> <!-- Print out the course name and the teacher's username -->
-        <a href = "{{ url_for('rooms', room_id=t.id) }}">Enter Room</a><!-- Print out the course name and the teacher's username -->
-    {% endfor %}
+    {% if user.role == 0 %} <!-- If the user is a teacher, then show the activation stuff -->
+        <!-- Teachers and their courses -->
+        {% for t in teacher_courses %} <!-- Loops through all of the courses that teacher teaches -->
+            <p>{{ t.course_name }} | Teacher: {{ t.teacher.username }} (you!) | Class Code: {{ t.code }}</p> <!-- Print out the course name and the teacher's username -->
+            <a href = "{{ url_for('rooms', room_id=t.id) }}">Enter Room</a><!-- Print out the course name and the teacher's username -->
+        {% endfor %}
+    {% endif %}
 
 
 {% endblock %}

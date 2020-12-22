@@ -93,6 +93,27 @@
     {% endfor %}
     </table>
     <br>
+    <!-- Room Status -->
+    <h2>Status</h2> 
+    <table>
+    <tr>
+        <th>ID</th>
+        <th>Course ID</th>
+        <th>Status</th>
+    </tr>
+    {% for s in status_all %}
+        <tr>
+            <td>{{ s.id }}</td>
+            <td>{{ s.s_course_id }}</td>
+            {% if s.status == 1 %} <!-- 1 is equal to active -->
+            <td>Active</td>
+            {% else %}
+            <td>Inactive</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
     <!-- Sign-ups -->
     <h2>Sign-ups</h2> 
     <table>

@@ -13,7 +13,6 @@ import random
 
 @app.route('/')
 @app.route('/index')
-@login_required
 def index():
     posts = [
         {
@@ -44,9 +43,6 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    # print("Bob", form)
-    # print("Form's password method", form.password())
-    # print(form.password(size=54))
     return render_template('login.html', title='Sign In', form=form)
 
 @app.route('/logout')
@@ -111,10 +107,10 @@ def classes(username): # the word after def has to be the same as the text in th
     teacher_courses = Courses.query.filter_by(teacher_id=user.id)
     return render_template('classes.html', user=user, user_signups=user_signups, teacher_courses=teacher_courses, title="Classes")
 
+# Add a new class
 @app.route('/user/<username>/classes/add', methods=["POST"]) # This is a POST method
 @login_required
 def add(username):
-    # Add a new class
     user = User.query.filter_by(username=username).first_or_404()
     code = request.form.get("title") # This stores the user code that the student enters
     course = Courses.query.filter_by(code=code).first_or_404() # Filter through courses by this code
@@ -124,6 +120,7 @@ def add(username):
     for s in signups_all:
         if new_signup.user_id == s.user_id and new_signup.course == s.course:
             already = True
+            flash('You have already enrolled in this course. Nice try.')
     if already == False:
         db.session.add(new_signup)
         db.session.commit()
@@ -135,8 +132,123 @@ def rooms(room_id):
     course = Courses.query.filter_by(id=room_id).first_or_404()
     reactions_all = Reactions.query.all() # Tried filtering for reactions and speeds, but it wouldn't let me iterate through the object in HTML, so I had to check with if statements in the HTML :(
     speeds_all = Speed.query.all()
-    return render_template('rooms.html', course=course, reactions_all=reactions_all, speeds_all=speeds_all, title=course.course_name) 
+    status_all = Status.query.all()
+    present_list = [] # List of students present
+    absent_list = [] # List of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
+    students = Signups.query.filter_by(course=room_id) # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(reactions_course_id=room_id) # List of reactions that happened in this specific course
+    speeds_specific = Speed.query.filter_by(speed_course_id=room_id) # List of reactions that happened in this specific course
+    for s in students:
+        present = False
+        already = False
+        for r in reactions_specific:
+            if s.user_id == r.user_id: # If this is true, then that student has reacted in this class
+                for p in present_list: # Checking to see whether they are already in the present_list
+                    if s.student.username == p: # If they are already in the present list
+                        already = True # Set already to true
+                if already == False:
+                    present_list.append(s.student.username) # Or you can append their ID by doing s.ID (s.student is the backref which will bring up the user in <User> form)
+                    present = True
+        if present == False: # If they didn't make a reaction
+            for sp in speeds_specific: # Then check if they made a speed complaint
+                if s.user_id == sp.user_id: # If this is true, then that student has complained about the speed in this class (naughty lil kids!)
+                    present_list.append(s.student.username) 
+                    present = True
+            if present == False: # If they didn't react or enter a speed
+                absent_list.append(s.student.username) # Add them to the absent list
+    found = False # Found variable is for the teacher side regarding whether they have activated the class or not (and whether it is in the database yet)
+    if status_all is not None: # If there are some courses already in the status table
+        for s in status_all: # Checking whether this course is already in the database (aka if it hasn't been activated even once yet)
+            if s.status_course_id == course.id:
+                found = True
+    if course.teacher_id != current_user.id: # If the current user is not that teacher (current user is a student)
+        if found == False: # If this course has never been activated yet
+            return render_template('unactivated.html') # Then render the HTMl for the unactivated page
+        elif found == True:
+            specific_status = Status.query.filter_by(status_course_id=room_id).first_or_404()
+            if specific_status.status == 0: # If this course has been activated before (already in database) AND it's status is 0 (unactivated)
+                return render_template('unactivated.html') 
+    return render_template('rooms.html', course=course, reactions_all=reactions_all, speeds_all=speeds_all, status_all=status_all, found=found, present_list=present_list, absent_list=absent_list, title=course.course_name) 
 
+# Attendance
+@app.route('/classes/rooms/<room_id>/attendance', methods=["POST"]) 
+@login_required 
+def attendance(room_id):
+    course = Courses.query.filter_by(id=room_id).first_or_404()
+    present_list = [] # List of students present
+    absent_list = [] # List of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
+    students = Signups.query.filter_by(course=room_id) # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(reactions_course_id=room_id) # List of reactions that happened in this specific course
+    speeds_specific = Speed.query.filter_by(speed_course_id=room_id) # List of reactions that happened in this specific course
+    for s in students:
+        present = False
+        already = False
+        for r in reactions_specific:
+            if s.user_id == r.user_id: # If this is true, then that student has reacted in this class
+                for p in present_list: # Checking to see whether they are already in the present_list
+                    if s.student.username == p: # If they are already in the present list
+                        already = True # Set already to true
+                if already == False:
+                    present_list.append(s.student.username) # Or you can append their ID by doing s.ID (s.student is the backref which will bring up the user in <User> form)
+                    present = True 
+        if present == False: # If they didn't make a reaction
+            for sp in speeds_specific: # Then check if they made a speed complaint
+                if s.user_id == sp.user_id: # If this is true, then that student has complained about the speed in this class (naughty lil kids!)
+                    present_list.append(s.student.username) 
+                    present = True
+            if present == False: # If they didn't react or enter a speed
+                absent_list.append(s.student.username) # Add them to the absent list
+    return render_template('attendance.html', course=course, present_list=present_list, absent_list=absent_list, title=course.course_name)
+
+# Method to activate class
+@app.route('/classes/rooms/<room_id>/activate', methods=["POST"]) # POST method, important declaration
+@login_required
+def activate(room_id):
+    course = Courses.query.filter_by(id=room_id).first_or_404()
+    active = Status(status_course_id=course.id, status=1) # Status is 1, meaning class is activated
+    status_all = Status.query.all()
+    found = False
+    for s in status_all:
+        if active.status_course_id == s.status_course_id:
+            exists = Status.query.filter_by(status_course_id=active.status_course_id).first_or_404() # Variable that represents the correct row of the database
+            exists.status=1
+            db.session.add(exists)
+            db.session.commit()
+            found = True
+    if found == False:
+        db.session.add(active)
+        db.session.commit()
+    return redirect(url_for('rooms', room_id=course.id))
+
+# Method to end class
+@app.route('/classes/rooms/<room_id>/end', methods=["POST"]) # POST method, important declaration
+@login_required
+def end(room_id):
+    course = Courses.query.filter_by(id=room_id).first_or_404()
+    end = Status(status_course_id=course.id, status=0) # Status is 0, meaning class is ended. What the students are thinking --> Yay! 
+    status_all = Status.query.all()
+    found = False
+    for s in status_all: # Looping through all the Status objects, e.g. <Status 1 1 1>
+        if end.status_course_id == s.status_course_id: # If this course is laready in the database
+            exists = Status.query.filter_by(status_course_id=end.status_course_id).first_or_404() # Variable that represents the correct row of the database
+            exists.status = 0  # Then update that course's status to 0 (inactive)
+            db.session.add(exists) # Adding and committing to the database
+            db.session.commit() 
+            reactions = Reactions.query.filter_by(reactions_course_id=course.id) # Filtering the reactions to get only the reactions for this specific course
+            for r in reactions: # Looping through all the reactions for this course only
+                db.session.delete(r) # Deleting them because the class has ended, hurrah!
+                db.session.commit() 
+            speeds = Speed.query.filter_by(speed_course_id=course.id) # Deleting all the speed complaints for this course
+            for s in speeds:
+                db.session.delete(s)
+                db.session.commit()
+            found = True # This course was found in the database
+    if found == False: # If this course was not found in the database
+        db.session.add(end) # Just add the entire Status object
+        db.session.commit()
+    return redirect(url_for('rooms', room_id=course.id))
+
+# Start of the defs for all the emotions and speeds
 @app.route('/classes/rooms/<room_id>/good', methods=["POST"]) # Adds an emotion, also don't forget to add this methods POST thing!
 @login_required
 def happy(room_id):
@@ -191,9 +303,10 @@ def database():
     courses_all = Courses.query.all()
     signups_all = Signups.query.all()
     speed_all = Speed.query.all()
+    status_all = Status.query.all()
     #user_signups = User.query.join(Signups, (Signups.user_id == User.id)) 
     user_signups = User.query.join(Signups, (Signups.user_id == User.id)).join(Courses, (Courses.id == Signups.course)) 
-    return render_template('database.html', user_all=user_all, reactions_all=reactions_all, courses_all=courses_all, signups_all=signups_all, user_signups=user_signups, speed_all=speed_all, title='Database') # Have to pass in your variables above in here
+    return render_template('database.html', user_all=user_all, reactions_all=reactions_all, courses_all=courses_all, signups_all=signups_all, user_signups=user_signups, speed_all=speed_all, status_all=status_all, title='Database') # Have to pass in your variables above in here
 
 # Testing javascript image reload
 @app.route('/image-reload')

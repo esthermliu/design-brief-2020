@@ -4,6 +4,22 @@
     <h1>Welcome to {{ course.course_name }}, {{ current_user.username }}!</h1> 
     {% if current_user.role == 0 %} <!-- If the user is a teacher -->
         <h3>Time to teach these annoying little brats again</h3> 
+        <form action="/classes/rooms/{{ course.id }}/activate" method='post'>
+            {% if found == true %} <!-- If this class has already been activated before -->
+                {% for s in status_all %}
+                    {% if s.status_course_id == course.id %}
+                        {% if s.status == 1 %}
+                            <button type="submit" formaction="/classes/rooms/{{ course.id }}/end">End Class</button>
+                            <button type="submit" formaction="/classes/rooms/{{ course.id }}/attendance">Get Attendance</button>
+                        {% else %}
+                            <button type="submit">Start Class</button>
+                        {% endif %}
+                    {% endif %} 
+                {% endfor %}
+            {% else %} <!-- First time activating that class -->
+                <button type="submit">Activate Class</button>
+            {% endif %}
+        </form>
     {% endif %}
     <!--<img style = "height: 250px;"src = "../../../static/Dog.jpg">-->
     <h2>Reactions</h2>
@@ -48,5 +64,27 @@
             {% endif %}
         {% endif %}
     {% endfor %}
-    
+
+    <h2>Attendance: </h2>
+    {% if found == true %} <!-- If this class has already been activated before -->
+            {% for s in status_all %}
+                {% if s.status_course_id == course.id and s.status == 1 %}
+                    {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
+                        <div id = "attendance"> 
+                            <div id = "inside">
+                                <h3>Present Students (The good ones)</h3>
+                                {% for p in present_list %}
+                                    <p>{{ p }}</p>
+                                {% endfor %}
+                                <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
+                                {% for a in absent_list %}
+                                    <p>{{ a }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}     
+            {% endfor %}   
+    {% endif %}
+
 {% endblock %}
