@@ -14,16 +14,13 @@
             {% endif %}
         </form> 
     </div>
-    <!-- Students and their signups -->
-    {% for u in user_signups %}
-        {% if u.username == user.username %} <!-- This is to make sure that only this user's classes will show up, not other users' classes -->
-            {% for i in u.signups %} 
-                    <p>{{ i.course_id.course_name }} | Teacher: {{ i.course_id.teacher.username }} | Class Code: {{ i.course_id.code }}</p> <!-- i.course_id will allow you to access the fields in the Course table-->
-                    <a href = "{{ url_for('rooms', room_id=i.course) }}">Enter Room</a>
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
 
+    <!-- Students and their signups -->
+    {% for u in user_signups_filtered %} 
+        <p>{{ u.course_id.course_name }} | Teacher: {{ u.course_id.teacher.username }} | Class Code: {{ u.course_id.code }}</p> <!-- i.course_id will allow you to access the fields in the Course table-->
+        <a href = "{{ url_for('rooms', room_id=u.course_id.id) }}">Enter Room</a>
+    {% endfor %}
+        
     {% if user.role == 0 %} <!-- If the user is a teacher, then show the activation stuff -->
         <!-- Teachers and their courses -->
         {% for t in teacher_courses %} <!-- Loops through all of the courses that teacher teaches -->
@@ -34,3 +31,12 @@
 
 
 {% endblock %}
+
+<!--{% for u in user_signups %}
+        {% if u.username == user.username %} --><!-- This is to make sure that only this user's classes will show up, not other users' classes -->
+            <!--{% for i in u.signups %}  
+                    <p>{{ i.course_id.course_name }} | Teacher: {{ i.course_id.teacher.username }} | Class Code: {{ i.course_id.code }}</p> --><!-- i.course_id will allow you to access the fields in the Course table-->
+                    <!--<a href = "{{ url_for('rooms', room_id=i.course) }}">Enter Room</a>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}-->

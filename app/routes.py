@@ -103,9 +103,12 @@ def user(username):
 @login_required
 def classes(username): # the word after def has to be the same as the text in the urlfor quotation marks 
     user = User.query.filter_by(username=username).first_or_404()
-    user_signups = User.query.join(Signups, (Signups.user_id == User.id)).join(Courses, (Courses.id == Signups.course))
-    teacher_courses = Courses.query.filter_by(teacher_id=user.id)
-    return render_template('classes.html', user=user, user_signups=user_signups, teacher_courses=teacher_courses, title="Classes")
+    user_signups_filtered = User.query.join(Signups, (Signups.user_id == User.id)).\
+        join(Courses, (Courses.id == Signups.course)).\
+            with_entities(Signups).\
+                filter(Signups.user_id == user.id)
+    teacher_courses = Courses.query.filter_by(teacher_id=user.id).all()
+    return render_template('classes.html', user=user, user_signups_filtered=user_signups_filtered, teacher_courses=teacher_courses, title="Classes")
 
 # Add a new class
 @app.route('/user/<username>/classes/add', methods=["POST"]) # This is a POST method

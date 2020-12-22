@@ -65,11 +65,11 @@
         {% endif %}
     {% endfor %}
 
-    <h2>Attendance: </h2>
-    {% if found == true %} <!-- If this class has already been activated before -->
-            {% for s in status_all %}
-                {% if s.status_course_id == course.id and s.status == 1 %}
-                    {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
+    {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
+        <h2>Attendance: </h2>
+        {% if found == true %} <!-- If this class has already been activated before -->
+                {% for s in status_all %}
+                    {% if s.status_course_id == course.id and s.status == 1 %}
                         <div id = "attendance"> 
                             <div id = "inside">
                                 <h3>Present Students (The good ones)</h3>
@@ -82,9 +82,9 @@
                                 {% endfor %}
                             </div>
                         </div>
-                    {% endif %}
-                {% endif %}     
-            {% endfor %}   
+                    {% endif %}     
+                {% endfor %}   
+        {% endif %}
     {% endif %}
 
 {% endblock %}
