@@ -6,6 +6,7 @@ function init() {
         console.log("Update");
         fetchReactions();
         fetchSpeeds();
+       
     }, 5000) // The updateTherm1 function will be called every 5 seconds, therefore changing the value of the const interval
 }
 
@@ -121,21 +122,21 @@ function displayReactions(reactions) {
     // console.log(reactions[0]["reactions"]);
     // console.log(reactions[0]["reactions_course_id"]);
     reaction_html = document.getElementById("reactionResults")
-    document.getElementById("reactionResults").innerHTML = "";
+    document.getElementById("reactionResults").innerHTML = ""; // Clearing all the content in the div 
     console.log("Testing")
     for (let i in reactions) {
         console.log("reactions: " + reactions[i]["reactions"]);
         console.log("user ID: " + reactions[i]["user_id"]);
         var user_reaction = reactions[i]["reactions"];
         var username = reactions[i]["user_id"];
-        if (user_reaction == 0) {
+        if (user_reaction == 0) { // Determining what to print out based on the reaction number
             user_reaction = "Good"
         } else if (user_reaction == 1) {
             user_reaction = "Okay"
         } else {
             user_reaction = "Bad"
         }
-        reaction_html.innerHTML += ('<p>' + user_reaction + " | " + username + '</p>');
+        reaction_html.innerHTML += ('<p>' + user_reaction + " | " + username + '</p>'); // Adding the new info to the div
     } 
 }
 
@@ -154,19 +155,19 @@ function fetchSpeeds() {
 // How to display the speeds
 function displaySpeeds(speeds) {
     speed_html = document.getElementById("speedResults")
-    document.getElementById("speedResults").innerHTML = "";
+    document.getElementById("speedResults").innerHTML = ""; // Clears everything in the div first
     console.log("Testing");
     for (let i in speeds) {
         console.log("speed: " + speeds[i]["speed"]);
         console.log("user ID: " + speeds[i]["user_id"]);
         var user_speed = speeds[i]["speed"];
         var username = speeds[i]["user_id"];
-        if (user_speed == 0) {
-            user_speed = "Faster";
+        if (user_speed == 0) { // Determining what string to print out depending on the number of the speed
+            user_speed = "Faster"; 
         } else {
             user_speed = "Slower";
         }
-        speed_html.innerHTML += ('<p>' + user_speed + " | " + username + '</p>');
+        speed_html.innerHTML += ('<p>' + user_speed + " | " + username + '</p>'); // Adds the info to the speedResults div
     }
 }
 
@@ -189,9 +190,20 @@ function displayAttendance(attendance) {
     console.log("Display Attendance");
     present_html = document.getElementById("present"); // Grabs the HTML div with the ID present
     absent_html = document.getElementById("absent");
+    document.getElementById("present").innerHTML = ""; // Clears everything in the present div first
+    document.getElementById("absent").innerHTML = ""; // Clears everything in the absent div first
     console.log("Attendance TESTING")
-    for (let a in attendance) {
-        console.log(attendance[a]["Present"])
+    console.log("Present Students: ")
+    for (let a in attendance[0]["Present"]) {
+        console.log(attendance[0]["Present"][a]);
+        present_student = attendance[0]["Present"][a];
+        present_html.innerHTML += ("<p>" + present_student + "</p>"); // Adding content to the present div
+    }
+    console.log("Absent Students: ")
+    for (let a in attendance[1]["Absent"]) {
+        console.log(attendance[1]["Absent"][a]);
+        absent_student = attendance[1]["Absent"][a];
+        absent_html.innerHTML += ("<p>" + absent_student + "</p>"); // Ading the content to the absent div
     }
 }
 

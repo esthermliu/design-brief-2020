@@ -234,41 +234,59 @@ def attendance(room_id):
 @login_required 
 def attendance_json(room_id):
     course = Courses.query.filter_by(id=room_id).first_or_404()
-    present_list = [] # List of students present
-    absent_list = [] # List of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
-    final_list = []
+    present_set = set() # Set of students present
+    absent_set = set() # Set of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
+    present_list = list()
+    absent_list = list()
+    final_list = list()
     students = Signups.query.filter_by(course=room_id) # List of students that are in this specific course
     reactions_specific = Reactions.query.filter_by(reactions_course_id=room_id) # List of reactions that happened in this specific course
     speeds_specific = Speed.query.filter_by(speed_course_id=room_id) # List of reactions that happened in this specific course
-    for s in students: 
-        present = False
-        already = False
-        for r in reactions_specific:
-            if s.user_id == r.user_id: # If this is true, then that student has reacted in this class
-                for p in present_list: # Checking to see whether they are already in the present_list
-                    if s.student.username == p: # If they are already in the present list
-                        already = True # Set already to true
-                if already == False:
-                    present_list.append(s.student.username) # Or you can append their ID by doing s.ID (s.student is the backref which will bring up the user in <User> form)
-                    present = True 
-        if present == False: # If they didn't make a reaction
-            for sp in speeds_specific: # Then check if they made a speed complaint
-                if s.user_id == sp.user_id: # If this is true, then that student has complained about the speed in this class (naughty lil kids!)
-                    present_list.append(s.student.username) 
-                    present = True
-            if present == False: # If they didn't react or enter a speed
-                absent_list.append(s.student.username) # Add them to the absent list
-    for p in present_list: # CHANGE LOGIC TO SET AND THEN ADD THE SETS TO THE DICT
-        converted_dict = {
-            "Present": p
-        }
-        final_list.append(converted_dict)
-    for a in absent_list:
-        converted_dict = {
-            "Absent": a
-        }
-        final_list.append(converted_dict)
-    return jsonify(final_list, "Present")
+    for s in students:
+        for r in reactions_specific: 
+            if s.user_id == r.user_id: # If the student has reacted
+                present_set.add(s.student.username) # Then add to the present list
+        for sp in speeds_specific: 
+            if s.user_id == sp.user_id: # If the student has made a speed complaint
+                present_set.add(s.student.username) # Then add to the present list
+    for student in students: # Going through the list of students
+        found = False
+        for p in present_set: # Going through list of present students
+            if student.student.username == p: # If the student in the student list is in the present list
+                found = True # Set found to true
+        if found == False: # Otherwise, if they are not in the present list
+            absent_set.add(student.student.username) # Add that student to the absent list
+    # for s in students: 
+    #     present = False
+    #     already = False
+    #     for r in reactions_specific:
+    #         if s.user_id == r.user_id: # If this is true, then that student has reacted in this class
+    #             for p in present_list: # Checking to see whether they are already in the present_list
+    #                 if s.student.username == p: # If they are already in the present list
+    #                     already = True # Set already to true
+    #             if already == False:
+    #                 present_list.append(s.student.username) # Or you can append their ID by doing s.ID (s.student is the backref which will bring up the user in <User> form)
+    #                 present = True 
+    #     if present == False: # If they didn't make a reaction
+    #         for sp in speeds_specific: # Then check if they made a speed complaint
+    #             if s.user_id == sp.user_id: # If this is true, then that student has complained about the speed in this class (naughty lil kids!)
+    #                 present_list.append(s.student.username) 
+    #                 present = True
+    #         if present == False: # If they didn't react or enter a speed
+    #             absent_list.append(s.student.username) # Add them to the absent list
+    present_list = present_set
+    absent_list = absent_set
+    converted_dict_present = {
+        "Present": list(present_list)  
+    }
+    final_list.append(converted_dict_present)
+    
+    converted_dict_absent = {
+        "Absent": list(absent_list)
+    }
+    final_list.append(converted_dict_absent)
+    #return str(final_list)
+    return jsonify(list(final_list))
 
 # Method to activate class
 @app.route('/classes/rooms/<room_id>/activate', methods=["POST"]) # POST method, important declaration
