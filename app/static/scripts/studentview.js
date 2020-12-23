@@ -5,6 +5,7 @@ function init() {
         getPercentage();  // This is calling the function updateTherm1 and passes in the #yipyip id, which refers to a button in rooms html
         console.log("Update");
         fetchReactions();
+        fetchSpeeds();
     }, 5000) // The updateTherm1 function will be called every 5 seconds, therefore changing the value of the const interval
 }
 
@@ -110,15 +111,15 @@ function fetchReactions() {
         .catch(handleError);
 }
 
-fetchReactions()
+//fetchReactions()
 
 function displayReactions(reactions) {
     // First have to delete all the existing reactions on the page
-    console.log("REACTIONS")
-    console.log(reactions[0]["reactions_id"]);
-    console.log(reactions[0]["user_id"]);
-    console.log(reactions[0]["reactions"]);
-    console.log(reactions[0]["reactions_course_id"]);
+    // console.log("REACTIONS") // Testing whether this works in console 
+    // console.log(reactions[0]["reactions_id"]);
+    // console.log(reactions[0]["user_id"]);
+    // console.log(reactions[0]["reactions"]);
+    // console.log(reactions[0]["reactions_course_id"]);
     reaction_html = document.getElementById("reactionResults")
     document.getElementById("reactionResults").innerHTML = "";
     console.log("Testing")
@@ -138,10 +139,63 @@ function displayReactions(reactions) {
     } 
 }
 
-function clearInfo() {
-    document.getElementById("reactionResults").innerHTML = "";
+// Fetch speeds from the json file
+function fetchSpeeds() {
+    room_id = getRoomId();
+    let url = "/classes/rooms/" + room_id + "/speeds_only";
+    console.log("Speed fetched");
+    fetch(url, {method: "GET"})
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(displaySpeeds)
+        .catch(handleError);
 }
 
+// How to display the speeds
+function displaySpeeds(speeds) {
+    speed_html = document.getElementById("speedResults")
+    document.getElementById("speedResults").innerHTML = "";
+    console.log("Testing");
+    for (let i in speeds) {
+        console.log("speed: " + speeds[i]["speed"]);
+        console.log("user ID: " + speeds[i]["user_id"]);
+        var user_speed = speeds[i]["speed"];
+        var username = speeds[i]["user_id"];
+        if (user_speed == 0) {
+            user_speed = "Faster";
+        } else {
+            user_speed = "Slower";
+        }
+        speed_html.innerHTML += ('<p>' + user_speed + " | " + username + '</p>');
+    }
+}
+
+//fetchSpeeds();
+
+// Fetch attendance from the json file
+function fetchAttendance() {
+    room_id = getRoomId();
+    url = "/classes/rooms/" + room_id + "/attendance_json";
+    console.log("Attendance Fetched")
+    fetch(url, {method: "GET"})
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(displayAttendance)
+        .catch(handleError);
+}
+
+// Display the attendance
+function displayAttendance(attendance) {
+    console.log("Display Attendance");
+    present_html = document.getElementById("present"); // Grabs the HTML div with the ID present
+    absent_html = document.getElementById("absent");
+    console.log("Attendance TESTING")
+    for (let a in attendance) {
+        console.log(attendance[a]["Present"])
+    }
+}
+
+fetchAttendance();
 
 
 

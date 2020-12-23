@@ -161,6 +161,7 @@ def rooms(room_id):
     reactions_all = Reactions.query.filter_by(reactions_course_id=room_id).all()
     speeds_all = Speed.query.filter_by(speed_course_id=room_id).all()
     status_all = Status.query.all()
+    status_filtered = Status.query.filter_by(status_course_id=room_id).all()
     present_list = [] # List of students present
     absent_list = [] # List of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
     students = Signups.query.filter_by(course=room_id) # List of students that are in this specific course
@@ -196,9 +197,9 @@ def rooms(room_id):
             specific_status = Status.query.filter_by(status_course_id=room_id).first_or_404()
             if specific_status.status == 0: # If this course has been activated before (already in database) AND it's status is 0 (unactivated)
                 return render_template('unactivated.html') 
-    return render_template('rooms.html', course=course, reactions_all=reactions_all, speeds_all=speeds_all, status_all=status_all, found=found, present_list=present_list, absent_list=absent_list, title=course.course_name) 
+    return render_template('rooms.html', course=course, reactions_all=reactions_all, speeds_all=speeds_all, status_all=status_all, status_filtered=status_filtered, found=found, present_list=present_list, absent_list=absent_list, title=course.course_name) 
 
-# Attendance
+# Attendance 
 @app.route('/classes/rooms/<room_id>/attendance', methods=["POST"]) 
 @login_required 
 def attendance(room_id):
@@ -227,6 +228,47 @@ def attendance(room_id):
             if present == False: # If they didn't react or enter a speed
                 absent_list.append(s.student.username) # Add them to the absent list
     return render_template('attendance.html', course=course, present_list=present_list, absent_list=absent_list, title=course.course_name)
+
+# Status and Attendance JSON 
+@app.route('/classes/rooms/<room_id>/attendance_json', methods=["GET", "POST"]) 
+@login_required 
+def attendance_json(room_id):
+    course = Courses.query.filter_by(id=room_id).first_or_404()
+    present_list = [] # List of students present
+    absent_list = [] # List of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
+    final_list = []
+    students = Signups.query.filter_by(course=room_id) # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(reactions_course_id=room_id) # List of reactions that happened in this specific course
+    speeds_specific = Speed.query.filter_by(speed_course_id=room_id) # List of reactions that happened in this specific course
+    for s in students: 
+        present = False
+        already = False
+        for r in reactions_specific:
+            if s.user_id == r.user_id: # If this is true, then that student has reacted in this class
+                for p in present_list: # Checking to see whether they are already in the present_list
+                    if s.student.username == p: # If they are already in the present list
+                        already = True # Set already to true
+                if already == False:
+                    present_list.append(s.student.username) # Or you can append their ID by doing s.ID (s.student is the backref which will bring up the user in <User> form)
+                    present = True 
+        if present == False: # If they didn't make a reaction
+            for sp in speeds_specific: # Then check if they made a speed complaint
+                if s.user_id == sp.user_id: # If this is true, then that student has complained about the speed in this class (naughty lil kids!)
+                    present_list.append(s.student.username) 
+                    present = True
+            if present == False: # If they didn't react or enter a speed
+                absent_list.append(s.student.username) # Add them to the absent list
+    for p in present_list: # CHANGE LOGIC TO SET AND THEN ADD THE SETS TO THE DICT
+        converted_dict = {
+            "Present": p
+        }
+        final_list.append(converted_dict)
+    for a in absent_list:
+        converted_dict = {
+            "Absent": a
+        }
+        final_list.append(converted_dict)
+    return jsonify(final_list, "Present")
 
 # Method to activate class
 @app.route('/classes/rooms/<room_id>/activate', methods=["POST"]) # POST method, important declaration
@@ -354,6 +396,22 @@ def reactions_only(room_id):
             "user_id": r.reactor.username,
             "reactions": r.emotions,
             "reactions_course_id": r.reactions_course_id
+        }
+        result.append(converted_dict)
+    return jsonify(result)
+
+# Fetch Speeds page
+@app.route('/classes/rooms/<room_id>/speeds_only', methods=["GET", "POST"])
+@login_required
+def speeds_only(room_id):
+    speeds = Speed.query.filter_by(speed_course_id=room_id).all() # Only show the speeds for this specific course
+    result = []
+    for s in speeds:
+        converted_dict = {
+            "speeds_id": s.id,
+            "user_id": s.speeder.username,
+            "speed": s.speed,
+            "speed_course_id": s.speed_course_id
         }
         result.append(converted_dict)
     return jsonify(result)

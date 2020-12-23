@@ -59,33 +59,37 @@
     <!--</form>-->
     <!--<form action="/classes/rooms/{{ course.id }}/slow" method='post'>--> <!-- Form for feeling meh :| -->
     <button id="slower" onclick="slowerForm()">Slower</button>
-    <button onclick="fetchReactions()">Fetch Reactions</button>
     <!--</form>-->
 
-    <h2 id = "reactionResults"> Reaction Results: </h2> <!-- Shows the reaction results-->
-    {% for r in reactions_all %}
-        {% if r.emotions == 0 %}    <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
-            <p>Good | {{ r.reactor.username }}</p>
-        {% elif r.emotions == 1 %}
-            <p>Okay | {{ r.reactor.username }}</p>
-        {% else %}
-            <p>Bad | {{ r.reactor.username }}</p>
-        {% endif %}
-    {% endfor %}
+    <h2> Reaction Results: </h2> <!-- Shows the reaction results-->
+    <div id = "reactionResults">
+        <!--{% for r in reactions_all %}
+            {% if r.emotions == 0 %} -->   <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
+                <!--<p>Good | {{ r.reactor.username }}</p>
+            {% elif r.emotions == 1 %}
+                <p>Okay | {{ r.reactor.username }}</p>
+            {% else %}
+                <p>Bad | {{ r.reactor.username }}</p>
+            {% endif %}
+        {% endfor %}-->
+    </div>
 
-    <h2>Speed Results: </h2> <!-- Shows the speed results -->
-    {% for s in speeds_all %}
-        {% if s.speed == 0 %} <!-- Making it easier to see what each speed number represents, 0=faster, 1=slower-->
-            <p>Faster | {{ s.speeder.username }}</p>
+
+    <h2> Speed Results: </h2> <!-- Shows the speed results -->
+    <div id = "speedResults">
+    <!--{% for s in speeds_all %}
+        {% if s.speed == 0 %} --><!-- Making it easier to see what each speed number represents, 0=faster, 1=slower-->
+            <!--<p>Faster | {{ s.speeder.username }}</p>
         {% else %}
             <p>Slower | {{ s.speeder.username }}</p>
         {% endif %}
-    {% endfor %}
+    {% endfor %}-->
+    </div>
 
-    {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
-        <h2>Attendance: </h2>
-        {% if found == true %} <!-- If this class has already been activated before -->
-                {% for s in status_all %}
+    <!--{% if current_user.role == 0 %}--> <!-- If the current user is a teacher -->
+        <!--<h2>Attendance: </h2>
+        {% if found == true %} --><!-- If this class has already been activated before -->
+                <!--{% for s in status_all %}
                     {% if s.status_course_id == course.id and s.status == 1 %}
                         <div id = "attendance"> 
                             <div id = "inside">
@@ -97,6 +101,32 @@
                                 {% for a in absent_list %}
                                     <p>{{ a }}</p>
                                 {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}     
+                {% endfor %}   
+        {% endif %}
+    {% endif %}-->
+
+    {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
+        <h2>Attendance: </h2>
+        {% if found == true %} <!-- If this class has already been activated before -->
+                {% for s in status_filtered %}
+                    {% if s.status == 1 %}
+                        <div id = "attendance"> 
+                            <div id = "inside">
+                                <h3>Present Students (The good ones)</h3>
+                                <div id = "present">
+                                </div>
+                                <!--{% for p in present_list %}
+                                    <p>{{ p }}</p>
+                                {% endfor %}-->
+                                <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
+                                <div id = "absent">
+                                </div>
+                                <!--{% for a in absent_list %}
+                                    <p>{{ a }}</p>
+                                {% endfor %}-->
                             </div>
                         </div>
                     {% endif %}     
