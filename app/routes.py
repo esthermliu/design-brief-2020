@@ -196,7 +196,7 @@ def rooms(room_id):
         elif found == True:
             specific_status = Status.query.filter_by(status_course_id=room_id).first_or_404()
             if specific_status.status == 0: # If this course has been activated before (already in database) AND it's status is 0 (unactivated)
-                return render_template('unactivated.html') 
+                return render_template('unactivated.html', course=course) 
     return render_template('rooms.html', course=course, reactions_all=reactions_all, speeds_all=speeds_all, status_all=status_all, status_filtered=status_filtered, found=found, present_list=present_list, absent_list=absent_list, title=course.course_name) 
 
 # Attendance 
@@ -430,6 +430,21 @@ def speeds_only(room_id):
             "user_id": s.speeder.username,
             "speed": s.speed,
             "speed_course_id": s.speed_course_id
+        }
+        result.append(converted_dict)
+    return jsonify(result)
+
+# Fetch course status (active or inactive) json
+@app.route('/classes/rooms/<room_id>/course_status', methods=["GET", "POST"])
+@login_required
+def course_status(room_id): 
+    status = Status.query.filter_by(status_course_id=room_id).all() # Only show the status for this specific course
+    result = list()
+    for s in status:
+        converted_dict = {
+            "status_id": s.id,
+            "course_id": s.status_course_id,
+            "status": s.status
         }
         result.append(converted_dict)
     return jsonify(result)

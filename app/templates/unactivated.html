@@ -5,4 +5,15 @@
     <h1>Your teacher is late! Hurrah! Maybe they won't come to remote school today ;)</h1>
     <h1>Just kidding, don't get too comfortable yet, {{ current_user.username }}.</h1>
     <h1>They're coming for you...</h1>
+
+    <button id="yipyip" value="{{ course.id }}" name=1>
+        Hi there
+    </button>
+
+    <button id="yopyop" value="{{ course.id }}" name=0>
+        Bye there
+    </button>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
 {% endblock %}

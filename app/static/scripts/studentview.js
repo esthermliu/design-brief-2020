@@ -1,12 +1,83 @@
 console.log("hello")
 
+fetchStatus(); // Refreshes the page whenever class ends or starts
+
+// Finds the status of the course when it is first activated/started
+function fetchStatus() {
+    let room_id = getRoomId();
+    let url = "/classes/rooms/" + room_id + "/course_status";
+    console.log("FIRST STATUS");
+
+    fetch(url, {method: "GET"})
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(activeFirst) // Refer to the activeFirst method below
+        .catch(handleError);
+}
+
+// Function that returns the original status of that course
+function activeFirst(status) {
+    var activeNum = status[0]["status"]; // Sorting through status (which is the json file) to find the "status" field
+                                        // Set activeNum to the appropriate value int he json
+    console.log("Active Num:"); 
+    console.log(activeNum);
+    refetchStatus(activeNum); // Active num represents the original status of the course, calling refetchStatus and inputting this number into the function
+}
+
+//var firstNum = fetchStatus();
+
+function refetchStatus(previousStatus) { // previousStatus is the original number representing the course's first status (equal to activeNum)
+    const room_id = getRoomId();
+    const url = "/classes/rooms/" + room_id + "/course_status";
+    let redirect = "/classes/rooms/" + room_id;
+    console.log("RECHECKING STATUS");
+
+    function refreshPage(currentNumber) { // currentNumber is the number that represents the course's current status, this number is taken from the json file 
+        console.log("LAKJLF");
+        console.log("Previous status:");
+        console.log(previousStatus);
+        if (previousStatus != currentNumber) {
+            console.log("UNEQUAL");
+            window.location.assign(redirect);
+        } else {
+            console.log("EQUAL")
+        }
+        // Check currentNum with the firstNum
+        // If they are different, refresh the page
+    }
+
+    setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
+        console.log("rechecking")
+        fetch(url, {method: "GET"})
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(currentStatus)
+        .then(refreshPage) // Calls the refreshPage function above and enters the current status number as the parameter
+        .catch(handleError);
+    }, 5000) 
+
+}
+
+function currentStatus(status) {
+    console.log("WHATKJS")
+    for (let s in status) {
+        console.log(status[s]) 
+    }
+    console.log("WHATLKJJlkj")
+    var currentNum = status[0]["status"];
+    console.log("Current Num:");
+    console.log(currentNum);
+    return currentNum;
+    // Return the current status number
+}
+
 function init() {
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         getPercentage();  // This is calling the function updateTherm1 and passes in the #yipyip id, which refers to a button in rooms html
         console.log("Update");
         fetchReactions();
         fetchSpeeds();
-       
+        fetchAttendance();
     }, 5000) // The updateTherm1 function will be called every 5 seconds, therefore changing the value of the const interval
 }
 
@@ -176,7 +247,7 @@ function displaySpeeds(speeds) {
 // Fetch attendance from the json file
 function fetchAttendance() {
     room_id = getRoomId();
-    url = "/classes/rooms/" + room_id + "/attendance_json";
+    let url = "/classes/rooms/" + room_id + "/attendance_json";
     console.log("Attendance Fetched")
     fetch(url, {method: "GET"})
         .then(checkStatus)
@@ -203,11 +274,77 @@ function displayAttendance(attendance) {
     for (let a in attendance[1]["Absent"]) {
         console.log(attendance[1]["Absent"][a]);
         absent_student = attendance[1]["Absent"][a];
-        absent_html.innerHTML += ("<p>" + absent_student + "</p>"); // Ading the content to the absent div
+        absent_html.innerHTML += ("<p>" + absent_student + "</p>"); // Adding the content to the absent div
     }
 }
 
-fetchAttendance();
+//fetchAttendance();
+
+// function fetchStatus() {
+//     room_id = getRoomId();
+//     url = "/classes/rooms/" + room_id + "/course_status";
+//     console.log("Refresh page");
+//     fetch(url, {method: "GET"})
+//         .then(checkStatus)
+//         .then(response => response.json())
+//         .then(refreshPage)
+//         .catch(handleError);
+// }
+
+// function refreshPage(status) {
+//     console.log("STATUS");
+//     var isActive = False;
+//     var newActive = False;
+//     var activeList = [];
+//     for (let s in status) {
+//         console.log(status[s]["status"]);
+//         s_num = status[s]["status"]; // 0 is inactive, 1 is active
+//         if (s_num == 0) {
+//             isActive = False; // The course is inactive
+//         } else {
+//             isActive = True; // Course is active
+//         }
+//         activeList[0] = isActive;
+//     }
+//     for (let s in status) {
+//         console.log(status[s]["status"]);
+//         s_num = status[s]["status"]; // 0 is inactive, 1 is active
+//         if (s_num == 0) {
+//             newActive = False; // Course is inactive
+//         } else {
+//             newActive = True; // Course is active
+//         }
+//     }
+    
+// }
+
+// function fetchStatus() {
+//     room_id = getRoomId();
+//     url = "/classes/rooms/" + room_id + "/course_status";
+//     console.log("FIRST STATUS");
+//     fetch(url, {method: "GET"})
+//         .then(checkStatus)
+//         .then(response => response.json())
+//         .then(activeFirst)
+//         .catch(handleError);
+// }
+
+// function activeFirst(status) {
+//     var activeNum = 0;
+    
+//     for (let s in status) {
+//         s_num = status[s]["status"];
+//         activeNum = s_num;
+//     }
+//     console.log("here");
+//     console.log(activeNum);
+//     return activeNum;
+// }
+
+
+
+
+
 
 
 
