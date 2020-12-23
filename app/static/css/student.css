@@ -1,0 +1,18 @@
+.tempVisual {
+    background-color: orange;
+    height: 400px;
+    width: 100px;
+    position: relative;
+}
+
+.thermometer {
+    width: 60px;
+    position: absolute;
+    background-color: red;
+    position: absolute;
+    transition: height 0.25s ease-in;
+    position: absolute;
+    bottom: 0;
+    border-radius: 40px;
+}
+

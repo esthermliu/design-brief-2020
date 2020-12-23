@@ -10,6 +10,8 @@
         <th>Email</th>
         <th>Password Hash</th>
         <th>Role</th>
+        <th>About Me</th>
+        <th>Last Seen</th>
     </tr>
     {% for user in user_all %}
         <tr>
@@ -18,10 +20,12 @@
             <td>{{ user.email }}</td>
             <td>{{ user.password_hash }}</td>
             {% if user.role == 0 %}
-            <td>Teacher</td>
+                <td>Teacher</td>
             {% else %}
-            <td>Student</td>
+                <td>Student</td>
             {% endif %}
+            <td>{{ user.about_me }}</td>
+            <td>{{ user.last_seen }}</td>
         </tr>
     {% endfor %}
     </table>

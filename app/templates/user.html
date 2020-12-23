@@ -1,19 +1,34 @@
 {% extends "base.html" %}
 
 {% block content %}
+<table>
     <tr valign="top">
         <td><img src="{{ user.avatar(128) }}"></td>
-        <td><h1>User: {{ user.username }}</h1></td>
-        {% if user.role == 0 %}
-        <td><h1>Role: Teacher</h1></td>
-        {% else %}
-        <td><h1>Role: Student</h1></td>
-        {% endif %}
+        <td><h1>User: {{ user.username }}</h1>
+            {% if user.role == 0 %}
+                <h1>Role: Teacher</h1>
+            {% else %}
+                <h1>Role: Student</h1>
+            {% endif %}
+            {% if user.about_me %}
+                <p> {{ user.about_me }}</p> 
+            {% endif %}
+            {% if user.last_seen %}
+                <p>Last seen on: {{ user.last_seen }}</p>
+            {% endif %}
+            {% if user == current_user %}
+                <p><a href = "{{ url_for('edit_profile')}}">Edit your profile</a></p>
+            {% endif %}
+        </td>
     </tr>
+</table>
     <hr>
     {% for post in posts %}
-    <p>
-        {{ post.author.username }} says: <b>{{ post.body }}</b>
-    </p>
+    <table>
+        <tr valign="top">
+            <td><img src="{{ user.avatar(36) }}"></td>
+            <td>{{ post.author.username }} says: <b>{{ post.body }}</b></td>
+        </tr>
+    </table>
     {% endfor %}
 {% endblock %}

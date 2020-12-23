@@ -1,8 +1,9 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, jsonify
 from app import app
 from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
+from app.forms import EditProfileForm
 from flask_login import current_user, login_user
 from app.models import User, Reactions, Post, Courses, Signups, Speed, Status
 from flask_login import logout_user
@@ -10,6 +11,7 @@ from flask_login import login_required
 from flask import request
 from werkzeug.urls import url_parse
 import random 
+from datetime import datetime
 
 @app.route('/')
 @app.route('/index')
@@ -67,14 +69,14 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 # Page to create a new class as a teacher
-@app.route('/user/<username>/create-class') 
+@app.route('/user/<username>/create_class') 
 @login_required # Have to be logged in as a teacher for this to work
 def create(username):
     t_courses_all = Courses.query.filter_by(teacher_id=current_user.id) # All of that teacher's courses   
-    return render_template('create-class.html', t_courses_all=t_courses_all, title="Create a Class")
+    return render_template('create_class.html', t_courses_all=t_courses_all, title="Create a Class")
 
 # Adds the new course to the database 
-@app.route('/user/<username>/create-class/new', methods=["POST"]) # This is a POST method
+@app.route('/user/<username>/create_class/new', methods=["POST"]) # This is a POST method
 @login_required 
 def newclass(username):
     course_name = request.form.get("course_name")
@@ -98,6 +100,29 @@ def user(username):
         {'author': user, 'body': 'Test post #2'}
     ]
     return render_template('user.html', user=user, posts=posts, title=username)
+
+# Last seen function
+@app.before_request # This function will be executed right before the view function
+def before_request():
+    if current_user.is_authenticated: # Checks whether the current user is logged in
+        current_user.last_seen = datetime.utcnow() # Sets the last seen to the date using the UTC time zone 
+        db.session.commit() # Don't need to do db.session.add() because the user is already in the database (using a current_user)
+
+# Edit Profile function
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    if form.validate_on_submit(): # If the form successfully submitted
+        current_user.username = form.username.data # Set the user's username to what they entered in the form
+        current_user.about_me = form.about_me.data # Set about me for current user to input from the form
+        db.session.commit() # Commit changes to the database
+        flash('Your changes have been saved.')
+        return redirect(url_for('edit_profile'))
+    elif request.method == 'GET': # If this is the first time that the form has been requested
+        form.username.data = current_user.username # Then pre-populate the fields with the data in the database
+        form.about_me.data = current_user.about_me
+    return render_template('edit_profile.html', form=form, title="Edit Profile")
 
 @app.route('/user/<username>/classes') # User's classes
 @login_required
@@ -133,8 +158,8 @@ def add(username):
 @login_required # Have to be logged in to see these rooms
 def rooms(room_id):
     course = Courses.query.filter_by(id=room_id).first_or_404()
-    reactions_all = Reactions.query.all() # Tried filtering for reactions and speeds, but it wouldn't let me iterate through the object in HTML, so I had to check with if statements in the HTML :(
-    speeds_all = Speed.query.all()
+    reactions_all = Reactions.query.filter_by(reactions_course_id=room_id).all()
+    speeds_all = Speed.query.filter_by(speed_course_id=room_id).all()
     status_all = Status.query.all()
     present_list = [] # List of students present
     absent_list = [] # List of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
@@ -297,6 +322,41 @@ def slow(room_id):
     db.session.commit()
     return redirect(url_for('rooms', room_id=course.id)) # Redirects to the room page
 
+# Percentage of happiness in class
+@app.route('/classes/rooms/<room_id>/percent', methods=["GET", "POST"])
+@login_required
+def percent(room_id):
+    reactions = Reactions.query.filter_by(reactions_course_id=room_id) # Reactions represents all the reactions for this specific room
+    percent_happy = "No reactions, no percentage"
+    size = 0
+    for reaction in reactions:
+        size += 1
+    if size > 0:
+        total = 0
+        happy = 0
+        for r in reactions:
+            total += 1
+            if r.emotions == 0:
+                happy += 1
+        percent_happy = (happy/total) * 100
+    return str(percent_happy)
+    #return str(random.randint(100000, 999999)) # Generating a random code
+
+# Fetch Reactions page
+@app.route('/classes/rooms/<room_id>/reactions_only', methods=["GET", "POST"])
+@login_required
+def reactions_only(room_id):
+    reactions = Reactions.query.filter_by(reactions_course_id=room_id).all() # Only show the reactions for this specific course
+    result = []
+    for r in reactions:
+        converted_dict = {
+            "reactions_id": r.id,
+            "user_id": r.reactor.username,
+            "reactions": r.emotions,
+            "reactions_course_id": r.reactions_course_id
+        }
+        result.append(converted_dict)
+    return jsonify(result)
 
 # Just so I can see all the databases
 @app.route('/database') 
