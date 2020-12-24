@@ -192,11 +192,11 @@ def rooms(room_id):
                 found = True
     if course.teacher_id != current_user.id: # If the current user is not that teacher (current user is a student)
         if found == False: # If this course has never been activated yet
-            return render_template('unactivated.html') # Then render the HTMl for the unactivated page
+            return render_template('unactivated.html', course=course, status_all=status_all) # Then render the HTMl for the unactivated page
         elif found == True:
             specific_status = Status.query.filter_by(status_course_id=room_id).first_or_404()
             if specific_status.status == 0: # If this course has been activated before (already in database) AND it's status is 0 (unactivated)
-                return render_template('unactivated.html', course=course) 
+                return render_template('unactivated.html', course=course, status_all=status_all) 
     return render_template('rooms.html', course=course, reactions_all=reactions_all, speeds_all=speeds_all, status_all=status_all, status_filtered=status_filtered, found=found, present_list=present_list, absent_list=absent_list, title=course.course_name) 
 
 # Attendance 
@@ -256,6 +256,43 @@ def attendance_json(room_id):
                 found = True # Set found to true
         if found == False: # Otherwise, if they are not in the present list
             absent_set.add(student.student.username) # Add that student to the absent list
+
+    # To determine the speed
+    speed_filtered = Speed.query.filter_by(speed_course_id=room_id)
+    faster = 0
+    slower = 0
+    speed_number = 0
+    for s in speed_filtered:
+        if s.speed == 0: # Faster request
+            faster += 1
+        else: # Slower request
+            slower += 1
+    total = slower + faster
+    if total != 0:
+        speed_number = (faster/total) * 100
+    if speed_number >= 91:
+        speed_number = 10
+    elif speed_number >= 81:
+        speed_number = 9
+    elif speed_number >= 71:
+        speed_number = 8
+    elif speed_number >= 61:
+        speed_number = 7
+    elif speed_number >= 51:
+        speed_number = 6
+    elif speed_number >= 41:
+        speed_number = 5
+    elif speed_number >= 31:
+        speed_number = 0
+    elif speed_number >= 21:
+        speed_number = 1
+    elif speed_number >= 11:
+        speed_number = 2
+    elif speed_number >= 1: # Smaller the number is, the slower the class should be 
+        speed_number = 3
+    else:
+        speed_number = 4
+    
     # for s in students: 
     #     present = False
     #     already = False
@@ -285,8 +322,25 @@ def attendance_json(room_id):
         "Absent": list(absent_list)
     }
     final_list.append(converted_dict_absent)
+
+    final_list.append({"speed": speed_number})
     #return str(final_list)
     return jsonify(list(final_list))
+
+# # Fetch the speed 
+# @app.route("/classes/rooms/<room_id>/speed_num", methods=["POST"])
+# @login_required
+# def speed_num(room_id):
+#     speed_filtered = Speed.query.filter_by(speed_course_id=room_id)
+#     faster = 0
+#     slower = 0
+#     for s in speed_filtered:
+#         if s.speed == 0: # Faster request
+#             faster += 1
+#         else: # Slower request
+#             slower += 1
+        
+
 
 # Method to activate class
 @app.route('/classes/rooms/<room_id>/activate', methods=["POST"]) # POST method, important declaration

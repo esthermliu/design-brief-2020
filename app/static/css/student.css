@@ -1,18 +1,119 @@
-.tempVisual {
-    background-color: orange;
-    height: 400px;
-    width: 100px;
-    position: relative;
+body {
+    background-color: skyblue;
+    display: flex;
+    flex-direction: column;
 }
 
-.thermometer {
+.tempVisual {
+    height: 95%;
+    width: 100px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overallThermoContainer {
+    background-color: white;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 260px;
+    border-radius: 30px;
+}
+
+.thermometer, .thermometer_shell {
     width: 60px;
     position: absolute;
     background-color: red;
     position: absolute;
     transition: height 0.25s ease-in;
     position: absolute;
-    bottom: 0;
     border-radius: 40px;
+    bottom: 0;
 }
 
+.thermoCircle {
+    height: 16%;
+    width: 90%;
+    position: absolute;
+    bottom: 0;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.thermometer_shell {
+    height: 100%;
+    background-color: pink;
+}
+
+#yipyip, #yopyop {
+    display: none;
+}
+
+.dashes {
+    height: 87%;
+    width: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.dashHolder {
+    height: 95%;
+}
+
+.dash {
+    background-color: grey;
+    height: 3px;
+    width: 35%;
+}
+
+#long {
+    width: 70%;
+}
+
+.numbers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 88%;
+}
+
+.numHolder {
+    height: 95%;
+    font-size: 20px;
+}
+
+.num p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.overallContainer {
+    padding: 0% 5% 0% 15%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.titleHolder {
+    padding-left: 15%;
+}
+
+.all {
+    height: 50px;
+    width: 50px;
+    display: none;
+    margin-bottom: 10px;
+}
+
+.visual_slow {
+    background-color: orange;
+}
+
+.visual_fast {
+    background-color: red;
+}

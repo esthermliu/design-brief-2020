@@ -12,13 +12,26 @@ function fetchStatus() {
         .then(checkStatus)
         .then(response => response.json())
         .then(activeFirst) // Refer to the activeFirst method below
-        .catch(handleError);
+        .catch(handleErrorStatus);
+}
+
+function handleErrorStatus() {
+    console.log("ERROR");
+    setInterval(function() {
+        fetchStatus();
+    }, 5000)
 }
 
 // Function that returns the original status of that course
 function activeFirst(status) {
-    var activeNum = status[0]["status"]; // Sorting through status (which is the json file) to find the "status" field
-                                        // Set activeNum to the appropriate value int he json
+    let activeNum = 0;
+    if (status.length == 0) {
+        console.log("YEPAKJLAKJFL lkdsjf")
+        activeNum = 0;
+        console.log(activeNum)
+    } else {
+        activeNum = status[0]["status"]; // Sorting through status (which is the json file) to find the "status" field
+    }                                    // Set activeNum to the appropriate value int he json
     console.log("Active Num:"); 
     console.log(activeNum);
     refetchStatus(activeNum); // Active num represents the original status of the course, calling refetchStatus and inputting this number into the function
@@ -78,6 +91,7 @@ function init() {
         fetchReactions();
         fetchSpeeds();
         fetchAttendance();
+        fetchCalculatedSpeed();
     }, 5000) // The updateTherm1 function will be called every 5 seconds, therefore changing the value of the const interval
 }
 
@@ -225,8 +239,13 @@ function fetchSpeeds() {
 
 // How to display the speeds
 function displaySpeeds(speeds) {
-    speed_html = document.getElementById("speedResults")
+    speed_html = document.getElementById("speedResults");
+    visual_html = document.getElementById("speedVisual");
+    var image = ""
+    // Increment bunnies and turtles by their speed number
+    // Whichever has more, go through that number and print out either bunnies or turtles
     document.getElementById("speedResults").innerHTML = ""; // Clears everything in the div first
+    //document.getElementById("speedVisual").innerHTML = ""; // Clears everything in the div first 
     console.log("Testing");
     for (let i in speeds) {
         console.log("speed: " + speeds[i]["speed"]);
@@ -238,9 +257,53 @@ function displaySpeeds(speeds) {
         } else {
             user_speed = "Slower";
         }
-        speed_html.innerHTML += ('<p>' + user_speed + " | " + username + '</p>'); // Adds the info to the speedResults div
+        speed_html.innerHTML += ('<p>' + user_speed + " | " + username + '</p>'); // Adds the info to the speedResults div    
+    //visual_html.innerHTML += (image); // Adds the info to the speedResults div
     }
 }
+
+function fetchCalculatedSpeed() {
+    room_id = getRoomId();
+    let url = "/classes/rooms/" + room_id + "/attendance_json";
+    console.log("Attendance Fetched")
+    fetch(url, {method: "GET"})
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(displayCalculatedSpeed)
+        .catch(handleError);
+}
+
+
+// How to display the calculated speed number
+function displayCalculatedSpeed(data) {
+    console.log("SPEED NUM");
+    let visuals_slow = document.getElementsByClassName("visual_slow");
+    let visuals_fast = document.getElementsByClassName("visual_fast");
+    let visuals_all = document.getElementsByClassName("all");
+    document.getElementById("speedVisual").innerHTML = ""; // Clears everything in the div previously
+    for (let i = 0; i < 10; i++) { // Clears all the divs
+        visuals_all[i].style.display = "none";
+    }
+    let speed_num = data[2]["speed"];
+    console.log(speed_num);
+    speed_html = document.getElementById("speedVisual");
+    speed_html.innerHTML += ('<p>' + speed_num + '</p>'); // Adds the speed num to the div
+    //let visualHolder = document.getElementById("visualHolder");
+    if (speed_num < 5) {    
+        for (let i = 0; i < speed_num; i++) {
+            visuals_slow[i].style.display = "block";
+        }
+    } else if (speed_num > 5) {
+        var vf = 0;
+        for (let k = 5; k < speed_num; k++) {
+            visuals_fast[vf].style.display = "block";
+            vf++;
+        }
+    }
+    
+}
+
+
 
 //fetchSpeeds();
 
