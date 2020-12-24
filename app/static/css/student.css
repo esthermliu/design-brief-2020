@@ -104,8 +104,7 @@ body {
 }
 
 .all {
-    height: 50px;
-    width: 50px;
+    width: 100px;
     display: none;
     margin-bottom: 10px;
 }
@@ -116,4 +115,8 @@ body {
 
 .visual_fast {
     background-color: red;
+}
+
+.turtle {
+    width: 100%;
 }

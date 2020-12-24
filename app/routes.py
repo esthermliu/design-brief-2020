@@ -232,11 +232,11 @@ def attendance(room_id):
 # Status and Attendance JSON 
 @app.route('/classes/rooms/<room_id>/attendance_json', methods=["GET", "POST"]) 
 @login_required 
-def attendance_json(room_id):
+def attendance_json(room_id): 
     course = Courses.query.filter_by(id=room_id).first_or_404()
     present_set = set() # Set of students present
     absent_set = set() # Set of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
-    present_list = list()
+    present_list = list() 
     absent_list = list()
     final_list = list()
     students = Signups.query.filter_by(course=room_id) # List of students that are in this specific course
@@ -293,7 +293,7 @@ def attendance_json(room_id):
         speed_number = 4
     else:
         speed_number = 5
-        if total == 0:
+        if total == 0: # No speeds have been selected yet
             speed_number = 0
     
     # for s in students: 
