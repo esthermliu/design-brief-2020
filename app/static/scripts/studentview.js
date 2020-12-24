@@ -289,7 +289,10 @@ function displayCalculatedSpeed(data) {
     speed_html = document.getElementById("speedVisual");
     speed_html.innerHTML += ('<p>' + speed_num + '</p>'); // Adds the speed num to the div
     //let visualHolder = document.getElementById("visualHolder");
-    if (speed_num < 5) {    
+    if (speed_num == 100) {
+        
+    }
+    if (speed_num <= 5) {    
         for (let i = 0; i < speed_num; i++) {
             visuals_slow[i].style.display = "block";
         }

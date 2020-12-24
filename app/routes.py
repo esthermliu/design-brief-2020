@@ -257,11 +257,12 @@ def attendance_json(room_id):
         if found == False: # Otherwise, if they are not in the present list
             absent_set.add(student.student.username) # Add that student to the absent list
 
-    # To determine the speed
+    # To determine the speed number
     speed_filtered = Speed.query.filter_by(speed_course_id=room_id)
     faster = 0
     slower = 0
     speed_number = 0
+    calculated_number = 0
     for s in speed_filtered:
         if s.speed == 0: # Faster request
             faster += 1
@@ -269,29 +270,31 @@ def attendance_json(room_id):
             slower += 1
     total = slower + faster
     if total != 0:
-        speed_number = (faster/total) * 100
-    if speed_number >= 91:
+        calculated_number = (faster/total) * 100 
+    if calculated_number >= 91:
         speed_number = 10
-    elif speed_number >= 81:
+    elif calculated_number >= 81:
         speed_number = 9
-    elif speed_number >= 71:
+    elif calculated_number >= 71:
         speed_number = 8
-    elif speed_number >= 61:
+    elif calculated_number >= 61:
         speed_number = 7
-    elif speed_number >= 51:
+    elif calculated_number >= 51:
         speed_number = 6
-    elif speed_number >= 41:
-        speed_number = 5
-    elif speed_number >= 31:
-        speed_number = 0
-    elif speed_number >= 21:
+    elif calculated_number >= 41:
+        speed_number = 0 # Nothing will be shown at this point
+    elif calculated_number >= 31:
         speed_number = 1
-    elif speed_number >= 11:
+    elif calculated_number >= 21:
         speed_number = 2
-    elif speed_number >= 1: # Smaller the number is, the slower the class should be 
+    elif calculated_number >= 11:
         speed_number = 3
-    else:
+    elif calculated_number >= 1: # Smaller the number is, the slower the class should be 
         speed_number = 4
+    else:
+        speed_number = 5
+        if total == 0:
+            speed_number = 0
     
     # for s in students: 
     #     present = False
@@ -323,24 +326,10 @@ def attendance_json(room_id):
     }
     final_list.append(converted_dict_absent)
 
-    final_list.append({"speed": speed_number})
+    final_list.append({"speed": speed_number, "percentage": calculated_number})
     #return str(final_list)
     return jsonify(list(final_list))
-
-# # Fetch the speed 
-# @app.route("/classes/rooms/<room_id>/speed_num", methods=["POST"])
-# @login_required
-# def speed_num(room_id):
-#     speed_filtered = Speed.query.filter_by(speed_course_id=room_id)
-#     faster = 0
-#     slower = 0
-#     for s in speed_filtered:
-#         if s.speed == 0: # Faster request
-#             faster += 1
-#         else: # Slower request
-#             slower += 1
-        
-
+    
 
 # Method to activate class
 @app.route('/classes/rooms/<room_id>/activate', methods=["POST"]) # POST method, important declaration
