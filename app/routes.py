@@ -11,7 +11,8 @@ from flask_login import login_required
 from flask import request
 from werkzeug.urls import url_parse
 import random 
-from datetime import datetime
+from datetime import datetime, timedelta
+
 
 @app.route('/')
 @app.route('/index')
@@ -293,14 +294,14 @@ def submit_reaction(session_id, reaction_num):
 @app.route('/classes/course/session/<session_id>/session_json', methods=["GET", "POST"])
 @login_required
 def session_json(session_id):
-    print("Calling session json with ", session_id)
     # Emotions, speeds, attendance, course status
+    time_ago = datetime.utcnow()-timedelta(minutes=5) # Gets the time 5 minutes ago
     reactions = Reactions.query.filter_by(session_id=session_id).all() # Only show the reactions for this specific course's session
+    reactions_time_filtered = Reactions.query.filter_by(session_id=session_id).filter(Reactions.timestamp > time_ago).all() # Filtered by time
     reaction_list = []
     speed_list = []
     attendance_list = []
     for r in reactions:
-        print("\n\n", "r", r, r.reactions, "\n\n")
         if (r.reactions <= 5): # Then it is an emotion, add to emotion dictionary
             emotions_dict = {
                 "reactions_id": r.id,
@@ -309,7 +310,8 @@ def session_json(session_id):
                 "reactions_course_id": r.reactions_course_id
             }
             reaction_list.append(emotions_dict)
-        elif (r.reactions > 5): # Then it is a speed, add to speed dictionary
+    for r in reactions_time_filtered:
+        if (r.reactions > 5): # Then it is a speed, add to speed dictionary
             speed_dict = {
                 "reactions_id": r.id, 
                 "user_id": r.reactor.username,
@@ -349,23 +351,26 @@ def session_json(session_id):
     }
     attendance_list.append(converted_dict_absent)
 
-    # Percentage of happiness
-    reactions = Reactions.query.filter_by(session_id=session_id) # Reactions represents all the reactions for this specific room
+    # Percentage of happiness FIX THIS RIP
+    reactions = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions < 6) # All the emotions for this specific room, no speeds
+    print("HELLO")
+    
     percent_happy = "No reactions, no percentage"
     size = 0
     for reaction in reactions:
         size += 1
     if size > 0:
-        total = 0
         happy = 0
         for r in reactions:
-            total += 1
             if r.reactions == 0:
                 happy += 1
-        percent_happy = (happy/total) * 100
-    
+        percent_happy = (happy/size) * 100
+        
     # To determine the speed number
-    speed_filtered = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5).all() # Speeds filtered out by the session ID and by the reaction number
+    
+    #print(datetime.utcnow()-timedelta(minutes=5))
+    
+    speed_filtered = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5).filter(Reactions.timestamp > time_ago).all() # Speeds filtered out by the session ID and by the reaction number
     faster = 0
     slower = 0
     speed_number = 0

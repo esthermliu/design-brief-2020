@@ -1,4 +1,4 @@
-// Fetches all the session info
+// Fetches all the session info from the API
 function fetchSessionInfo(course_id, session_id, status) {
     let url = "/classes/course/session/" + session_id + "/session_json";
     console.log("HELLO")
@@ -9,6 +9,7 @@ function fetchSessionInfo(course_id, session_id, status) {
         .catch(handleError);
 }
 
+// Calls all the separate functions that display each feature, also includes the funtion that checks whether page will be refreshed
 function displayAll(status, data) {
     checkIfShouldRefresh(status, data["course_status"])
     displayPercentage(data["percentage"]); // Display percentage on the thermometer
@@ -19,10 +20,11 @@ function displayAll(status, data) {
     displayAttendance(data["attendance"]); // Display the attendance
 }
 
+// Checks whether the page should be refreshed, oldStatus is the status passed in via init function, newStatus is the updated status in the API
 function checkIfShouldRefresh(oldStatus, newStatus) {
-    if (oldStatus != newStatus) {
+    if (oldStatus != newStatus) {  // If oldStatus is not equal to newStatus
         console.log("SHOULD REFRESH THE PAGE", oldStatus, newStatus);
-        location.reload()
+        location.reload(); // Then reload the page, and everyone should be kicked out
     }
 }
 
@@ -159,10 +161,10 @@ function displayAttendance(attendance) {
     }
 }
 
-function init(course_id, session_id, course_status) {
+function init(course_id, session_id, course_status) { // Course ID, session ID, and course status are all passed in through the rooms html page
     console.log("Called INIT", "Previous course status", course_status);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchSessionInfo(course_id, session_id, course_status);
-    }, 5000) // The updateTherm1 function will be called every 5 seconds
+    }, 5000) // The fetchSessionInfo function will be called every 5 seconds  
 }

@@ -28,19 +28,6 @@
         </form>
     {% endif %}
 
-    <!-- Testing something out here-->
-    <button id="yipyip" value="{{ session.id }}" name=1>
-        Hi there
-    </button>
-
-    <button id="yopyop" value="{{ session.id }}" name=0>
-        Bye there
-    </button>
-
-    <button id="yupyup" value="{{ course.id }}" name=1>
-        Hi there
-    </button>
-
     <!-- Thermometer/Temperature Visualization -->
     <div class = "overallThermoContainer">
         <div class = "numHolder">
@@ -198,7 +185,7 @@
     <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
 
     <script type="text/javascript">
-        init({{course.id}}, {{session.id}}, {{course.status}});
+        init({{course.id}}, {{session.id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
     </script>
 </div>
 {% endblock %}

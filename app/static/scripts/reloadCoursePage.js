@@ -1,18 +1,19 @@
-// Fetches all the session info
+// Fetches the course status on the unactivated html page to decide when to refresh the page
 function fetchCourseStatus(course_id, status) {
     let url = "/classes/course/" + course_id + "/course_status_json";
     fetch(url, {method: "GET"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .then(response => response.json()) 
-        .then((data) => compareStatus(status, data)) // Calls the displayData function, which will update the thermometer visually
+        .then((data) => compareStatus(status, data)) // Calls the compareStatus function, which will compare the previous status to the new status of the course
         .catch(handleError);
 }
 
+// Compares the previous status of the course to the new
 function compareStatus(oldStatus, data) {
     newStatus = data["status"]
-    if (oldStatus != newStatus) {
+    if (oldStatus != newStatus) { // If the old status and new status are not the same
         console.log("SHOULD REFRESH THE PAGE", oldStatus, newStatus);
-        location.reload()
+        location.reload(); // Then refresh the page
     }
 }
 
@@ -32,5 +33,5 @@ function init(course_id, course_status) {
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchCourseStatus(course_id, course_status);
-    }, 5000) // The updateTherm1 function will be called every 5 seconds
+    }, 5000) // The fetchCourseStatus function will be called every 5 seconds
 }
