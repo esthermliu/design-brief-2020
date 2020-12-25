@@ -6,17 +6,6 @@
     <h1>Just kidding, don't get too comfortable yet, {{ current_user.username }}.</h1>
     <h1>They're coming for you...</h1>
 
-    <button id="yipyip" value="{{ course.id }}" name=1>
-        Hi there
-    </button>
-
-    <button id="yopyop" value="{{ course.id }}" name=0>
-        Bye there
-    </button>
-
-    <button id="yupyup" value="{{ session_id }}" name=0>
-        Bye there
-    </button>
 
     <form action="/classes/rooms/{{ course.id }}/activate" method='post'>
         <button type="submit">Activate Class</button>
@@ -24,5 +13,9 @@
     <!-- If student, just show the text, if it is a teacher, have an activate button -->
 
     <!-- Scripts -->
-    <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/reloadCoursePage.js') }}"></script>
+
+    <script type="text/javascript">
+        init({{course.id}}, {{course.status}});
+    </script>
 {% endblock %}

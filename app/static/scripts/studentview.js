@@ -49,14 +49,6 @@ function updateThermometer(temp) {
     thermometer[0].style.height = temp + "%"; // Changes the height of the thermometer div to the temp value
 }
 
-function getRoomId() {
-    idHolder = document.getElementById("yipyip") // Yipyip button has the course ID in its value
-    console.log(idHolder)
-    value = idHolder.value
-    console.log("Room ID: " + value)
-    return value // Returns the room ID
-}
-
 // Page won't refresh when user reacts, submits/posts reactions to the database
 function submitFormGeneral(session_id, react_num) {
     console.log("Submitting form")
