@@ -36,27 +36,35 @@
     <tr>
         <th>ID</th>
         <th>User ID</th>
-        <th>Emotions</th>
+        <th>Reactions</th>
         <th>Course ID</th>
+        <th>Session ID</th>
+        <th>Timestamp</th>
     </tr>
     {% for r in reactions_all %}
         <tr>
             <td>{{ r.id }}</td>
             <td>{{ r.reactor }}</td>
-            {% if r.emotions == 0 %} <!-- Just making it easier to see the different emotions and what they mean -->
+            {% if r.reactions == 0 %} <!-- Just making it easier to see the different emotions and what they mean -->
                 <td>Good</td> 
-            {% elif r.emotions == 1 %}
+            {% elif r.reactions == 1 %}
                 <td>Okay</td> 
-            {% else %}
-                <td>Bad</td> 
+            {% elif r.reactions == 2 %}
+                <td>Bad</td>
+            {% elif r.reactions == 7 %}
+                <td>Slower</td> 
+            {% elif r.reactions == 6 %}
+                <td>Faster</td>  
             {% endif %}
             <td>{{ r.course_actual }}</td> <!-- r.reactions_course_id will show you the actual id, but course_actual is the backref so I can see the course in <Course> form-->
+            <td>{{ r.actual_session }}</td>
+            <td>{{ r.timestamp }}</td> 
         </tr>
     {% endfor %}
     </table>
     <br>
     <!-- Speed-->
-    <h2>Speed</h2> 
+    <!--<h2>Speed</h2> 
     <table>
     <tr>
         <th>ID</th>
@@ -68,16 +76,16 @@
         <tr>
             <td>{{ s.id }}</td>
             <td>{{ s.speeder }}</td>
-            {% if s.speed == 0 %} <!-- Just making it easier to see the different speeds and what they mean -->
-                <td>Faster</td> 
+            {% if s.speed == 0 %}--> <!-- Just making it easier to see the different speeds and what they mean -->
+                <!--<td>Faster</td> 
             {% else %} 
                 <td>Slower</td> 
             {% endif %}
-            <td>{{ s.course_s }}</td> <!-- s.speed_course_id will show you the actual id, but course_s is the backref so I can see the course in <Course> form-->
-        </tr>
+            <td>{{ s.course_s }}</td>--> <!-- s.speed_course_id will show you the actual id, but course_s is the backref so I can see the course in <Course> form-->
+        <!--</tr>
     {% endfor %}
     </table>
-    <br>
+    <br>-->
     <!-- Courses -->
     <h2>Courses</h2> 
     <table>
@@ -86,6 +94,8 @@
         <th>Course Name</th>
         <th>Course Code</th>
         <th>Teacher</th>
+        <th>Course Status</th>
+        <th>Timestamp</th>
     </tr>
     {% for c in courses_all %}
         <tr>
@@ -93,31 +103,55 @@
             <td>{{ c.course_name }}</td>
             <td>{{ c.code }}</td>
             <td>{{ c.teacher }}</td>
+            <td>{{ c.status }}</td>
+            <td>{{ c.timestamp }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+    <!-- Course Sessions -->
+    <h2>Course Sessions</h2> 
+    <table>
+    <tr>
+        <th>Session ID </th>
+        <th>Course ID</th>
+        <!--<th>User ID (from the Signups table, same as User ID)</th>-->
+        <th>Start Timestamp</th>
+        <th>End Timestamp</th>
+    </tr>
+    {% for s in session_all %} <!-- user_signups will give you the User object, like <User Cat 1> -->
+        <tr>
+            <td>{{ s.id }}</td>
+            <td>{{ s.session_course_id }}</td> 
+            <td>{{ s.timestamp_start }}</td> <!-- i.course_id will return the Courses object like <Courses 1 Math> -->
+            <td>{{ s.timestamp_end }}</td>
         </tr>
     {% endfor %}
     </table>
     <br>
     <!-- Room Status -->
-    <h2>Status</h2> 
+    <!--<h2>Status</h2> 
     <table>
     <tr>
         <th>ID</th>
         <th>Course ID</th>
         <th>Status</th>
+        <th>Timestamp</th>
     </tr>
     {% for s in status_all %}
         <tr>
             <td>{{ s.id }}</td>
             <td>{{ s.s_course_id }}</td>
-            {% if s.status == 1 %} <!-- 1 is equal to active -->
-            <td>Active</td>
+            {% if s.status == 1 %}--> <!-- 1 is equal to active -->
+            <!--<td>Active</td>
             {% else %}
             <td>Inactive</td>
             {% endif %}
+            <td>{{ s.timestamp }}</td>
         </tr>
     {% endfor %}
     </table>
-    <br>
+    <br>-->
     <!-- Sign-ups -->
     <h2>Sign-ups</h2> 
     <table>
@@ -125,12 +159,14 @@
         <th>ID</th>
         <th>User ID</th>
         <th>Course</th>
+        <th>Timestamp</th>
     </tr>
     {% for s in signups_all %}
         <tr>
             <td>{{ s.id }}</td>
             <td>{{ s.student }}</td>
             <td>{{ s.course_id }}</td>
+            <td>{{ s.timestamp }}</td>
         </tr>
     {% endfor %}
     </table> 
@@ -146,6 +182,7 @@
         <th>Course ID</th>
         <th>Course Name</th>
         <th>Teacher</th>
+        <th>Timestamp</th>
     </tr>
     {% for u in user_signups %} <!-- user_signups will give you the User object, like <User Cat 1> -->
         {% for i in u.signups %} <!-- u.signups will return all of the Signup objects of that user, like <Signups 1 1 1> -->
@@ -157,6 +194,7 @@
                 <td>{{ i.course_id.id }}</td>
                 <td>{{ i.course_id.course_name }}</td> 
                 <td>{{ i.course_id.teacher }}</td> <!-- The .teacher part will return the user, like <User Cat 1>, and the .username will grab the User's username, like Cat -->
+                <td>{{ i.timestamp }}</td> 
             </tr>
         {% endfor %}
     {% endfor %}

@@ -6,11 +6,11 @@
             <div id = "inside">
                 <h2>Attendance: </h2>
                 <h3>Present Students (The good ones)</h3>
-                {% for p in present_list %}
+                {% for p in present_set %}
                     <p>{{ p }}</p>
                 {% endfor %}
                 <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
-                {% for a in absent_list %}
+                {% for a in absent_set %}
                     <p>{{ a }}</p>
                 {% endfor %}
             </div>

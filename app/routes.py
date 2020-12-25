@@ -5,7 +5,7 @@ from app.forms import LoginForm
 from app.forms import RegistrationForm
 from app.forms import EditProfileForm
 from flask_login import current_user, login_user
-from app.models import User, Reactions, Post, Courses, Signups, Speed, Status
+from app.models import User, Reactions, Post, Courses, Signups, Session
 from flask_login import logout_user
 from flask_login import login_required
 from flask import request
@@ -80,6 +80,7 @@ def create(username):
 @login_required 
 def newclass(username):
     course_name = request.form.get("course_name")
+    # TODO: Look up how to generate a random UNIQUE code
     rand_code = random.randint(100000, 999999) # Generating a random code
     courses_all = Courses.query.all()
     # Making sure that the code hasn't already been generated for a previous class
@@ -124,14 +125,23 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form=form, title="Edit Profile")
 
+
+
+
+
+
+
+
+
+
 @app.route('/user/<username>/classes') # User's classes
 @login_required
 def classes(username): # the word after def has to be the same as the text in the urlfor quotation marks 
     user = User.query.filter_by(username=username).first_or_404()
     user_signups_filtered = User.query.join(Signups, (Signups.user_id == User.id)).\
-        join(Courses, (Courses.id == Signups.course)).\
-            with_entities(Signups).\
-                filter(Signups.user_id == user.id)
+                                        join(Courses, (Courses.id == Signups.course)).\
+                                        with_entities(Signups).\
+                                        filter(Signups.user_id == user.id)
     teacher_courses = Courses.query.filter_by(teacher_id=user.id).all()
     return render_template('classes.html', user=user, user_signups_filtered=user_signups_filtered, teacher_courses=teacher_courses, title="Classes")
 
@@ -143,6 +153,7 @@ def add(username):
     code = request.form.get("title") # This stores the user code that the student enters
     course = Courses.query.filter_by(code=code).first_or_404() # Filter through courses by this code
     new_signup = Signups(user_id = user.id, course=course.id) # Now that you have that course, take the course id and enter that into the course field
+    # TODO: Remove this for loop later by querying with a filter and checking if none
     signups_all = Signups.query.all() # Getting all of the sign-ups
     already = False
     for s in signups_all:
@@ -154,117 +165,213 @@ def add(username):
         db.session.commit()
     return redirect(url_for('classes', username=user.username))
 
-@app.route('/classes/rooms/<room_id>') # The text inside the <> has to be the same as the parameter in the def room()
+
+
+# Route for each session
+@app.route('/classes/course/session/<session_id>') # The text inside the <> has to be the same as the parameter in the def room()
 @login_required # Have to be logged in to see these rooms
-def rooms(room_id):
-    course = Courses.query.filter_by(id=room_id).first_or_404()
-    reactions_all = Reactions.query.filter_by(reactions_course_id=room_id).all()
-    speeds_all = Speed.query.filter_by(speed_course_id=room_id).all()
-    status_all = Status.query.all()
-    status_filtered = Status.query.filter_by(status_course_id=room_id).all()
-    present_list = [] # List of students present
-    absent_list = [] # List of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
-    students = Signups.query.filter_by(course=room_id) # List of students that are in this specific course
-    reactions_specific = Reactions.query.filter_by(reactions_course_id=room_id) # List of reactions that happened in this specific course
-    speeds_specific = Speed.query.filter_by(speed_course_id=room_id) # List of reactions that happened in this specific course
-    for s in students:
-        present = False
-        already = False
-        for r in reactions_specific:
-            if s.user_id == r.user_id: # If this is true, then that student has reacted in this class
-                for p in present_list: # Checking to see whether they are already in the present_list
-                    if s.student.username == p: # If they are already in the present list
-                        already = True # Set already to true
-                if already == False:
-                    present_list.append(s.student.username) # Or you can append their ID by doing s.ID (s.student is the backref which will bring up the user in <User> form)
-                    present = True
-        if present == False: # If they didn't make a reaction
-            for sp in speeds_specific: # Then check if they made a speed complaint
-                if s.user_id == sp.user_id: # If this is true, then that student has complained about the speed in this class (naughty lil kids!)
-                    present_list.append(s.student.username) 
-                    present = True
-            if present == False: # If they didn't react or enter a speed
-                absent_list.append(s.student.username) # Add them to the absent list
-    found = False # Found variable is for the teacher side regarding whether they have activated the class or not (and whether it is in the database yet)
-    if status_all is not None: # If there are some courses already in the status table
-        for s in status_all: # Checking whether this course is already in the database (aka if it hasn't been activated even once yet)
-            if s.status_course_id == course.id:
-                found = True
-    if course.teacher_id != current_user.id: # If the current user is not that teacher (current user is a student)
-        if found == False: # If this course has never been activated yet
-            return render_template('unactivated.html', course=course, status_all=status_all) # Then render the HTMl for the unactivated page
-        elif found == True:
-            specific_status = Status.query.filter_by(status_course_id=room_id).first_or_404()
-            if specific_status.status == 0: # If this course has been activated before (already in database) AND it's status is 0 (unactivated)
-                return render_template('unactivated.html', course=course, status_all=status_all) 
-    return render_template('rooms.html', course=course, reactions_all=reactions_all, speeds_all=speeds_all, status_all=status_all, status_filtered=status_filtered, found=found, present_list=present_list, absent_list=absent_list, title=course.course_name) 
+def sessions(session_id):
+    session = Session.query.get(session_id)
+    
+    # If the session as ended, then redirect
+    if (session.timestamp_end is not None):
+        return redirect(url_for('course_waiting_room', course_id=session.course_id))
+
+
+    course = session.session_course_id # This gives you the actual course
+    course_id = session.course_id # This will give you the course id
+
+    signups = Signups.query.filter_by(course=course_id) # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(session_id=session_id) # List of reactions that happened in this specific course, specific session
+    # speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
+    present_set = set()
+    absent_set = set()
+    for r in reactions_specific: 
+        if (r.reactor.role == 1): # If the reactor is a student
+            present_set.add(r.reactor.username) # Then add to the present list
+    for signup in signups: # Going through the list of signups
+        if (signup.student.username not in present_set and signup.student.role == 1):
+            absent_set.add(signup.student.username)
+    
+    return render_template('rooms.html', course=course,
+                                        reactions_specific=reactions_specific,
+                                        session=session,
+                                        session_id=session_id,
+                                        present_list=list(present_set), 
+                                        absent_list=list(absent_set), 
+                                        title=course.course_name) 
+
+# Course waiting room, if there is an active session, then redirect to session. Otherwise, redirect to unactivated html
+@app.route('/classes/course/<course_id>')
+@login_required
+def course_waiting_room(course_id):
+    course = Courses.query.get(course_id)
+    # If session_filtered is None, then render unactivated html, otherwise, redirect to the session
+    # TODO replace with constants
+    # status 0 is unactive, status 1 is active
+    if (course.status == 0): # If no sessions are currently active
+        return render_template('unactivated.html', course=course) # Render the unactivated html page
+    else:
+        session_filtered = Session.query.filter_by(course_id=course_id).filter_by(timestamp_end=None).first() # Session that is currently active
+        return redirect(url_for('sessions', session_id=session_filtered.id))     
+
+
+
+
 
 # Attendance 
-@app.route('/classes/rooms/<room_id>/attendance', methods=["POST"]) 
+# @app.route('/classes/course/session/<session_id>/attendance', methods=["GET", "POST"]) 
 @login_required 
-def attendance(room_id):
-    course = Courses.query.filter_by(id=room_id).first_or_404()
-    present_list = [] # List of students present
-    absent_list = [] # List of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
-    students = Signups.query.filter_by(course=room_id) # List of students that are in this specific course
-    reactions_specific = Reactions.query.filter_by(reactions_course_id=room_id) # List of reactions that happened in this specific course
-    speeds_specific = Speed.query.filter_by(speed_course_id=room_id) # List of reactions that happened in this specific course
-    for s in students:
-        present = False
-        already = False
-        for r in reactions_specific:
-            if s.user_id == r.user_id: # If this is true, then that student has reacted in this class
-                for p in present_list: # Checking to see whether they are already in the present_list
-                    if s.student.username == p: # If they are already in the present list
-                        already = True # Set already to true
-                if already == False:
-                    present_list.append(s.student.username) # Or you can append their ID by doing s.ID (s.student is the backref which will bring up the user in <User> form)
-                    present = True 
-        if present == False: # If they didn't make a reaction
-            for sp in speeds_specific: # Then check if they made a speed complaint
-                if s.user_id == sp.user_id: # If this is true, then that student has complained about the speed in this class (naughty lil kids!)
-                    present_list.append(s.student.username) 
-                    present = True
-            if present == False: # If they didn't react or enter a speed
-                absent_list.append(s.student.username) # Add them to the absent list
-    return render_template('attendance.html', course=course, present_list=present_list, absent_list=absent_list, title=course.course_name)
+def attendance(session_id):
+    session = Session.query.get(session_id)
+    course = session.session_course_id # This gives you the actual course
+    course_id = session.course_id # This will give you the course id
 
-# Status and Attendance JSON 
-@app.route('/classes/rooms/<room_id>/attendance_json', methods=["GET", "POST"]) 
-@login_required 
-def attendance_json(room_id): 
-    course = Courses.query.filter_by(id=room_id).first_or_404()
-    present_set = set() # Set of students present
-    absent_set = set() # Set of absent students (those naughty lil kids! Santa ain't bringing you presents this year!)
-    present_list = list() 
+    signups = Signups.query.filter_by(course=course_id) # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(session_id=session_id) # List of reactions that happened in this specific course, specific session
+    # speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
+    present_set = set()
+    absent_set = set()
+    for r in reactions_specific: 
+        if (r.reactor.role == 1):
+            present_set.add(r.reactor.username) # Then add to the present list
+    for signup in signups: # Going through the list of signups
+        if (signup.student.username not in present_set and signup.student.role == 1):
+            absent_set.add(signup.student.username)
+
+    return render_template('attendance.html', course=course,
+                                            session=session, 
+                                            present_set=present_set, 
+                                            absent_set=absent_set, 
+                                            title=course.course_name)
+    
+
+# Method to activate class
+@app.route('/classes/rooms/<course_id>/activate', methods=["GET", "POST"]) # POST method, important declaration
+@login_required
+def activate(course_id):
+    course = Courses.query.filter_by(id=course_id).first_or_404()
+    if (current_user.id == course.teacher_id and course.status != 1):
+        session = Session(course_id=course_id)
+        course.status = 1
+        db.session.add(course)
+        db.session.add(session)
+        db.session.commit() 
+    return redirect(url_for('course_waiting_room', course_id=course.id))
+
+# Method to end class
+@app.route('/classes/rooms/<course_id>/<session_id>/end', methods=["GET", "POST"]) # POST method, important declaration
+@login_required
+def end(course_id, session_id):
+    course = Courses.query.get(course_id)
+    session = Session.query.get(session_id) # Getting the correct session
+    
+    session.timestamp_end = datetime.utcnow() # Setting the end timestamp for the session
+    course.status = 0 # Setting course status to 0 (unactivated)
+    db.session.add(course)
+    db.session.add(session)
+    db.session.commit()
+
+    return redirect(url_for('course_waiting_room', course_id=course.id))
+
+# Function for all the emotions and speeds
+@app.route('/classes/course/session/<session_id>/react/<reaction_num>', methods=["GET", "POST"]) # Adds an emotion, also don't forget to add this methods POST thing!
+@login_required
+def submit_reaction(session_id, reaction_num):
+    session = Session.query.get(session_id)
+    course = session.session_course_id # This gives you the actual course
+    course_id = session.course_id # This will give you the course id
+
+    reaction = Reactions(user_id=current_user.id, reactions=reaction_num, reactions_course_id=course_id, session_id=session_id) # This is the user's reaction based on the button pressed
+    db.session.add(reaction)
+    db.session.commit() 
+    return redirect(url_for('sessions', session_id=session_id)) # Redirects to the room page
+
+
+
+# Fetch Session json (includes reactions, speeds, attendance, percentage, speed num, and course status)
+@app.route('/classes/course/session/<session_id>/session_json', methods=["GET", "POST"])
+@login_required
+def session_json(session_id):
+    print("Calling session json with ", session_id)
+    # Emotions, speeds, attendance, course status
+    reactions = Reactions.query.filter_by(session_id=session_id).all() # Only show the reactions for this specific course's session
+    reaction_list = []
+    speed_list = []
+    attendance_list = []
+    for r in reactions:
+        print("\n\n", "r", r, r.reactions, "\n\n")
+        if (r.reactions <= 5): # Then it is an emotion, add to emotion dictionary
+            emotions_dict = {
+                "reactions_id": r.id,
+                "user_id": r.reactor.username,
+                "emotions": r.reactions,
+                "reactions_course_id": r.reactions_course_id
+            }
+            reaction_list.append(emotions_dict)
+        elif (r.reactions > 5): # Then it is a speed, add to speed dictionary
+            speed_dict = {
+                "reactions_id": r.id, 
+                "user_id": r.reactor.username,
+                "speed": r.reactions,
+                "reactions_course_id": r.reactions_course_id
+            }
+            speed_list.append(speed_dict)
+
+    # To get the attendance information
+    session = Session.query.get(session_id)
+    course = session.session_course_id # This gives you the actual course
+    course_id = session.course_id # This will give you the course id
+
+    signups = Signups.query.filter_by(course=course_id) # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(session_id=session_id) # List of reactions that happened in this specific course, specific session
+    # speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
+    present_set = set()
+    absent_set = set()
+    present_list = list()
     absent_list = list()
-    final_list = list()
-    students = Signups.query.filter_by(course=room_id) # List of students that are in this specific course
-    reactions_specific = Reactions.query.filter_by(reactions_course_id=room_id) # List of reactions that happened in this specific course
-    speeds_specific = Speed.query.filter_by(speed_course_id=room_id) # List of reactions that happened in this specific course
-    for s in students:
-        for r in reactions_specific: 
-            if s.user_id == r.user_id: # If the student has reacted
-                present_set.add(s.student.username) # Then add to the present list
-        for sp in speeds_specific: 
-            if s.user_id == sp.user_id: # If the student has made a speed complaint
-                present_set.add(s.student.username) # Then add to the present list
-    for student in students: # Going through the list of students
-        found = False
-        for p in present_set: # Going through list of present students
-            if student.student.username == p: # If the student in the student list is in the present list
-                found = True # Set found to true
-        if found == False: # Otherwise, if they are not in the present list
-            absent_set.add(student.student.username) # Add that student to the absent list
+    for r in reactions_specific: 
+        if (r.reactor.role == 1):
+            present_set.add(r.reactor.username) # Then add to the present list
+    for signup in signups: # Going through the list of signups
+        if (signup.student.username not in present_set and signup.student.role == 1):
+            absent_set.add(signup.student.username)
+    
+    present_list = present_set
+    absent_list = absent_set
+    converted_dict_present = {
+        "Present": list(present_list)  
+    }
+    attendance_list.append(converted_dict_present)
+    
+    converted_dict_absent = {
+        "Absent": list(absent_list)
+    }
+    attendance_list.append(converted_dict_absent)
 
+    # Percentage of happiness
+    reactions = Reactions.query.filter_by(session_id=session_id) # Reactions represents all the reactions for this specific room
+    percent_happy = "No reactions, no percentage"
+    size = 0
+    for reaction in reactions:
+        size += 1
+    if size > 0:
+        total = 0
+        happy = 0
+        for r in reactions:
+            total += 1
+            if r.reactions == 0:
+                happy += 1
+        percent_happy = (happy/total) * 100
+    
     # To determine the speed number
-    speed_filtered = Speed.query.filter_by(speed_course_id=room_id)
+    speed_filtered = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5).all() # Speeds filtered out by the session ID and by the reaction number
     faster = 0
     slower = 0
     speed_number = 0
     calculated_number = 0
     for s in speed_filtered:
-        if s.speed == 0: # Faster request
+        if s.reactions == 6: # Faster request
             faster += 1
         else: # Slower request
             slower += 1
@@ -295,202 +402,31 @@ def attendance_json(room_id):
         speed_number = 5
         if total == 0: # No speeds have been selected yet
             speed_number = 0
-    
-    # for s in students: 
-    #     present = False
-    #     already = False
-    #     for r in reactions_specific:
-    #         if s.user_id == r.user_id: # If this is true, then that student has reacted in this class
-    #             for p in present_list: # Checking to see whether they are already in the present_list
-    #                 if s.student.username == p: # If they are already in the present list
-    #                     already = True # Set already to true
-    #             if already == False:
-    #                 present_list.append(s.student.username) # Or you can append their ID by doing s.ID (s.student is the backref which will bring up the user in <User> form)
-    #                 present = True 
-    #     if present == False: # If they didn't make a reaction
-    #         for sp in speeds_specific: # Then check if they made a speed complaint
-    #             if s.user_id == sp.user_id: # If this is true, then that student has complained about the speed in this class (naughty lil kids!)
-    #                 present_list.append(s.student.username) 
-    #                 present = True
-    #         if present == False: # If they didn't react or enter a speed
-    #             absent_list.append(s.student.username) # Add them to the absent list
-    present_list = present_set
-    absent_list = absent_set
-    converted_dict_present = {
-        "Present": list(present_list)  
+
+    # To get course status information
+    if (session.timestamp_end is None):
+        course_status = 1 # The session is still active
+    else:
+        course_status = 0 # The session is over
+
+    result = {
+        "reactions": reaction_list, 
+        "speeds": speed_list,
+        "attendance": attendance_list, 
+        "course_status": course_status,
+        "percentage": percent_happy,    
+        "speed_num": speed_number,
+        "speed_percentage": calculated_number  
     }
-    final_list.append(converted_dict_present)
-    
-    converted_dict_absent = {
-        "Absent": list(absent_list)
-    }
-    final_list.append(converted_dict_absent)
-
-    final_list.append({"speed": speed_number, "percentage": calculated_number})
-    #return str(final_list)
-    return jsonify(list(final_list))
-    
-
-# Method to activate class
-@app.route('/classes/rooms/<room_id>/activate', methods=["POST"]) # POST method, important declaration
-@login_required
-def activate(room_id):
-    course = Courses.query.filter_by(id=room_id).first_or_404()
-    active = Status(status_course_id=course.id, status=1) # Status is 1, meaning class is activated
-    status_all = Status.query.all()
-    found = False
-    for s in status_all:
-        if active.status_course_id == s.status_course_id:
-            exists = Status.query.filter_by(status_course_id=active.status_course_id).first_or_404() # Variable that represents the correct row of the database
-            exists.status=1
-            db.session.add(exists)
-            db.session.commit()
-            found = True
-    if found == False:
-        db.session.add(active)
-        db.session.commit()
-    return redirect(url_for('rooms', room_id=course.id))
-
-# Method to end class
-@app.route('/classes/rooms/<room_id>/end', methods=["POST"]) # POST method, important declaration
-@login_required
-def end(room_id):
-    course = Courses.query.filter_by(id=room_id).first_or_404()
-    end = Status(status_course_id=course.id, status=0) # Status is 0, meaning class is ended. What the students are thinking --> Yay! 
-    status_all = Status.query.all()
-    found = False
-    for s in status_all: # Looping through all the Status objects, e.g. <Status 1 1 1>
-        if end.status_course_id == s.status_course_id: # If this course is laready in the database
-            exists = Status.query.filter_by(status_course_id=end.status_course_id).first_or_404() # Variable that represents the correct row of the database
-            exists.status = 0  # Then update that course's status to 0 (inactive)
-            db.session.add(exists) # Adding and committing to the database
-            db.session.commit() 
-            reactions = Reactions.query.filter_by(reactions_course_id=course.id) # Filtering the reactions to get only the reactions for this specific course
-            for r in reactions: # Looping through all the reactions for this course only
-                db.session.delete(r) # Deleting them because the class has ended, hurrah!
-                db.session.commit() 
-            speeds = Speed.query.filter_by(speed_course_id=course.id) # Deleting all the speed complaints for this course
-            for s in speeds:
-                db.session.delete(s)
-                db.session.commit()
-            found = True # This course was found in the database
-    if found == False: # If this course was not found in the database
-        db.session.add(end) # Just add the entire Status object
-        db.session.commit()
-    return redirect(url_for('rooms', room_id=course.id))
-
-# Start of the defs for all the emotions and speeds
-@app.route('/classes/rooms/<room_id>/good', methods=["POST"]) # Adds an emotion, also don't forget to add this methods POST thing!
-@login_required
-def happy(room_id):
-    course = Courses.query.filter_by(id=room_id).first_or_404() # Finding the actual course by filtering through the room_id
-    reaction = Reactions(user_id=current_user.id, emotions=0, reactions_course_id=room_id) # This is the user's reaction based on the button pressed
-    db.session.add(reaction)
-    db.session.commit()
-    return redirect(url_for('rooms', room_id=course.id)) # Redirects to the room page
-
-@app.route('/classes/rooms/<room_id>/okay', methods=["POST"]) # Adds an emotion, also don't forget to add this methods POST thing!
-@login_required
-def okay(room_id):
-    course = Courses.query.filter_by(id=room_id).first_or_404()
-    reaction = Reactions(user_id=current_user.id, emotions=1, reactions_course_id=room_id)
-    db.session.add(reaction)
-    db.session.commit()
-    return redirect(url_for('rooms', room_id=course.id)) # Redirects to the room page
-
-@app.route('/classes/rooms/<room_id>/bad', methods=["POST"]) # Adds an emotion, also don't forget to add this methods POST thing!
-@login_required
-def bad(room_id):
-    course = Courses.query.filter_by(id=room_id).first_or_404()
-    reaction = Reactions(user_id=current_user.id, emotions=2, reactions_course_id=room_id)
-    db.session.add(reaction)
-    db.session.commit()
-    return redirect(url_for('rooms', room_id=course.id)) # Redirects to the room page
-
-@app.route('/classes/rooms/<room_id>/fast', methods=["POST"]) # Too Fast!
-@login_required
-def fast(room_id):
-    course = Courses.query.filter_by(id=room_id).first_or_404()
-    speed = Speed(user_id=current_user.id, speed=0, speed_course_id=room_id)
-    db.session.add(speed)
-    db.session.commit()
-    return redirect(url_for('rooms', room_id=course.id)) # Redirects to the room page
-
-@app.route('/classes/rooms/<room_id>/slow', methods=["POST"]) # Too Fast!
-@login_required
-def slow(room_id):
-    course = Courses.query.filter_by(id=room_id).first_or_404()
-    speed = Speed(user_id=current_user.id, speed=1, speed_course_id=room_id)
-    db.session.add(speed)
-    db.session.commit()
-    return redirect(url_for('rooms', room_id=course.id)) # Redirects to the room page
-
-# Percentage of happiness in class
-@app.route('/classes/rooms/<room_id>/percent', methods=["GET", "POST"])
-@login_required
-def percent(room_id):
-    reactions = Reactions.query.filter_by(reactions_course_id=room_id) # Reactions represents all the reactions for this specific room
-    percent_happy = "No reactions, no percentage"
-    size = 0
-    for reaction in reactions:
-        size += 1
-    if size > 0:
-        total = 0
-        happy = 0
-        for r in reactions:
-            total += 1
-            if r.emotions == 0:
-                happy += 1
-        percent_happy = (happy/total) * 100
-    return str(percent_happy)
-    #return str(random.randint(100000, 999999)) # Generating a random code
-
-# Fetch Reactions page
-@app.route('/classes/rooms/<room_id>/reactions_only', methods=["GET", "POST"])
-@login_required
-def reactions_only(room_id):
-    reactions = Reactions.query.filter_by(reactions_course_id=room_id).all() # Only show the reactions for this specific course
-    result = []
-    for r in reactions:
-        converted_dict = {
-            "reactions_id": r.id,
-            "user_id": r.reactor.username,
-            "reactions": r.emotions,
-            "reactions_course_id": r.reactions_course_id
-        }
-        result.append(converted_dict)
     return jsonify(result)
 
-# Fetch Speeds page
-@app.route('/classes/rooms/<room_id>/speeds_only', methods=["GET", "POST"])
-@login_required
-def speeds_only(room_id):
-    speeds = Speed.query.filter_by(speed_course_id=room_id).all() # Only show the speeds for this specific course
-    result = []
-    for s in speeds:
-        converted_dict = {
-            "speeds_id": s.id,
-            "user_id": s.speeder.username,
-            "speed": s.speed,
-            "speed_course_id": s.speed_course_id
-        }
-        result.append(converted_dict)
-    return jsonify(result)
 
 # Fetch course status (active or inactive) json
-@app.route('/classes/rooms/<room_id>/course_status', methods=["GET", "POST"])
+@app.route('/classes/course/<course_id>/course_status_json', methods=["GET", "POST"])
 @login_required
-def course_status(room_id): 
-    status = Status.query.filter_by(status_course_id=room_id).all() # Only show the status for this specific course
-    result = list()
-    for s in status:
-        converted_dict = {
-            "status_id": s.id,
-            "course_id": s.status_course_id,
-            "status": s.status
-        }
-        result.append(converted_dict)
-    return jsonify(result)
+def course_status(course_id): 
+    course = Courses.query.get(course_id)
+    return jsonify({"status": course.status})
 
 # Just so I can see all the databases
 @app.route('/database') 
@@ -499,11 +435,10 @@ def database():
     reactions_all = Reactions.query.all()
     courses_all = Courses.query.all()
     signups_all = Signups.query.all()
-    speed_all = Speed.query.all()
-    status_all = Status.query.all()
+    session_all = Session.query.all()
     #user_signups = User.query.join(Signups, (Signups.user_id == User.id)) 
     user_signups = User.query.join(Signups, (Signups.user_id == User.id)).join(Courses, (Courses.id == Signups.course)) 
-    return render_template('database.html', user_all=user_all, reactions_all=reactions_all, courses_all=courses_all, signups_all=signups_all, user_signups=user_signups, speed_all=speed_all, status_all=status_all, title='Database') # Have to pass in your variables above in here
+    return render_template('database.html', user_all=user_all, reactions_all=reactions_all, courses_all=courses_all, session_all=session_all, signups_all=signups_all, user_signups=user_signups, title='Database') # Have to pass in your variables above in here
 
 # Testing javascript image reload
 @app.route('/image-reload')

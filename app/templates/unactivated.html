@@ -14,6 +14,15 @@
         Bye there
     </button>
 
+    <button id="yupyup" value="{{ session_id }}" name=0>
+        Bye there
+    </button>
+
+    <form action="/classes/rooms/{{ course.id }}/activate" method='post'>
+        <button type="submit">Activate Class</button>
+    </form>
+    <!-- If student, just show the text, if it is a teacher, have an activate button -->
+
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
 {% endblock %}

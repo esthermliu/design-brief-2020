@@ -18,14 +18,14 @@
     <!-- Students and their signups -->
     {% for u in user_signups_filtered %} 
         <p>{{ u.course_id.course_name }} | Teacher: {{ u.course_id.teacher.username }} | Class Code: {{ u.course_id.code }}</p> <!-- i.course_id will allow you to access the fields in the Course table-->
-        <a href = "{{ url_for('rooms', room_id=u.course_id.id) }}">Enter Room</a>
+        <a href = "{{ url_for('course_waiting_room', course_id=u.course_id.id) }}">Enter Room</a>
     {% endfor %}
         
     {% if user.role == 0 %} <!-- If the user is a teacher, then show the activation stuff -->
         <!-- Teachers and their courses -->
         {% for t in teacher_courses %} <!-- Loops through all of the courses that teacher teaches -->
             <p>{{ t.course_name }} | Teacher: {{ t.teacher.username }} (you!) | Class Code: {{ t.code }}</p> <!-- Print out the course name and the teacher's username -->
-            <a href = "{{ url_for('rooms', room_id=t.id) }}">Enter Room</a><!-- Print out the course name and the teacher's username -->
+            <a href = "{{ url_for('course_waiting_room', course_id=t.id) }}">Enter Room</a><!-- Print out the course name and the teacher's username -->
         {% endfor %}
     {% endif %}
 

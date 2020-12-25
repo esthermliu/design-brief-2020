@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
     reactions = db.relationship('Reactions', backref='reactor', lazy='dynamic') # This will show all the reactions that this user has made
     teaches = db.relationship('Courses', backref='teacher', lazy='dynamic') # This will show all the courses that the user teaches
     signups = db.relationship('Signups', backref='student', lazy='dynamic') # This will show all of the signups of that user
-    speed = db.relationship('Speed', backref='speeder', lazy='dynamic') # This will show all the speed complaints of that user
+    #speed = db.relationship('Speed', backref='speeder', lazy='dynamic') # This will show all the speed complaints of that user
 
     def __repr__(self):
         return '<User {} {}>'.format(self.username, self.id)
@@ -49,47 +49,46 @@ def load_user(id):
 class Reactions(db.Model): # A base class for all models from Flask SQLAlchemy
     id = db.Column(db.Integer, primary_key=True) # every new database should have an ID so it knows how to organize the info passed in
     user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Taking the user ID from the user model, using the backref of reactor will show you the actual user
-    emotions = db.Column(db.Integer, index=False, unique=False) # Creating a new column in the database for emotions. Not unique and not indexable 
+    reactions = db.Column(db.Integer, index=False, unique=False) # Creating a new column in the database for emotions. Not unique and not indexable 
     reactions_course_id = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using backref of course_actual will show you the actual course
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id')) # Using backref actual_session of will show you the actual session, e.g. <Session>
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow) # Timestamp
     #speed = db.Column(db.Integer, index=False, unique=False) # Creating a new column in the database for speed, will put in separate table actually
 
     def __repr__(self):
-        return '<Reaction {} {} {} {}>'.format(self.id, self.user_id, self.emotions, self.reactions_course_id)
+        return '<Reaction {} {} {} {} {}>'.format(self.id, self.user_id, self.reactions, self.reactions_course_id, self.timestamp)
 
-class Speed(db.Model):
+class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Use the backref of speeder will show you actual user
-    speed = db.Column(db.Integer, index=False, unique=False) # New column holding speed values, not unique nor indexable
-    speed_course_id = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using backref of course_s will show actual course
-    
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using the backref of session_course_id will show you the actual course
+    timestamp_start = db.Column(db.DateTime, index=True, default=datetime.utcnow) # Timestamp of the class starting
+    timestamp_end = db.Column(db.DateTime, index=True) # Timestamp of the class ending
+    reactions = db.relationship('Reactions', backref='actual_session', lazy='dynamic') # This will show all the reactions for that session
+
     def __repr__(self):
-        return '<Speed {} {} {} {}>'.format(self.id, self.user_id, self.speed, self.speed_course_id)
+        return '<Session {} {} {} {}>'.format(self.id, self.course_id, self.timestamp_start, self.timestamp_end)
 
 class Courses(db.Model): 
     id = db.Column(db.Integer, primary_key=True) # Always need ID
     course_name = db.Column(db.String(140), index=False, unique=False) # Not indexable or unique bc many people can have the same course
     code = db.Column(db.Integer, index=True, unique=True) # Indexable to link it back to the course name
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow) # Timestamp
+    status = db.Column(db.Integer, index=False, unique=False, default=0) # 0 means the class is inactive, 1 is active
     teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Taking the user ID from the user model, using backref of teacher will show you the actual teacher
     signups = db.relationship('Signups', backref='course_id', lazy='dynamic') # This will show all the student signups for this course
     reactions = db.relationship('Reactions', backref='course_actual', lazy='dynamic') # This will show all the reactions for this course
-    speed = db.relationship('Speed', backref='course_s', lazy='dynamic') # This will show all the speed complaints for this course 
-    status = db.relationship('Status', backref='s_course_id', lazy='dynamic') # This will show the status of the course, one-to-one relationship
+    #speed = db.relationship('Speed', backref='course_s', lazy='dynamic') # This will show all the speed complaints for this course 
+    session = db.relationship('Session', backref='session_course_id', lazy='dynamic') # This will show you all the sessions of the course
 
     def __repr__(self):
-        return '<Courses {} {} {} {}>'.format(self.id, self.course_name, self.code, self.teacher_id)
+        return '<Courses {} {} {} {} {} {}>'.format(self.id, self.course_name, self.code, self.teacher_id, self.status, self.timestamp)
 
-class Status(db.Model): # Holds info abt whether each room is activated or not
-    id = db.Column(db.Integer, primary_key=True)
-    status_course_id = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using the backref of s_course_id will give you the actual id of the object
-    status = db.Column(db.Integer, index=False, unique=False) # Not indexable or unique, 0 is not activated, 1 is activated
-
-    def __repr__(self):
-        return '<Status {} {} {}>'.format(self.id, self.status_course_id, self.status) 
 
 class Signups(db.Model):
     id = db.Column(db.Integer, primary_key=True) # Always need ID
     user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Using the backref student will show you the actual student who signed up, inside of the foreign key should be lowercase
     course = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using the backref course_id will show you the actual id of the course
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow) # Timestamp
 
     def __repr__(self):
-        return '<Signups {} {} {}>'.format(self.id, self.user_id, self.course)
+        return '<Signups {} {} {} {}>'.format(self.id, self.user_id, self.course, self.timestamp)

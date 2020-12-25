@@ -5,36 +5,40 @@
 {% endblock %}
 
 {% block content %}
+<h1>
+    This session is currently {{ 'active' if session.timestamp_end == None else 'inactive' }}
+</h1>
 <div class = "titleHolder">
     <h1>Welcome to {{ course.course_name }}, {{ current_user.username }}!</h1> 
 </div>
 <div class = "overallContainer">
     {% if current_user.role == 0 %} <!-- If the user is a teacher --> 
         <form action="/classes/rooms/{{ course.id }}/activate" method='post'>
-            {% if found == true %} <!-- If this class has already been activated before -->
-                {% for s in status_all %}
-                    {% if s.status_course_id == course.id %}
-                        {% if s.status == 1 %}
-                            <button type="submit" formaction="/classes/rooms/{{ course.id }}/end">End Class</button>
-                            <button type="submit" formaction="/classes/rooms/{{ course.id }}/attendance">Get Attendance</button>
-                        {% else %}
-                            <button type="submit">Start Class</button>
-                        {% endif %}
-                    {% endif %} 
-                {% endfor %}
-            {% else %} <!-- First time activating that class -->
+             <!-- If this class has already been activated before -->
+                
+                        <button type="submit" formaction="/classes/rooms/{{ course.id }}/{{ session.id }}/end">End Class</button>
+                        <button type="submit" formaction="/classes/course/session/{{ session.id }}/attendance">Get Attendance</button>
+                    
+                        <button type="submit">Start Class</button>
+                    
+               
+            
                 <button type="submit">Activate Class</button>
-            {% endif %}
+           
         </form>
     {% endif %}
 
     <!-- Testing something out here-->
-    <button id="yipyip" value="{{ course.id }}" name=1>
+    <button id="yipyip" value="{{ session.id }}" name=1>
         Hi there
     </button>
 
-    <button id="yopyop" value="{{ course.id }}" name=0>
+    <button id="yopyop" value="{{ session.id }}" name=0>
         Bye there
+    </button>
+
+    <button id="yupyup" value="{{ course.id }}" name=1>
+        Hi there
     </button>
 
     <!-- Thermometer/Temperature Visualization -->
@@ -83,21 +87,21 @@
     <div class = "reactionsHolder">
         <h2 id = "title">Reactions</h2>
         <!-- <form id='reaction_form'> Form for feeling good :) -->
-        <button id="temp" name="react" onclick="submitForm()">Good</button> <!-- name is react -->
+        <button id="temp" name="react" onclick="submitFormGeneral({{ session_id }}, 0)">Good</button> <!-- name is react -->
         <!-- </form>  -->
         <!--<form action="/classes/rooms/{{ course.id }}/okay" method='post'> --><!-- Form for feeling meh :| -->
-        <button id="okay" name="react" onclick="submitFormOk()">Okay</button>
+        <button id="okay" name="react" onclick="submitFormGeneral({{ session_id }}, 1)">Okay</button>
         <!--</form>-->
         <!--<form action="/classes/rooms/{{ course.id }}/bad" method='post'> --><!-- Form for feeling sad :( -->
-        <button id="bad" name="react" onclick="submitFormBad()">Bad</button>
+        <button id="bad" name="react" onclick="submitFormGeneral({{ session_id }}, 2)">Bad</button>
         <!--</form>-->
 
         <h2>Speed</h2>
         <!--<form action="/classes/rooms/{{ course.id }}/fast" method='post'>--> <!-- Form for feeling good :) -->
-        <button id="faster" onclick="fasterForm()">Faster</button>
+        <button id="faster" onclick="submitFormGeneral({{ session_id }}, 6)">Faster</button>
         <!--</form>-->
         <!--<form action="/classes/rooms/{{ course.id }}/slow" method='post'>--> <!-- Form for feeling meh :| -->
-        <button id="slower" onclick="slowerForm()">Slower</button>
+        <button id="slower" onclick="submitFormGeneral({{ session_id }}, 7)">Slower</button>
         <!--</form>-->
     
 
@@ -169,55 +173,32 @@
             <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
         </div>
     </div>
-    <!--{% if current_user.role == 0 %}--> <!-- If the current user is a teacher -->
-        <!--<h2>Attendance: </h2>
-        {% if found == true %} --><!-- If this class has already been activated before -->
-                <!--{% for s in status_all %}
-                    {% if s.status_course_id == course.id and s.status == 1 %}
-                        <div id = "attendance"> 
-                            <div id = "inside">
-                                <h3>Present Students (The good ones)</h3>
-                                {% for p in present_list %}
-                                    <p>{{ p }}</p>
-                                {% endfor %}
-                                <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
-                                {% for a in absent_list %}
-                                    <p>{{ a }}</p>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endif %}     
-                {% endfor %}   
-        {% endif %}
-    {% endif %}-->
 
     {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
-        <h2>Attendance: </h2>
-        {% if found == true %} <!-- If this class has already been activated before -->
-                {% for s in status_filtered %}
-                    {% if s.status == 1 %}
-                        <div id = "attendance"> 
-                            <div id = "inside">
-                                <h3>Present Students (The good ones)</h3>
-                                <div id = "present">
-                                </div>
-                                <!--{% for p in present_list %}
-                                    <p>{{ p }}</p>
-                                {% endfor %}-->
-                                <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
-                                <div id = "absent">
-                                </div>
-                                <!--{% for a in absent_list %}
-                                    <p>{{ a }}</p>
-                                {% endfor %}-->
-                            </div>
-                        </div>
-                    {% endif %}     
-                {% endfor %}   
-        {% endif %}
+        <h2>Attendance: </h2> 
+            <div id = "attendance"> 
+                <div id = "inside">
+                    <h3>Present Students (The good ones)</h3>
+                    <div id = "present">
+                    </div>
+                    <!--{% for p in present_list %}
+                        <p>{{ p }}</p>
+                    {% endfor %}-->
+                    <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
+                    <div id = "absent">
+                    </div>
+                    <!--{% for a in absent_list %}
+                        <p>{{ a }}</p>
+                    {% endfor %}-->
+                </div>
+            </div>      
     {% endif %}
     
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
+
+    <script type="text/javascript">
+        init({{course.id}}, {{session.id}}, {{course.status}});
+    </script>
 </div>
 {% endblock %}
