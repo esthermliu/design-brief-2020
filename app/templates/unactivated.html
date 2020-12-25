@@ -2,15 +2,19 @@
 
 {% block content %}
     <h1>This class has not started yet</h1>
-    <h1>Your teacher is late! Hurrah! Maybe they won't come to remote school today ;)</h1>
-    <h1>Just kidding, don't get too comfortable yet, {{ current_user.username }}.</h1>
-    <h1>They're coming for you...</h1>
+    {% if current_user.role == 1 %} <!-- If current user is a student-->
+        <h1>Your teacher is late! Hurrah! Maybe they won't come to remote school today ;)</h1>
+        <h1>Just kidding, don't get too comfortable yet, {{ current_user.username }}.</h1>
+        <h1>They're coming for you...</h1>
+    {% endif %}
 
-
-    <form action="/classes/rooms/{{ course.id }}/activate" method='post'>
-        <button type="submit">Activate Class</button>
-    </form>
-    <!-- If student, just show the text, if it is a teacher, have an activate button -->
+    {% if current_user.role == 0 %} <!-- If current user is a teacher -->
+        <form action="/classes/rooms/{{ course.id }}/activate" method='post'> <!-- Show the activate class button -->
+            <button type="submit">Activate Class</button>
+        </form>
+        <a href = "{{ url_for('previous_session_list', course_id=course.id) }}">Access Data from Previous Sessions</a>
+    {% endif %}
+    
 
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='scripts/reloadCoursePage.js') }}"></script>

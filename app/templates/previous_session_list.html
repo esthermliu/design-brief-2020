@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for s in sessions %}
+        <p>Session ID: {{ s.id }}</p>
+        <p>Session Start Time: {{ s.timestamp_start }}</p>
+        <p>Session End Time: {{ s.timestamp_end }}</p>
+        <a href = "{{ url_for('previous_session_data', course_id=course_id, session_id=s.id) }}">View Session Data</a>
+    {% endfor %}
+{% endblock %}

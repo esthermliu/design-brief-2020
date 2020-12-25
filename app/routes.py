@@ -433,6 +433,45 @@ def course_status(course_id):
     course = Courses.query.get(course_id)
     return jsonify({"status": course.status})
 
+# Shows the list of previous sessions
+@app.route('/classes/course/<course_id>/previous_session_list')
+@login_required
+def previous_session_list(course_id):
+    sessions = Session.query.filter_by(course_id=course_id).filter(Session.timestamp_end!=None).all() # This is all the sessions for that course id that are inactive
+    return render_template('previous_session_list.html', course_id=course_id, sessions=sessions)
+    # Inside of the HTML page, there are links that will show the specific info for that session
+    # Create a new route to the rendered page
+
+# Directs to the previous session data pages
+@app.route('/classes/course/<course_id>/previous_session_data/<session_id>')
+@login_required
+def previous_session_data(course_id, session_id):
+    session = Session.query.get(session_id)
+    
+    course = session.session_course_id # This gives you the actual course
+    course_id = session.course_id # This will give you the course id
+
+    signups = Signups.query.filter_by(course=course_id) # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(session_id=session_id) # List of reactions that happened in this specific course, specific session
+    speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
+    present_set = set()
+    absent_set = set()
+    for r in reactions_specific: 
+        if (r.reactor.role == 1): # If the reactor is a student
+            present_set.add(r.reactor.username) # Then add to the present list
+    for signup in signups: # Going through the list of signups
+        if (signup.student.username not in present_set and signup.student.role == 1):
+            absent_set.add(signup.student.username)
+    
+    return render_template('previous_session_data.html', course=course,
+                                        reactions_specific=reactions_specific,
+                                        speeds_specific=speeds_specific,
+                                        session=session,
+                                        session_id=session_id,
+                                        present_list=list(present_set), 
+                                        absent_list=list(absent_set), 
+                                        title=course.course_name + " Session " + session_id) 
+
 # Just so I can see all the databases
 @app.route('/database') 
 def database():

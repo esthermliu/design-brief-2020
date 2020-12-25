@@ -6,25 +6,16 @@
 
 {% block content %}
 <h1>
-    This session is currently {{ 'active' if session.timestamp_end == None else 'inactive' }}
+    This session is currently {{ 'active' if session.timestamp_end == None else 'inactive' }} <!-- Prints out whether the session is active or not-->
 </h1>
 <div class = "titleHolder">
     <h1>Welcome to {{ course.course_name }}, {{ current_user.username }}!</h1> 
 </div>
 <div class = "overallContainer">
-    {% if current_user.role == 0 %} <!-- If the user is a teacher --> 
+    {% if current_user.role == 0 and session.timestamp_end == None %} <!-- If the user is a teacher and the session is active --> 
         <form action="/classes/rooms/{{ course.id }}/activate" method='post'>
-             <!-- If this class has already been activated before -->
-                
-                        <button type="submit" formaction="/classes/rooms/{{ course.id }}/{{ session.id }}/end">End Class</button>
-                        <button type="submit" formaction="/classes/course/session/{{ session.id }}/attendance">Get Attendance</button>
-                    
-                        <button type="submit">Start Class</button>
-                    
-               
-            
-                <button type="submit">Activate Class</button>
-           
+            <button type="submit" formaction="/classes/rooms/{{ course.id }}/{{ session.id }}/end">End Class</button>
+            <!--<button type="submit" formaction="/classes/course/session/{{ session.id }}/attendance">Get Attendance</button>-->
         </form>
     {% endif %}
 
@@ -70,7 +61,7 @@
     
 
     <!--<img style = "height: 250px;"src = "../../../static/Dog.jpg">-->
-
+    
     <div class = "reactionsHolder">
         <h2 id = "title">Reactions</h2>
         <!-- <form id='reaction_form'> Form for feeling good :) -->

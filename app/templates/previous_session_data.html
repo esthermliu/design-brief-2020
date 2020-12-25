@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2> Reaction Results: </h2> <!-- Shows the reaction results-->
+<div id = "reactionResults">
+    {% for r in reactions_specific %}
+        {% if r.reactions == 0 %}  <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
+            <p>Good | {{ r.reactor.username }}</p>
+        {% elif r.reactions == 1 %}
+            <p>Okay | {{ r.reactor.username }}</p>
+        {% else %}
+            <p>Bad | {{ r.reactor.username }}</p>
+        {% endif %}
+    {% endfor %}
+</div>
+
+
+<h2> Speed Results: </h2> <!-- Shows the speed results -->
+<div id = "speedResults">
+{% for s in speeds_specific %}
+    {% if s.reactions == 6 %} <!-- Making it easier to see what each speed number represents, 6=faster, 7=slower-->
+        <p>Faster | {{ s.reactor.username }}</p>
+    {% else %}
+        <p>Slower | {{ s.reactor.username }}</p>
+    {% endif %}
+{% endfor %}
+</div>
+
+<h2>Attendance: </h2> 
+    <div id = "attendance"> 
+        <div id = "inside">
+            <h3>Present Students (The good ones)</h3>
+            <div id = "present">
+            </div>
+            {% for p in present_list %}
+                <p>{{ p }}</p>
+            {% endfor %}
+            <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
+            <div id = "absent">
+            </div>
+            {% for a in absent_list %}
+                <p>{{ a }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
