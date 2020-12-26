@@ -1,7 +1,7 @@
-// Fetches all the session info from the API
-function fetchSessionInfo(course_id, session_id, status) {
+// Fetches all the session info from the API (for the teacher)
+function fetchSessionInfoTeacher(course_id, session_id, status) {
     let url = "/classes/course/session/" + session_id + "/session_json";
-    console.log("HELLO")
+    console.log("HELLO TEACHER")
     fetch(url, {method: "GET"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .then(response => response.json()) 
@@ -9,15 +9,33 @@ function fetchSessionInfo(course_id, session_id, status) {
         .catch(handleError);
 }
 
+// Fetches all the session info from the API (for the student)
+function fetchSessionInfoStudent(course_id, session_id, status) {
+    let url = "/classes/course/session/" + session_id + "/session_json";
+    console.log("HELLO STUDENT")
+    fetch(url, {method: "GET"})
+        .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
+        .then(response => response.json()) 
+        .then((data) => displaySome(status, data)) // Calls the displayData function, which will update the thermometer visually
+        .catch(handleError);
+}
+
 // Calls all the separate functions that display each feature, also includes the funtion that checks whether page will be refreshed
 function displayAll(status, data) {
-    checkIfShouldRefresh(status, data["course_status"])
+    checkIfShouldRefresh(status, data["course_status"]); // Checks whether to refresh the page
     displayPercentage(data["percentage"]); // Display percentage on the thermometer
     console.log(data["percentage"]);
     displayReactions(data["reactions"]); // Display emotions
     displaySpeeds(data["speeds"]); // Display speeds
     displayCalculatedSpeed(data["speed_num"]); // Display the calculated speed number
     displayAttendance(data["attendance"]); // Display the attendance
+}
+
+// Only calls some of the functions to display certain features for the student
+function displaySome(status, data) { 
+    checkIfShouldRefresh(status, data["course_status"]); // To check whether to refresh
+    displayPercentage(data["percentage"]);  // For the percentage
+    displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
 }
 
 // Checks whether the page should be refreshed, oldStatus is the status passed in via init function, newStatus is the updated status in the API
@@ -46,6 +64,25 @@ function handleError(err) {
 
 function updateThermometer(temp) {
     thermometer = document.getElementsByClassName("thermometer"); // Returns an array of elements with that class name
+    room_vibe = document.getElementById("room_vibe"); // Grabs the HTML div that will display the overall room vibe
+    room_vibe.innerHTML = ""; // Clearing everything in the room_vibe div
+    if (temp > 67) {
+        console.log("Happy Room Vibe");
+        room_vibe.innerHTML += ('<img id = "vibe" class = "teacherStuff" src="../../../../static/images/HappyShadow.png">');
+        room_vibe.innerHTML += ('<h2 class = "vibeHeader teacherVibeHeader">Happy Room Vibes!</h2>');
+    } else if (temp > 34) {
+        console.log("Meh Room Vibe");
+        room_vibe.innerHTML += ('<img id = "vibe" class = "teacherStuff" src="../../../../static/images/MehShadow.png">');
+        room_vibe.innerHTML += ('<h2 class = "vibeHeader teacherVibeHeader">Unamused Room Vibes...</h2>');
+    } else if (temp > 0) {
+        console.log("Sad Room Vibe");
+        room_vibe.innerHTML += ('<img id = "vibe" class = "teacherStuff" src="../../../../static/images/SadShadow2.png">');
+        room_vibe.innerHTML += ('<h2 class = "vibeHeader teacherVibeHeader">Struggling Room Vibes!</h2>');
+    } else {
+        console.log("No Room Vibe");
+        room_vibe.innerHTML += ('<img id = "vibe" class = "teacherStuff" src="../../../../static/images/NoneShadow.png">');
+        room_vibe.innerHTML += ('<h2 class = "vibeHeader teacherVibeHeader">No Room Vibes Yet</h2>');
+    }
     console.log("Thermometer" + thermometer[0]) 
     console.log("Temperature: " + temp)
     thermometer[0].style.height = temp + "%"; // Changes the height of the thermometer div to the temp value
@@ -65,19 +102,27 @@ function displayReactions(reactions) {
     reaction_html = document.getElementById("reactionResults")
     document.getElementById("reactionResults").innerHTML = ""; // Clearing all the content in the div 
     console.log("Testing")
-    for (let i in reactions) {
-        console.log("reactions: " + reactions[i]["emotions"]);
-        console.log("user ID: " + reactions[i]["user_id"]);
-        var user_reaction = reactions[i]["emotions"];
-        var username = reactions[i]["user_id"];
-        if (user_reaction == 0) { // Determining what to print out based on the reaction number
-            user_reaction = "Good"
-        } else if (user_reaction == 1) {
-            user_reaction = "Okay"
-        } else {
-            user_reaction = "Bad"
+    var reactions_counter = 0;
+    var r_for;
+    for (r_for = reactions.length - 1; r_for >= 0; r_for--) { // Gets the last five reactions
+        console.log("HELLO HERE", reactions.length);
+        reactions_counter++;
+        if (reactions_counter > 5) {
+            break; // Breaks out of the for loop
         }
-        reaction_html.innerHTML += ('<p>' + user_reaction + " | " + username + '</p>'); // Adding the new info to the div
+        console.log("reactions: " + reactions[r_for]["emotions"]);
+        console.log("user ID: " + reactions[r_for]["user_id"]);
+        var user_reaction = reactions[r_for]["emotions"];
+        var username = reactions[r_for]["user_id"];
+        var emotions_timestamp = reactions[r_for]["emotions_timestamp"];
+        if (user_reaction == 0) { // Determining what to print out based on the reaction number
+            user_reaction = "<img class = 'makeSmaller' src='../../../../static/images/HappyShadow.png'>"
+        } else if (user_reaction == 1) {
+            user_reaction = "<img class = 'makeSmaller' src='../../../../static/images/MehShadow.png'>"
+        } else {
+            user_reaction = "<img class = 'makeSmaller' src='../../../../static/images/SadShadow2.png'>"
+        }
+        reaction_html.innerHTML += ('<div class = "userReactionView">' + user_reaction + "<p>" + username + "</p>" + '</div>'); // Adding the new info to the div
     } 
 }
 
@@ -91,17 +136,24 @@ function displaySpeeds(speeds) {
     document.getElementById("speedResults").innerHTML = ""; // Clears everything in the div first
     //document.getElementById("speedVisual").innerHTML = ""; // Clears everything in the div first 
     console.log("Testing");
-    for (let i in speeds) {
-        console.log("speed: " + speeds[i]["speed"]);
-        console.log("user ID: " + speeds[i]["user_id"]);
-        var user_speed = speeds[i]["speed"];
-        var username = speeds[i]["user_id"];
-        if (user_speed == 6) { // Determining what string to print out depending on the number of the speed
-            user_speed = "Faster"; 
-        } else {
-            user_speed = "Slower";
+    var speeds_counter = 0;
+    var s_for;
+    for (s_for = speeds.length - 1; s_for >= 0; s_for--) { // Going backwards through the json list of speeds to only get 5 of them
+        speeds_counter++;
+        if (speeds_counter > 5) {
+            break; // Break out of the loop once 5 speeds have been grabbed
         }
-        speed_html.innerHTML += ('<p>' + user_speed + " | " + username + '</p>'); // Adds the info to the speedResults div    
+        console.log("speed: " + speeds[s_for]["speed"]);
+        console.log("user ID: " + speeds[s_for]["user_id"]);
+        var user_speed = speeds[s_for]["speed"];
+        var username = speeds[s_for]["user_id"];
+        var speed_timestamp = speeds[s_for]["speed_timestamp"];
+        if (user_speed == 6) { // Determining what string to print out depending on the number of the speed
+            user_speed = "<img class = 'makeSmaller' src='../../../../static/images/Bunny.gif'>"; 
+        } else {
+            user_speed = "<img class = 'makeSmaller' src='../../../../static/images/Turtle.gif'>";
+        }
+        speed_html.innerHTML += ('<div class = "userReactionView">' + user_speed + "<p> " + username + '</p></div>'); // Adds the info to the speedResults div    
     //visual_html.innerHTML += (image); // Adds the info to the speedResults div
     }
 }
@@ -118,12 +170,18 @@ function displayCalculatedSpeed(data) {
     }
     let speed_num = data;
     console.log(speed_num);
-    speed_html = document.getElementById("speedVisual");
-    speed_html.innerHTML += ('<p>' + speed_num + '</p>'); // Adds the speed num to the div
-    //let visualHolder = document.getElementById("visualHolder");
-    if (speed_num == 100) {
-
+    speed_html = document.getElementById("paceTitle");
+    speed_html.innerHTML = "" // Clears everything in the div
+    //speed_html.innerHTML += ('<p>' + speed_num + '</p>'); // Adds the speed num to the div
+    if (speed_num > 5) {
+        speed_html.innerHTML += ('<h2>Speed Up</h2>');
+    } else if (speed_num == 0) {
+        speed_html.innerHTML += ('<h2>Good Pace!</h2>');
+        speed_html.innerHTML += ("<img class = 'makeSmaller' src='../../../../static/images/GoodPace.gif'>");
+    } else {
+        speed_html.innerHTML += ('<h2>Slow Down</h2>');
     }
+    //let visualHolder = document.getElementById("visualHolder");
     if (speed_num <= 5) {    
         for (let i = 0; i < speed_num; i++) {
             visuals_slow[i].style.display = "block";
@@ -161,10 +219,20 @@ function displayAttendance(attendance) {
     }
 }
 
-function init(course_id, session_id, course_status) { // Course ID, session ID, and course status are all passed in through the rooms html page
-    console.log("Called INIT", "Previous course status", course_status);
+function initTeacher(course_id, session_id, course_status) { // Course ID, session ID, and course status are all passed in through the rooms html page
+    console.log("Called INIT Teacher", "Previous course status", course_status);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
-        fetchSessionInfo(course_id, session_id, course_status);
+        fetchSessionInfoTeacher(course_id, session_id, course_status);
     }, 5000) // The fetchSessionInfo function will be called every 5 seconds  
 }
+
+function initStudent(course_id, session_id, course_status) {
+    console.log("Called INIT Student");
+    const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
+        console.log("Update");
+        fetchSessionInfoStudent(course_id, session_id, course_status);
+    }, 5000) 
+}
+
+// Have separate functions: initTeacher and initStudent

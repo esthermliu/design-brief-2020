@@ -307,7 +307,7 @@ def session_json(session_id):
                 "user_id": r.reactor.username,
                 "emotions": r.reactions,
                 "reactions_course_id": r.reactions_course_id, 
-                "emotions_timetamp": r.timestamp
+                "emotions_timestamp": r.timestamp
             }
             reaction_list.append(emotions_dict)
     for r in reactions_time_filtered:
