@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,13 +19,36 @@
     </head>
     <header>
         <nav> 
-            <a href="{{ url_for('index') }}">Home</a>
             {% if current_user.is_anonymous %}
+            <div class = "headerItem">
+                <a href="{{ url_for('index') }}">Home</a>
+            </div>
             <a href="{{ url_for('login') }}">Login</a>
             {% else %}
-            <a href="{{ url_for('user', username=current_user.username) }}">Profile</a> <!-- Have to pass in what the username is here for the lik-->
-            <a href="{{ url_for('classes', username=current_user.username) }}">Classes</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <div class = "headerItem uppermost">
+                <div class = "insideHeader">
+                    <a class = "imageLinkHolder" href="{{ url_for('classes', username=current_user.username) }}">
+                        <img src = "{{ url_for('static', filename='images/ClassesIcon.png') }}">
+                    </a>
+                    <a href="{{ url_for('classes', username=current_user.username) }}">Classes</a>
+                </div>
+            </div>
+            <div class = "headerItem">
+                <div class = "insideHeader">
+                    <a class = "imageLinkHolder" href="{{ url_for('user', username=current_user.username) }}">
+                        <img src = "{{ url_for('static', filename='images/ProfileIcon.png') }}">
+                    </a>
+                    <a href="{{ url_for('user', username=current_user.username) }}">Profile</a> <!-- Have to pass in what the username is here for the link-->
+                </div>
+            </div>
+            <div class = "headerItem">
+                <div class = "insideHeader">
+                    <a class = "imageLinkHolder" href="{{ url_for('logout') }}">
+                        <img src = "{{ url_for('static', filename='images/LogoutIcon.png') }}">
+                    </a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
             {% endif %}
         </nav>
     </header>
@@ -38,6 +62,8 @@
             </ul>
         {% endif %}
         {% endwith %}
-        {% block content %} {% endblock %}
+        <div class = "contentHolder">
+            {% block content %} {% endblock %}
+        </div>
     </body>
 </html>

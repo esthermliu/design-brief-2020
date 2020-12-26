@@ -17,34 +17,33 @@ from datetime import datetime, timedelta
 @app.route('/')
 @app.route('/index')
 def index():
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': "Beautiful day in Kirkland, Washington!"
-        },
+    # posts = [
+    #     {
+    #         'author': {'username': 'John'},
+    #         'body': "Beautiful day in Kirkland, Washington!"
+    #     },
 
-        {
-            'author': {'username': 'Susan'},
-            'body': "My name is Susan!"
-        }
-    ]
-
-    return render_template('index.html', title="Home", posts=posts)
+    #     {
+    #         'author': {'username': 'Susan'},
+    #         'body': "My name is Susan!"
+    #     }
+    # ]
+    return render_template('index.html', title="Home")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
+    if current_user.is_authenticated: # If the current user is already logged in 
+        return redirect(url_for('classes', username=current_user.username)) # Then direct the user to their classes page
+    form = LoginForm() # Takes in the login form
+    if form.validate_on_submit(): # If the form is validated
+        user = User.query.filter_by(username=form.username.data).first() # Get the correct user from the database
+        if user is None or not user.check_password(form.password.data): # If the user does not exist or the user's password is not the same as the password in the form
+            flash('Invalid username or password') # Flash an invalid username/password message
+            return redirect(url_for('login')) # Redirect them to the login page
+        login_user(user, remember=form.remember_me.data) # Otherwise, log the user in 
+        next_page = request.args.get('next') 
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
+            next_page = url_for('classes', username=current_user.username) # Redirects to the classes page
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
@@ -307,7 +306,8 @@ def session_json(session_id):
                 "reactions_id": r.id,
                 "user_id": r.reactor.username,
                 "emotions": r.reactions,
-                "reactions_course_id": r.reactions_course_id
+                "reactions_course_id": r.reactions_course_id, 
+                "emotions_timetamp": r.timestamp
             }
             reaction_list.append(emotions_dict)
     for r in reactions_time_filtered:
@@ -316,7 +316,8 @@ def session_json(session_id):
                 "reactions_id": r.id, 
                 "user_id": r.reactor.username,
                 "speed": r.reactions,
-                "reactions_course_id": r.reactions_course_id
+                "reactions_course_id": r.reactions_course_id,
+                "speed_timestamp": r.timestamp
             }
             speed_list.append(speed_dict)
 

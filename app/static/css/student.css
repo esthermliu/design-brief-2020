@@ -1,5 +1,5 @@
 body {
-    background-color: skyblue;
+    background-color: #A8D0E6;
     display: flex;
     flex-direction: column;
 }
@@ -21,6 +21,7 @@ body {
     justify-content: center;
     width: 260px;
     border-radius: 30px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .thermometer, .thermometer_shell {
@@ -94,13 +95,16 @@ body {
 }
 
 .overallContainer {
-    padding: 0% 5% 0% 15%;
     display: flex;
     justify-content: space-between;
 }
 
 .titleHolder {
-    padding-left: 15%;
+    margin-bottom: 3%;
+}
+
+.titleHolder h1 {
+    font-weight: 400;
 }
 
 .all {
@@ -119,4 +123,49 @@ body {
 
 .turtle {
     width: 100%;
+}
+
+.roomsBox {
+    background-color: orange;
+}
+
+.roomsBox {
+    width: 80%;
+}
+
+.contentHolder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.makeReactionBox {
+    background-color: white;
+    display: flex;
+    border-radius: 40px;
+}
+
+#temp, #okay, #bad, #faster, #slower {
+    display: none;
+}
+
+.reactionImage {
+    height: 100%;
+}
+
+.shadowBox {
+    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
+    height: 130px;
+    border-radius: 50%;
+    margin: 5%;
+}
+
+#visualHolder {
+    display: flex;
 }

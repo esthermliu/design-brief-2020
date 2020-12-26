@@ -1,0 +1,109 @@
+.classesTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.classBlock {
+    background-color: #F76C6C;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2%;
+    padding-right: 4%;
+    padding-left: 4%;
+    cursor: pointer;
+    margin-right: 2%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    width: 15%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.classBlockHolder {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.classMargin {
+    margin-top: 5%;
+}
+
+.classImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+}
+
+.classImage img {
+    width: 100%;
+}
+
+.classDescription {
+    color: white;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 35px;
+    width: 100%;
+}
+
+.courseName {
+    font-size: 30px;
+}
+
+.courseTeacher {
+    font-size: 16px;
+}
+
+.courseCode {
+    font-size: 14px;
+    border-top: 1px solid white;
+}
+
+/* Title underline */
+
+.titleHolder h1 {
+    position: relative;
+    font-size: 40px;
+    font-weight: 600;
+    color: black;
+}
+
+.titleHolder h1:after {
+    position: absolute;
+	content: '';
+	height: 4px;
+	bottom: -20px;
+	/*margin: 0 auto; This will center the underline */ 
+	left: 0;
+    right: 0;
+	width: 28%;
+	background: #A8D0E6;
+}
+
+.createLink {
+    background-color: #F8E9A1;
+    text-decoration: none;
+    color: black;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+    padding: 20px 20px;
+    border-radius: 50px;
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
+}
+
+.createLink:hover {
+    background-color: #A8D0E6;
+    color: white;
+}
+
+

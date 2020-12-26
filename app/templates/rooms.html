@@ -5,178 +5,198 @@
 {% endblock %}
 
 {% block content %}
-<h1>
-    This session is currently {{ 'active' if session.timestamp_end == None else 'inactive' }} <!-- Prints out whether the session is active or not-->
-</h1>
-<div class = "titleHolder">
-    <h1>Welcome to {{ course.course_name }}, {{ current_user.username }}!</h1> 
-</div>
-<div class = "overallContainer">
-    {% if current_user.role == 0 and session.timestamp_end == None %} <!-- If the user is a teacher and the session is active --> 
-        <form action="/classes/rooms/{{ course.id }}/activate" method='post'>
-            <button type="submit" formaction="/classes/rooms/{{ course.id }}/{{ session.id }}/end">End Class</button>
-            <!--<button type="submit" formaction="/classes/course/session/{{ session.id }}/attendance">Get Attendance</button>-->
-        </form>
-    {% endif %}
-
-    <!-- Thermometer/Temperature Visualization -->
-    <div class = "overallThermoContainer">
-        <div class = "numHolder">
-            <div class = "numbers">
-                <div class = "num"> 
-                    <p>100</p>
-                </div>
-                <div class = "num">
-                    <p>50</p>
-                </div>
-                <div class = "num">
-                    <p>0</p>
-                </div>
-            </div>
-        </div>
-        <div class = "dashHolder">
-            <div class = "dashes">
-                <div id = "long" class = "dash"></div>
-                <div class = "dash"></div>
-                <div class = "dash"></div>
-                <div class = "dash"></div>
-                <div class = "dash"></div>
-                <div id = "long" class = "dash"></div>
-                <div class = "dash"></div>
-                <div class = "dash"></div>
-                <div class = "dash"></div>
-                <div class = "dash"></div>
-                <div id = "long" class = "dash"></div>
-            </div>
-        </div>
-        <div class = "tempVisual">
-            <div class = "thermometer_shell">
-            </div>
-            <div class = "thermoCircle">
-            </div>
-            <div class = "thermometer">
-            </div>
-        </div>
+<!--<h1>
+    This session is currently {{ 'active' if session.timestamp_end == None else 'inactive' }}--> <!-- Prints out whether the session is active or not-->
+<!--</h1>-->
+<div class = "roomsBox">
+    <div class = "titleHolder">
+        <h1>Welcome to {{ course.course_name }}, {{ current_user.username }}!</h1> 
     </div>
-    
+    <div class = "overallContainer">
+        {% if current_user.role == 0 and session.timestamp_end == None %} <!-- If the user is a teacher and the session is active --> 
+            <form action="/classes/rooms/{{ course.id }}/activate" method='post'>
+                <button type="submit" formaction="/classes/rooms/{{ course.id }}/{{ session.id }}/end">End Class</button>
+                <!--<button type="submit" formaction="/classes/course/session/{{ session.id }}/attendance">Get Attendance</button>-->
+            </form>
+        {% endif %}
 
-    <!--<img style = "height: 250px;"src = "../../../static/Dog.jpg">-->
-    
-    <div class = "reactionsHolder">
-        <h2 id = "title">Reactions</h2>
-        <!-- <form id='reaction_form'> Form for feeling good :) -->
-        <button id="temp" name="react" onclick="submitFormGeneral({{ session_id }}, 0)">Good</button> <!-- name is react -->
-        <!-- </form>  -->
-        <!--<form action="/classes/rooms/{{ course.id }}/okay" method='post'> --><!-- Form for feeling meh :| -->
-        <button id="okay" name="react" onclick="submitFormGeneral({{ session_id }}, 1)">Okay</button>
-        <!--</form>-->
-        <!--<form action="/classes/rooms/{{ course.id }}/bad" method='post'> --><!-- Form for feeling sad :( -->
-        <button id="bad" name="react" onclick="submitFormGeneral({{ session_id }}, 2)">Bad</button>
-        <!--</form>-->
-
-        <h2>Speed</h2>
-        <!--<form action="/classes/rooms/{{ course.id }}/fast" method='post'>--> <!-- Form for feeling good :) -->
-        <button id="faster" onclick="submitFormGeneral({{ session_id }}, 6)">Faster</button>
-        <!--</form>-->
-        <!--<form action="/classes/rooms/{{ course.id }}/slow" method='post'>--> <!-- Form for feeling meh :| -->
-        <button id="slower" onclick="submitFormGeneral({{ session_id }}, 7)">Slower</button>
-        <!--</form>-->
-    
-
-        <h2> Reaction Results: </h2> <!-- Shows the reaction results-->
-        <div id = "reactionResults">
-            <!--{% for r in reactions_all %}
-                {% if r.emotions == 0 %} -->   <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
-                    <!--<p>Good | {{ r.reactor.username }}</p>
-                {% elif r.emotions == 1 %}
-                    <p>Okay | {{ r.reactor.username }}</p>
-                {% else %}
-                    <p>Bad | {{ r.reactor.username }}</p>
-                {% endif %}
-            {% endfor %}-->
+        <!-- Thermometer/Temperature Visualization -->
+        <div class = "overallThermoContainer">
+            <div class = "numHolder">
+                <div class = "numbers">
+                    <div class = "num"> 
+                        <p>100</p>
+                    </div>
+                    <div class = "num">
+                        <p>50</p>
+                    </div>
+                    <div class = "num">
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+            <div class = "dashHolder">
+                <div class = "dashes">
+                    <div id = "long" class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div id = "long" class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div id = "long" class = "dash"></div>
+                </div>
+            </div>
+            <div class = "tempVisual">
+                <div class = "thermometer_shell">
+                </div>
+                <div class = "thermoCircle">
+                </div>
+                <div class = "thermometer">
+                </div>
+            </div>
         </div>
+    
+        
+        <div class = "reactionsHolder">
 
+            <!-- Speed stuff -->
+            <div id = "speedVisual">
+                <div id = "visual"></div>
+            </div>
 
-        <h2> Speed Results: </h2> <!-- Shows the speed results -->
-        <div id = "speedResults">
-        <!--{% for s in speeds_all %}
-            {% if s.speed == 0 %} --><!-- Making it easier to see what each speed number represents, 0=faster, 1=slower-->
-                <!--<p>Faster | {{ s.speeder.username }}</p>
-            {% else %}
-                <p>Slower | {{ s.speeder.username }}</p>
+            <div id = "visualHolder">
+                <div class = "visual_slow all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                </div>
+                <div class = "visual_slow all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                </div>
+                <div class = "visual_slow all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                </div>
+                <div class = "visual_slow all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                </div>
+                <div class = "visual_slow all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                </div>
+
+                <div class = "visual_fast all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                </div>
+                <div class = "visual_fast all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                </div>
+                <div class = "visual_fast all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                </div>
+                <div class = "visual_fast all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                </div>
+                <div class = "visual_fast all">
+                    <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                </div>
+            </div>
+            {% if current_user.role == 1 %} <!-- If the current user is a student, then show all the reaction choices -->
+                <div class = "makeReactionBox">
+                    <!-- Emotions -->
+                    <!-- <form id='reaction_form'> Form for feeling good :) -->
+                    <label for="temp" class="shadowBox">
+                        <img src="{{ url_for('static', filename='images/Happy.png')}}" class = "reactionImage">
+                        <button id="temp" name="react" onclick="submitFormGeneral({{ session_id }}, 0)">Good</button> <!-- name is react -->
+                    </label>
+                    <!-- </form>  -->
+                    <!--<form action="/classes/rooms/{{ course.id }}/okay" method='post'> --><!-- Form for feeling meh :| -->
+                    <label for="okay" class="shadowBox">
+                        <img src="{{ url_for('static', filename='images/Meh.png')}}" class = "reactionImage">
+                        <button id="okay" name="react" onclick="submitFormGeneral({{ session_id }}, 1)">Okay</button>
+                    </label>
+                    <!--</form>-->
+                    <!--<form action="/classes/rooms/{{ course.id }}/bad" method='post'> --><!-- Form for feeling sad :( -->
+                    <label for="bad" class="shadowBox">
+                        <img src="{{ url_for('static', filename='images/Sad.png')}}" class = "reactionImage">
+                        <button id="bad" name="react" onclick="submitFormGeneral({{ session_id }}, 2)">Bad</button>
+                    </label>
+                    <!--</form>-->
+
+                    <!-- Speeds-->
+                    <!--<form action="/classes/rooms/{{ course.id }}/slow" method='post'>--> <!-- Form for feeling meh :| -->
+                    <label for="slower" class="shadowBox">
+                        <img src="{{ url_for('static', filename='images/Slow.png')}}" class = "reactionImage">  
+                        <button id="slower" onclick="submitFormGeneral({{ session_id }}, 7)">Slower</button>
+                    </label>
+                        <!--</form>-->
+                    <!--<form action="/classes/rooms/{{ course.id }}/fast" method='post'>--> <!-- Form for feeling good :) -->
+                    <label for="faster" class="shadowBox">
+                        <img src="{{ url_for('static', filename='images/Fast.png')}}" class = "reactionImage">
+                        <button id="faster" onclick="submitFormGeneral({{ session_id }}, 6)">Faster</button>
+                    </label>
+                    <!--</form>-->
+                </div>
             {% endif %}
-        {% endfor %}-->
-        </div>
-
-        <h2>Speed Bunnies/Turtles</h2>
-        <div id = "speedVisual">
-            <div id = "visual"></div>
-            <div ></div>
-            <div ></div>
-            <div ></div>
-            <div></div>
-        </div>
-    </div>
-
-    <div id = "visualHolder">
-        <div class = "visual_slow all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-        </div>
-        <div class = "visual_slow all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-        </div>
-        <div class = "visual_slow all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-        </div>
-        <div class = "visual_slow all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-        </div>
-        <div class = "visual_slow all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-        </div>
-
-        <div class = "visual_fast all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-        </div>
-        <div class = "visual_fast all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-        </div>
-        <div class = "visual_fast all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-        </div>
-        <div class = "visual_fast all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-        </div>
-        <div class = "visual_fast all">
-            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-        </div>
-    </div>
-
-    {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
-        <h2>Attendance: </h2> 
-            <div id = "attendance"> 
-                <div id = "inside">
-                    <h3>Present Students (The good ones)</h3>
-                    <div id = "present">
-                    </div>
-                    <!--{% for p in present_list %}
-                        <p>{{ p }}</p>
-                    {% endfor %}-->
-                    <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
-                    <div id = "absent">
-                    </div>
-                    <!--{% for a in absent_list %}
-                        <p>{{ a }}</p>
+            
+            
+            <!-- Only show this if the current user is a teacher-->
+                <h2> Reaction Results: </h2> <!-- Shows the reaction results-->
+                <div id = "reactionResults">
+                    <!--{% for r in reactions_all %}
+                        {% if r.emotions == 0 %} -->   <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
+                            <!--<p>Good | {{ r.reactor.username }}</p>
+                        {% elif r.emotions == 1 %}
+                            <p>Okay | {{ r.reactor.username }}</p>
+                        {% else %}
+                            <p>Bad | {{ r.reactor.username }}</p>
+                        {% endif %}
                     {% endfor %}-->
                 </div>
-            </div>      
-    {% endif %}
-    
-    <!-- Scripts -->
-    <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
 
-    <script type="text/javascript">
-        init({{course.id}}, {{session.id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
-    </script>
+
+                <h2> Speed Results: </h2> <!-- Shows the speed results -->
+                <div id = "speedResults"> 
+                <!--{% for s in speeds_all %}
+                    {% if s.speed == 0 %} --><!-- Making it easier to see what each speed number represents, 0=faster, 1=slower-->
+                        <!--<p>Faster | {{ s.speeder.username }}</p>
+                    {% else %}
+                        <p>Slower | {{ s.speeder.username }}</p>
+                    {% endif %}
+                {% endfor %}-->
+                </div>
+            
+
+        </div>
+
+        
+
+        {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
+            <h2>Attendance: </h2> 
+                <div id = "attendance"> 
+                    <div id = "inside">
+                        <h3>Present Students (The good ones)</h3>
+                        <div id = "present">
+                        </div>
+                        <!--{% for p in present_list %}
+                            <p>{{ p }}</p>
+                        {% endfor %}-->
+                        <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
+                        <div id = "absent">
+                        </div>
+                        <!--{% for a in absent_list %}
+                            <p>{{ a }}</p>
+                        {% endfor %}-->
+                    </div>
+                </div>      
+        {% endif %}
+
+        <!-- Scripts -->
+        <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
+
+        <script type="text/javascript">
+            init({{course.id}}, {{session.id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
+        </script>
+    </div>
 </div>
 {% endblock %}

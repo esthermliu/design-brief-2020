@@ -1,0 +1,38 @@
+.userBox {
+    background-color: orange;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.userImage {
+    background-color: pink;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.userImage img {
+    padding: 8%;
+}
+
+.userInfo {
+    background-color: lightgreen;
+    width: 40%;
+}
+
+.about {
+    background-color: lightsalmon;
+}
+
+.lastSeen {
+    background-color: lightseagreen;
+}
+
+.contentHolder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

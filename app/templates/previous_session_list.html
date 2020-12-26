@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for s in sessions %}
+    {% for s in sessions|reverse %}
         <p>Session ID: {{ s.id }}</p>
         <p>Session Start Time: {{ s.timestamp_start }}</p>
         <p>Session End Time: {{ s.timestamp_end }}</p>

@@ -115,3 +115,7 @@ input[type="submit" i]:hover {
 span {
     color: black;
 }
+
+.contentHolder {
+    margin: 0 !important;
+}
