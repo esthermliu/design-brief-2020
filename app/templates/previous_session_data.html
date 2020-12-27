@@ -152,7 +152,7 @@
                                     <h2>Good Pace!</h2>
                                     <img class = "makeSmaller" src = "{{ url_for('static', filename='images/GoodPace.gif') }}">
                                 {% else %}
-                                    <h2>Slow Down! {{ speed_number }}</h2>
+                                    <h2>Slow Down!</h2>
                                     {% for i in range(speed_number) %}
                                         <div class = "visual_fast teacherSpeed">
                                             <img class = "turtle display" src = "{{ url_for('static', filename='images/Turtle.gif') }}">

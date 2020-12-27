@@ -80,13 +80,11 @@ def create(username):
 @login_required 
 def newclass(username):
     course_name = request.form.get("course_name")
-    # TODO: Look up how to generate a random UNIQUE code
     rand_code = random.randint(100000, 999999) # Generating a random code
-    courses_all = Courses.query.all()
-    # Making sure that the code hasn't already been generated for a previous class
-    for c in courses_all: # Iterating through all the courses
-        if c.code == rand_code: # If the code of an existing course already exists
-            rand_code = random.randint(100000, 999999) # Generate a new random code
+    exist_course = Courses.query.filter_by(code=rand_code).first() # Checks if rand_code is already linked to an existing course
+    while exist_course is not None: # While an existing course has that code
+        rand_code = random.randint(100000, 999999) # Generate a random code again
+        exist_course = Courses.query.filter_by(code=rand_code).first() # Check the database again
     new_course = Courses(course_name=course_name, code=rand_code, teacher_id=current_user.id)
     db.session.add(new_course)
     db.session.commit()
@@ -181,8 +179,8 @@ def sessions(session_id):
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
 
-    signups = Signups.query.filter_by(course=course_id) # List of students that are in this specific course
-    reactions_specific = Reactions.query.filter_by(session_id=session_id) # List of reactions that happened in this specific course, specific session
+    signups = Signups.query.filter_by(course=course_id).all() # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(session_id=session_id).all() # List of reactions that happened in this specific course, specific session
     # speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
     present_set = set()
     absent_set = set()
@@ -227,8 +225,8 @@ def attendance(session_id):
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
 
-    signups = Signups.query.filter_by(course=course_id) # List of students that are in this specific course
-    reactions_specific = Reactions.query.filter_by(session_id=session_id) # List of reactions that happened in this specific course, specific session
+    signups = Signups.query.filter_by(course=course_id).all() # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(session_id=session_id).all() # List of reactions that happened in this specific course, specific session
     # speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
     present_set = set()
     absent_set = set()
@@ -326,8 +324,8 @@ def session_json(session_id):
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
 
-    signups = Signups.query.filter_by(course=course_id) # List of students that are in this specific course
-    reactions_specific = Reactions.query.filter_by(session_id=session_id) # List of reactions that happened in this specific course, specific session
+    signups = Signups.query.filter_by(course=course_id).all() # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(session_id=session_id).all() # List of reactions that happened in this specific course, specific session
     # speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
     present_set = set()
     absent_set = set()
@@ -353,7 +351,7 @@ def session_json(session_id):
     attendance_list.append(converted_dict_absent)
 
     # Percentage of happiness FIX THIS RIP
-    reactions = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions < 6) # All the emotions for this specific room, no speeds
+    reactions = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions < 6).all() # All the emotions for this specific room, no speeds
     print("HELLO")
     
     percent_happy = "No reactions, no percentage"
@@ -452,9 +450,9 @@ def previous_session_data(course_id, session_id):
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
 
-    signups = Signups.query.filter_by(course=course_id) # List of students that are in this specific course
-    reactions_specific = Reactions.query.filter_by(session_id=session_id) # List of reactions that happened in this specific course, specific session
-    speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
+    signups = Signups.query.filter_by(course=course_id).all() # List of students that are in this specific course
+    reactions_specific = Reactions.query.filter_by(session_id=session_id).all() # List of reactions that happened in this specific course, specific session
+    speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5).all() # Speeds filtered out by the course ID and by the reaction number
     present_set = set()
     absent_set = set()
     for r in reactions_specific: 
