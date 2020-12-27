@@ -23,7 +23,6 @@
     </head>
     <header>
         <nav> 
-            {% if current_user.is_anonymous %}
             <div class = "headerItem uppermost">
                 <div class = "insideHeader">
                     <a class = "imageLinkHolder" href="{{ url_for('index') }}">
@@ -32,6 +31,7 @@
                     <a href="{{ url_for('index') }}">Home</a>
                 </div>
             </div>
+            {% if current_user.is_anonymous %}
             <div class = "headerItem">
                 <div class = "insideHeader">
                     <a class = "imageLinkHolder" href="{{ url_for('login') }}">
@@ -41,7 +41,7 @@
                 </div>      
             </div>
             {% else %}
-            <div class = "headerItem uppermost">
+            <div class = "headerItem">
                 <div class = "insideHeader">
                     <a class = "imageLinkHolder" href="{{ url_for('classes', username=current_user.username) }}">
                         <img src = "{{ url_for('static', filename='images/ClassesIcon.png') }}">

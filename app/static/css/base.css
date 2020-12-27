@@ -113,6 +113,7 @@ h2, h3 {
     padding: 1%;
     color: white;
     text-align: center;
+    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
 }
 
 .info {

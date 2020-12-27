@@ -1,10 +1,32 @@
 {% extends "base.html" %}
 
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/previous_session_list.css') }}">
+{% endblock %}
+
 {% block content %}
+    <div class = "titleHolder">
+        <h1>Previous Sessions</h1>
+    </div>
+    <div class="gifHolder">
+        <div class="bunnyHolder">
+            <img src = "{{ url_for('static', filename='images/ViewData.gif') }}" class="bunnyView">
+        </div>
+    </div>
+    <div class = "sessionsList">
     {% for s in sessions|reverse %}
-        <p>Session ID: {{ s.id }}</p>
-        <p>Session Start Time: {{ s.timestamp_start }}</p>
-        <p>Session End Time: {{ s.timestamp_end }}</p>
-        <a href = "{{ url_for('previous_session_data', course_id=course_id, session_id=s.id) }}">View Session Data</a>
+        <div class = "{{ loop.cycle('sessionBlock red', 'sessionBlock yellow', 'sessionBlock blue') }}" id = "sessionBlock" onclick="divLinkSessions( {{ course_id }}, {{ s.id }})"><!-- Make the color of this block different -->
+            <div class = "sessionInsideBox">
+                <p class="emphasize">Session ID: {{ s.id }} </p>
+                <p>Date: {{ moment(s.timestamp_start).format("LL") }}</p>
+                <p>Start Time: {{ moment(s.timestamp_start).format("hh:mm a") }}</p>
+                <p>End Time: {{ moment(s.timestamp_end).format("hh:mm a") }}</p>
+                <a href = "{{ url_for('previous_session_data', course_id=course_id, session_id=s.id) }}" class="viewLink">View Session Data</a>
+            </div>
+        </div>
     {% endfor %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='scripts/divLink.js') }}"></script>
 {% endblock %}

@@ -13,7 +13,7 @@
             <form action="/user/{{ user.username }}/classes/add" method='post'> <!-- This form will execute the code in routes with the def add-->
                 {% if user.role == 1 %} <!-- If the user is a student, then show the enroll stuff -->
                     <!--<label for="title">Enroll in a Class</label>-->
-                    <input type="text" name="title" placeholder="Enter Class Code...">
+                    <input type="text" name="title" placeholder="Enter Class Code..." class = "joinStudent">
                     <button type="submit" class = "joinClassButton">Join Class</button>
                 {% else %}
                     <a href = "{{ url_for('create', username = current_user.username) }}" class = "createLink">Create a course</a>
@@ -26,7 +26,7 @@
     <!-- Students and their signups -->
     <div class = "classBlockHolder">
         {% for u in user_signups_filtered %} 
-            <div class = "classBlock" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
+            <div class = "{{ loop.cycle('classBlock red', 'classBlock yellow', 'classBlock blue') }}" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
                 
                 <div class = "classImage">
                     <img src = "{{ url_for('static', filename = 'images/Turtle.gif') }}">
@@ -46,7 +46,7 @@
         <!-- Teachers and their courses -->
         
             {% for t in teacher_courses %} <!-- Loops through all of the courses that teacher teaches -->
-            <div class = "classBlock" id = "classBlock" onclick="divLink({{ t.id }})">
+            <div class = "{{ loop.cycle('classBlock red', 'classBlock yellow', 'classBlock blue') }}" id = "classBlock" onclick="divLink({{ t.id }})">
                
                     <div class = "classImage">
                         <img src = "{{ url_for('static', filename = 'images/Turtle.gif') }}">

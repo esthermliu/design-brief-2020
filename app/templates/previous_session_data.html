@@ -1,46 +1,215 @@
 {% extends "base.html" %}
 
-{% block content %}
-<h2> Reaction Results: </h2> <!-- Shows the reaction results-->
-<div id = "reactionResults">
-    {% for r in reactions_specific %}
-        {% if r.reactions == 0 %}  <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
-            <p>Good | {{ r.reactor.username }}</p>
-        {% elif r.reactions == 1 %}
-            <p>Okay | {{ r.reactor.username }}</p>
-        {% else %}
-            <p>Bad | {{ r.reactor.username }}</p>
-        {% endif %}
-    {% endfor %}
-</div>
-
-
-<h2> Speed Results: </h2> <!-- Shows the speed results -->
-<div id = "speedResults">
-{% for s in speeds_specific %}
-    {% if s.reactions == 6 %} <!-- Making it easier to see what each speed number represents, 6=faster, 7=slower-->
-        <p>Faster | {{ s.reactor.username }}</p>
-    {% else %}
-        <p>Slower | {{ s.reactor.username }}</p>
-    {% endif %}
-{% endfor %}
-</div>
-
-<h2>Attendance: </h2> 
-    <div id = "attendance"> 
-        <div id = "inside">
-            <h3>Present Students (The good ones)</h3>
-            <div id = "present">
-            </div>
-            {% for p in present_list %}
-                <p>{{ p }}</p>
-            {% endfor %}
-            <h3>Absent Students (The bad ones. Santa ain't bringing them presents this year!)</h3>
-            <div id = "absent">
-            </div>
-            {% for a in absent_list %}
-                <p>{{ a }}</p>
-            {% endfor %}
-        </div>
-    </div>
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/previous_data.css') }}">
 {% endblock %}
+
+{% block content %}
+<div class = "roomsBox">
+    <div class = "titleHolder">
+        <h1>{{ course.course_name }} <span class = "white">Session {{ session_id }}</span></h1> 
+    </div>
+    <div class = "overallContainer">
+
+        <!-- Thermometer/Temperature Visualization -->
+        <div class = "overallThermoContainer">
+            <div class = "numHolder">
+                <div class = "numbers">
+                    <div class = "num"> 
+                        <p>100</p>
+                    </div>
+                    <div class = "num">
+                        <p>50</p>
+                    </div>
+                    <div class = "num">
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+            <div class = "dashHolder">
+                <div class = "dashes">
+                    <div id = "long" class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div id = "long" class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div id = "long" class = "dash"></div>
+                </div>
+            </div>
+            <div class = "tempVisual">
+                <div class = "thermometer_shell">
+                </div>
+                <div class = "thermoCircle">
+                </div>
+                <div class = "thermometer">
+                </div>
+            </div>
+        </div>
+    
+        
+        <div class = "reactionsHolder teacherVersion">
+            {% if current_user.role == 0 %}<!-- Only show this if the current user is a teacher-->
+                <div class = "bigReactionBox">
+
+                    <div class = "teacherReactionHolder">
+                        <div class = "reactionResultsHolder">
+                            <h2> Reactions: </h2> <!-- Shows the reaction results-->
+                            <div id = "reactionResults">
+                                <div class = "userReactionView">
+                                {% for r in reactions_specific %}
+                                    {% if r.reactions == 0 %} <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
+                                        <div class = "speedText">
+                                            <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
+                                            <p>{{ r.reactor.username }}</p>
+                                        </div>
+                                        <div>
+                                            <img class = 'makeSmaller' src='../../../../static/images/Happy.png'>
+                                        </div>
+                                    {% elif r.reactions == 1 %}
+                                    <div class = "speedText">
+                                        <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
+                                        <p>{{ r.reactor.username }}</p>
+                                    </div>
+                                    <div>
+                                        <img class = 'makeSmaller' src='../../../../static/images/Meh.png'>
+                                    </div>
+                                    {% else %}
+                                    <div class = "speedText">
+                                        <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
+                                        <p>{{ r.reactor.username }}</p>
+                                    </div>
+                                    <div>
+                                        <img class = 'makeSmaller' src='../../../../static/images/Sad.png'>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- reaction_html.innerHTML += ('<div class = "userReactionView">' + '<div><p>' + moment(emotions_timestamp).format('hh:mm a') +  "<p>" + username + '</p></div><div>' + user_reaction + '</div>');-->
+
+                        <!-- Overall room vibe  displayed for the teacher-->
+                        <div class = "vibeHolder teacherVibe">
+                            <div id = "room_vibe" class = "teacherVibeInside">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class = "speedHolder">
+                        <div class = "paceBox">
+                            <h2> Pace: </h2> <!-- Shows the speed results -->
+                            <div id = "speedResults"> 
+                                <div class = "userReactionView">
+                                    {% for s in speeds_specific %}
+
+                                            {% if s.reactions == 6 %} <!-- Making it easier to see what each speed number represents, 6=faster, 7=slower-->
+                                            <div class = "speedText">
+                                                <p>{{ moment(s.timestamp).format('hh:mm a') }}</p>
+                                                <p>{{ s.reactor.username }}</p>
+                                            </div>
+                                            <div>
+                                                <img class = 'makeSmaller' src='../../../../static/images/Bunny.gif'>
+                                            </div>
+                                            {% else %}
+                                                <div class = "speedText">
+                                                    <p>{{ moment( s.timestamp).format('hh:mm a') }}</p>
+                                                    <p>{{ s.reactor.username }}</p>
+                                                </div>
+                                                <div>
+                                                    <img class = 'makeSmaller' src='../../../../static/images/Turtle.gif'>
+                                                </div>
+                                            {% endif %}
+                                        
+                                    {% endfor %}  
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                        <!-- Speeds displayed for teacher -->
+                        <div id = "visualHolder" class = "teacherVisualHolder">
+                            
+                            <div id = "paceTitle">  
+                                {% if speed_number > 5 %} 
+                                    <h2>Speed Up!</h2>
+                                    <div class = "speedLine">
+                                    {% for i in range(speed_number - 5) %}
+                                        <div class = "visual_fast teacherSpeed">
+                                            <img class = "turtle display" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                {% elif speed_number == 0 %}
+                                    <h2>Good Pace!</h2>
+                                    <img class = "makeSmaller" src = "{{ url_for('static', filename='images/GoodPace.gif') }}">
+                                {% else %}
+                                    <h2>Slow Down! {{ speed_number }}</h2>
+                                    {% for i in range(speed_number) %}
+                                        <div class = "visual_fast teacherSpeed">
+                                            <img class = "turtle display" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div id = "paceTitle" class = "paceStudent"> <!-- So the JS doesn't cause an error -->           
+        </div>
+        
+
+        {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
+        <div class = "attendanceBox">
+            <div class = "attendanceSection">
+                <h2>Attendance: </h2> 
+                <div id = "attendance"> 
+                    <div id = "inside">
+                        <h3>Present Students</h3>
+                        <div id = "present">
+                            {% for p in present_list %}
+                                <p>{{ p }}</p>
+                            {% endfor %}
+                        </div>
+                        <h3>Absent Students</h3>
+                        <div id = "absent">
+                            {% for a in absent_list %}
+                                <p>{{ a }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            <div class = "endSection">
+                <div class="endForm">
+                    <a href ="/classes/course/{{ course_id }}/previous_session_list" class="endSessionButton">Return to Sessions List</a>
+                    <!--<button type="submit" formaction="/classes/course/session/{{ session.id }}/attendance">Get Attendance</button>-->
+                </div>
+            </div>
+        </div> 
+        {% endif %} 
+
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
+<script type="text/javascript">
+    pastInfo({{course.id}}, {{session.id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,19 @@
+.endForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.endForm a {
+    text-decoration: none;
+    line-height: 35px;
+}
+
+.display {
+    display: block !important;
+}
+
+.userReactionView {
+    flex-wrap: wrap;
+}

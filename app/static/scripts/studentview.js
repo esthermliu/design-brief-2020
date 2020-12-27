@@ -20,6 +20,24 @@ function fetchSessionInfoStudent(course_id, session_id, status) {
         .catch(handleError);
 }
 
+// Fetches information from PAST sessions
+function fetchPastSessionInfo(course_id, session_id, status) {
+    let url = "/classes/course/session/" + session_id + "/session_json";
+    console.log("PAST INFO FETCHED")
+    fetch(url, {method: "GET"})
+        .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
+        .then(response => response.json()) 
+        .then((data) => displayPast(status, data)) // Calls the displayData function, which will update the thermometer visually
+        .catch(handleError);
+}
+
+// Calls functions to display the PAST information
+function displayPast(status, data) {
+    console.log("DISPLAYED");
+    displayPercentage(data["percentage"]); // Displays the percentage on the thermometer
+}
+
+
 // Calls all the separate functions that display each feature, also includes the funtion that checks whether page will be refreshed
 function displayAll(status, data) {
     checkIfShouldRefresh(status, data["course_status"]); // Checks whether to refresh the page
@@ -37,6 +55,7 @@ function displaySome(status, data) {
     displayPercentage(data["percentage"]);  // For the percentage
     displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
 }
+
 
 // Checks whether the page should be refreshed, oldStatus is the status passed in via init function, newStatus is the updated status in the API
 function checkIfShouldRefresh(oldStatus, newStatus) {
@@ -122,9 +141,10 @@ function displayReactions(reactions) {
         } else {
             user_reaction = "<img class = 'makeSmaller' src='../../../../static/images/SadShadow2.png'>"
         }
-        reaction_html.innerHTML += ('<div class = "userReactionView">' + '<div><p>' + moment(emotions_timestamp).format('hh:mm a') +  "<p>" + username + '</p></div>' + user_reaction + '</div>'); // Adding the new info to the div
+        reaction_html.innerHTML += ('<div class = "userReactionView">' + '<div><p>' + moment(emotions_timestamp).format('hh:mm a') +  "<p>" + username + '</p></div><div>' + user_reaction + '</div>'); // Adding the new info to the div
     } 
 }
+
 
 // How to display the speeds
 function displaySpeeds(speeds) {
@@ -153,7 +173,7 @@ function displaySpeeds(speeds) {
         } else {
             user_speed = "<img class = 'makeSmaller' src='../../../../static/images/Turtle.gif'>";
         }
-        speed_html.innerHTML += ('<div class = "userReactionView">' + '<div class = "speedText"><p>' + moment(speed_timestamp).format('hh:mm a') +  "</p><p>" + username + "</p></div>" + user_speed + '</div>'); // Adds the info to the speedResults div    
+        speed_html.innerHTML += ('<div class = "userReactionView">' + '<div class = "speedText"><p>' + moment(speed_timestamp).format('hh:mm a') +  "</p><p>" + username + "</p></div><div>" + user_speed + '</div>'); // Adds the info to the speedResults div    
     //visual_html.innerHTML += (image); // Adds the info to the speedResults div
     }
 }
@@ -221,6 +241,7 @@ function displayAttendance(attendance) {
 
 function initTeacher(course_id, session_id, course_status) { // Course ID, session ID, and course status are all passed in through the rooms html page
     console.log("Called INIT Teacher", "Previous course status", course_status);
+    fetchSessionInfoTeacher(course_id, session_id, course_status);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchSessionInfoTeacher(course_id, session_id, course_status);
@@ -229,10 +250,16 @@ function initTeacher(course_id, session_id, course_status) { // Course ID, sessi
 
 function initStudent(course_id, session_id, course_status) {
     console.log("Called INIT Student");
+    fetchSessionInfoStudent(course_id, session_id, course_status);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchSessionInfoStudent(course_id, session_id, course_status);
     }, 5000) 
+}
+
+function pastInfo(course_id, session_id, course_status) {
+    console.log("Called PAST INFO");
+    fetchPastSessionInfo(course_id, session_id, course_status);
 }
 
 // Have separate functions: initTeacher and initStudent

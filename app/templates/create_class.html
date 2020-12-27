@@ -1,15 +1,22 @@
 {% extends "base.html" %}
 
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create_class.css') }}">
+{% endblock %}
+
 {% block content %}
     <h1>Create a Class</h1>
-    <form action="/user/{{ current_user.username }}/create_class/new" method='post'> 
-        <label for="title">Enter Class Name: </label>
-        <input type="text" name="course_name" placeholder="Your students are waiting..."> <!-- This is where the teacher can enter the name of the course -->
-        <br>
-        <button type="submit">Create</button>
+    <form action="/user/{{ current_user.username }}/create_class/new" method='post' class="createClassForm"> 
+        <!--<label for="title">Enter Class Name: </label>-->
+        <input type="text" name="course_name" placeholder="Enter Class Name..." class="newCourseInput"> <!-- This is where the teacher can enter the name of the course -->
+        <button type="submit" class="newCourseButton">Create</button>
     </form>
     
-    {% for t in t_courses_all %}
-        <p>{{ t.course_name }} | Class Code: {{ t.code }}</p>
-    {% endfor %}
+    <div class = "classCodesBox">
+        <div class = "codeText">
+            {% for t in t_courses_all %}
+                <p>{{ t.course_name }} | Class Code: {{ t.code }}</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

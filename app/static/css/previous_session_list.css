@@ -1,0 +1,91 @@
+
+.titleHolder h1 {
+    position: relative;
+    font-size: 40px;
+    font-weight: 600;
+    color: black;
+}
+
+.titleHolder h1:after {
+    position: absolute;
+	content: '';
+	height: 4px;
+	bottom: -20px;
+	/*margin: 0 auto; This will center the underline */ 
+	left: 0;
+    right: 0;
+	width: 3%;
+	background: #A8D0E6;
+}
+
+.sessionsList {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.sessionBlock {
+    background-color: #F8E9A1;
+    width: 31%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    cursor: pointer;
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+}
+
+.sessionBlock:hover {
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.19);
+}
+
+.sessionInsideBox {
+    padding: 8%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 35px;
+    text-align: center;
+}
+
+.emphasize {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.red {
+    background-color: lightcoral;
+}
+
+.blue {
+    background-color: #A8D0E6;
+}
+
+.viewLink {
+    color: black;
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    padding: 20px;
+    text-underline-offset: 8px;
+    text-decoration-thickness: 1px;
+}
+
+.bunnyView {
+    width: 50%;
+}
+
+.bunnyHolder {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gifHolder {
+    display: flex;
+    justify-content: space-between;
+}

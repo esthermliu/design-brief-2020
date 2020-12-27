@@ -210,7 +210,7 @@ def course_waiting_room(course_id):
     # TODO replace with constants
     # status 0 is unactive, status 1 is active
     if (course.status == 0): # If no sessions are currently active
-        return render_template('unactivated.html', course=course) # Render the unactivated html page
+        return render_template('unactivated.html', course=course, title=course.course_name +  " Waiting Room") # Render the unactivated html page
     else:
         session_filtered = Session.query.filter_by(course_id=course_id).filter_by(timestamp_end=None).first() # Session that is currently active
         return redirect(url_for('sessions', session_id=session_filtered.id))     
@@ -463,11 +463,53 @@ def previous_session_data(course_id, session_id):
     for signup in signups: # Going through the list of signups
         if (signup.student.username not in present_set and signup.student.role == 1):
             absent_set.add(signup.student.username)
+
+    # Getting the overall speed num
+    speed_filtered = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5).all() # Speeds filtered out by the session ID and by the reaction number
+    faster = 0
+    slower = 0
+    speed_number = 0
+    calculated_number = 0
+    for s in speed_filtered:
+        if s.reactions == 6: # Faster request
+            faster += 1
+        else: # Slower request
+            slower += 1
+    total = slower + faster
+    if total != 0:
+        calculated_number = (faster/total) * 100 
+    if calculated_number >= 91:
+        speed_number = 10
+    elif calculated_number >= 81:
+        speed_number = 9
+    elif calculated_number >= 71:
+        speed_number = 8
+    elif calculated_number >= 61:
+        speed_number = 7
+    elif calculated_number >= 51:
+        speed_number = 6
+    elif calculated_number >= 41:
+        speed_number = 0 # Nothing will be shown at this point
+    elif calculated_number >= 31:
+        speed_number = 1
+    elif calculated_number >= 21:
+        speed_number = 2
+    elif calculated_number >= 11:
+        speed_number = 3
+    elif calculated_number >= 1: # Smaller the number is, the slower the class should be 
+        speed_number = 4
+    else:
+        speed_number = 5
+        if total == 0: # No speeds have been selected yet
+            speed_number = 0
+
     
-    return render_template('previous_session_data.html', course=course,
+    return render_template('previous_session_data.html', course=course, 
+                                        course_id=course_id,
                                         reactions_specific=reactions_specific,
                                         speeds_specific=speeds_specific,
                                         session=session,
+                                        speed_number=speed_number,
                                         session_id=session_id,
                                         present_list=list(present_set), 
                                         absent_list=list(absent_set), 
