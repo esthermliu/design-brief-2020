@@ -7,29 +7,56 @@
 {% block content %}
 <div class = "userBox">
     <div class = "userImage">
-        <div class = "">
-            <h1>User: {{ user.username }}</h1>
-            {% if user.role == 0 %}
-                <h1>Role: Teacher</h1>
-            {% else %}
-                <h1>Role: Student</h1>
-            {% endif %}
+        <img src="{{ user.avatar(380) }}">
+        <div class = "usernameBox">
+            <div class = "titleHolder">
+                <h2>Profile</h2>
+            </div>
+            <div class = "usernameInside">
+                <div class = "userInsideAgain">
+                    <h1>User: {{ user.username }}</h1>
+                    {% if user.role == 0 %}
+                        <h1>Role: Teacher</h1>
+                    {% else %}
+                        <h1>Role: Student</h1>
+                    {% endif %}
+                </div>
+                {% if user == current_user %}
+                    <a href = "{{ url_for('edit_profile')}}">Edit your profile</a>
+                {% endif %}
+            </div>
         </div>
-        <img src="{{ user.avatar(500) }}">
     </div>
     <div class = "userInfo"> 
         <div class = "about">
-            {% if user.about_me %}
-                <p> {{ user.about_me }}</p> 
-            {% endif %}
+            <div class = "aboutImage">
+                <img src="{{ url_for('static', filename='images/Table.png' )}}">
+            </div>
+            <div class = "aboutMeText">
+                <div class = "titleHolder aboutTitle">
+                    <h2>About Me</h2>
+                </div>
+                <div class = "aboutActual">
+                    {% if user.about_me %}
+                        <p> {{ user.about_me }}</p> 
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class = "lastSeen">
-            {% if user.last_seen %}
-                <p>Last seen on: {{ user.last_seen }}</p>
-            {% endif %}
-            {% if user == current_user %}
-                <p><a href = "{{ url_for('edit_profile')}}">Edit your profile</a></p>
-            {% endif %}
+        <div class = "lastSeenHolder">
+            <div class = "aboutImage timeImage">
+                <img src="{{ url_for('static', filename='images/Time.png' )}}">
+            </div>
+            <div class = "lastSeen">
+                {% if user.last_seen %}
+                    <div class = "titleHolder aboutTitle">
+                        <h2>Last seen</h2>
+                    </div>
+                    <div class = "aboutActual">
+                        <p>{{ moment(user.last_seen).format('LLL') }}</p>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

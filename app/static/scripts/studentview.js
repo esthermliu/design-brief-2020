@@ -122,7 +122,7 @@ function displayReactions(reactions) {
         } else {
             user_reaction = "<img class = 'makeSmaller' src='../../../../static/images/SadShadow2.png'>"
         }
-        reaction_html.innerHTML += ('<div class = "userReactionView">' + user_reaction + "<p>" + username + "</p>" + '</div>'); // Adding the new info to the div
+        reaction_html.innerHTML += ('<div class = "userReactionView">' + '<div><p>' + moment(emotions_timestamp).format('hh:mm a') +  "<p>" + username + '</p></div>' + user_reaction + '</div>'); // Adding the new info to the div
     } 
 }
 
@@ -153,7 +153,7 @@ function displaySpeeds(speeds) {
         } else {
             user_speed = "<img class = 'makeSmaller' src='../../../../static/images/Turtle.gif'>";
         }
-        speed_html.innerHTML += ('<div class = "userReactionView">' + user_speed + "<p> " + username + '</p></div>'); // Adds the info to the speedResults div    
+        speed_html.innerHTML += ('<div class = "userReactionView">' + '<div class = "speedText"><p>' + moment(speed_timestamp).format('hh:mm a') +  "</p><p>" + username + "</p></div>" + user_speed + '</div>'); // Adds the info to the speedResults div    
     //visual_html.innerHTML += (image); // Adds the info to the speedResults div
     }
 }

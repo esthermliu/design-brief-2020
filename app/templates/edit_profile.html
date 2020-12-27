@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_profile.css') }}">
+{% endblock %}
+
 {% block content %}
     <h1>Edit Profile</h1>
-    <form action="" method="post">
+    <form action="" method="post" class = "profileForm">
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }}<br> <!-- Label of the username field in the forms.py (the text in quotation marks, first argument) -->
@@ -11,7 +15,7 @@
                 <span style = "color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>
+        <p class = "difSection">
             {{ form.about_me.label }}<br>
             {{ form.about_me(cols=50, rows=4)}}<br>
             {% for error in form.about_me.errors %}

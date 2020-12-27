@@ -236,7 +236,6 @@ body {
 }
 
 .attendanceBox {
-    background-color: purple;
     width: 20%;
     border-radius: 30px;
 }
@@ -261,6 +260,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .teacherVibe {
@@ -274,6 +274,7 @@ body {
     object-fit: contain;
     border-radius: 40px;
     padding-top: 5%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .teacherVibeHeader {
@@ -298,6 +299,7 @@ body {
     width: 100%;
 }
 
+
 .userReactionView p {
     font-size: 18px;
     font-family: 'Montserrat', sans-serif;
@@ -311,6 +313,7 @@ body {
     border-radius: 30px;
     justify-content: center !important;
     align-items: center !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #speedResults {
@@ -358,20 +361,43 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 30px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding-bottom: 8%;
 }
 
-#present {
+#present, #absent {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
 }
 
-#present p {
+#present p, #absent p {
     margin: 5px;
+}
+
+#inside {
+    text-align: center;
 }
 
 #inside h3 {
     font-size: 15px;
 }
 
+.endSessionButton {
+    background-color: #f76c6c;
+    border: 0;
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 20px;
+    width: 100%;
+    font-size: 20px;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    cursor: pointer;
+}
+
+.endForm {
+    margin-top: 10%;
+    width: 100%;
+}

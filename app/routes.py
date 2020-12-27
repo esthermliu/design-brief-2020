@@ -38,7 +38,7 @@ def login():
     if form.validate_on_submit(): # If the form is validated
         user = User.query.filter_by(username=form.username.data).first() # Get the correct user from the database
         if user is None or not user.check_password(form.password.data): # If the user does not exist or the user's password is not the same as the password in the form
-            flash('Invalid username or password') # Flash an invalid username/password message
+            flash('Invalid username or password', 'error') # Flash an invalid username/password message
             return redirect(url_for('login')) # Redirect them to the login page
         login_user(user, remember=form.remember_me.data) # Otherwise, log the user in 
         next_page = request.args.get('next') 
@@ -62,7 +62,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash('Congratulations, you are now a registered user!', 'info')
         return redirect(url_for('login'))
     print("role", form.role)
     print("label", form.role.label)
@@ -118,7 +118,7 @@ def edit_profile():
         current_user.username = form.username.data # Set the user's username to what they entered in the form
         current_user.about_me = form.about_me.data # Set about me for current user to input from the form
         db.session.commit() # Commit changes to the database
-        flash('Your changes have been saved.')
+        flash('Your changes have been saved', 'info')
         return redirect(url_for('edit_profile'))
     elif request.method == 'GET': # If this is the first time that the form has been requested
         form.username.data = current_user.username # Then pre-populate the fields with the data in the database
@@ -159,7 +159,7 @@ def add(username):
     for s in signups_all:
         if new_signup.user_id == s.user_id and new_signup.course == s.course:
             already = True
-            flash('You have already enrolled in this course. Nice try.')
+            flash('You have already enrolled in this course. Nice try.', 'error')
     if already == False:
         db.session.add(new_signup)
         db.session.commit()

@@ -10,7 +10,7 @@ header {
 }
 
 .innerBox {
-    background-color: skyblue;
+    background-color: #A8d0E6;
     width: 40%;
     display: flex;
     justify-content: center;
@@ -45,7 +45,7 @@ input[type="text" i], input[type="password" i] {
 
 label {
     line-height: 40px;
-    color: gray;
+    color: black;
     cursor: text;
     font-size: 17px;
     letter-spacing: 1px;
@@ -73,7 +73,7 @@ input {
     letter-spacing: 1.5px;
     font-size: 15px;
     text-align: center;
-    color: gray;
+    color: black ;
 }
 
 input[type="submit" i]:hover {
@@ -82,7 +82,7 @@ input[type="submit" i]:hover {
 }
 
 .registerLink {
-    color: gray;
+    color: black;
     text-decoration: none;
     border: 2px solid white;
     padding: 20px 20px;

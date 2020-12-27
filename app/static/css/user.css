@@ -1,12 +1,11 @@
 .userBox {
-    background-color: orange;
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
 
 .userImage {
-    background-color: pink;
+    background-color: #A8D0E6;
     width: 60%;
     display: flex;
     justify-content: center;
@@ -15,20 +14,34 @@
 }
 
 .userImage img {
-    padding: 8%;
+    margin: 8%; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
 }
 
 .userInfo {
-    background-color: lightgreen;
     width: 40%;
 }
 
 .about {
-    background-color: lightsalmon;
+    background-color: #F76C6C;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+}
+
+.lastSeenHolder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 40%;
+    background-color: #24305E;
 }
 
 .lastSeen {
-    background-color: lightseagreen;
+    width: 90%;
 }
 
 .contentHolder {
@@ -36,3 +49,91 @@
     align-items: center;
     justify-content: center;
 }
+
+
+.usernameBox {
+    width: 90%;
+    margin-bottom: 4%;
+    color: white;
+}
+
+.usernameInside h1 {
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 50px;
+}
+
+.usernameInside a {
+    background-color: white;
+    text-decoration: none;
+    padding: 20px;
+    border-radius: 30px;
+    color: black;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+}
+
+.usernameInside a:hover {
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.19);
+}
+
+.usernameInside {
+    margin-top: 3%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titleHolder h2 {
+    position: relative;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: white;
+}
+
+.titleHolder h2:after {
+    position: absolute;
+	content: '';
+	height: 3px;
+	bottom: -10px;
+	/*margin: 0 auto; This will center the underline */ 
+	left: 0;
+    right: 0;
+	width: 2.5%;
+	background: white;
+}
+
+.aboutTitle h2:after {
+    width: 4%;
+}
+
+.aboutImage {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.aboutImage img {
+    width: 50%;
+}
+
+.aboutMeText {
+    width: 90%;
+    color: white;
+}
+
+.aboutActual {
+    padding-top: 2%;
+    line-height: 30px;
+    color: white;
+}
+
+.timeImage img {
+    width: 20%;
+    margin-top: 4%;
+}
+
