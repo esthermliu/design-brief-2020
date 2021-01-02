@@ -439,7 +439,7 @@ def course_status(course_id):
 @login_required
 def previous_session_list(course_id):
     sessions = Session.query.filter_by(course_id=course_id).filter(Session.timestamp_end!=None).all() # This is all the sessions for that course id that are inactive
-    return render_template('previous_session_list.html', course_id=course_id, sessions=sessions)
+    return render_template('previous_session_list.html', course_id=course_id, sessions=sessions, title="Previous Sessions")
     # Inside of the HTML page, there are links that will show the specific info for that session
     # Create a new route to the rendered page
 
