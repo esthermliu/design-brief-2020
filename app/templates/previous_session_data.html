@@ -62,34 +62,34 @@
                             <h2> Reactions: </h2> <!-- Shows the reaction results-->
                             <div id = "reactionResults">
                                 <div class = "userReactionView">
-                                {% for r in reactions_specific %}
-                                    {% if r.reactions == 0 %} <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
-                                        <div class = "speedText">
-                                            <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
-                                            <p>{{ r.reactor.username }}</p>
-                                        </div>
-                                        <div>
-                                            <img class = 'makeSmaller' src='../../../../static/images/Happy.png'>
-                                        </div>
-                                    {% elif r.reactions == 1 %}
-                                    <div class = "speedText">
-                                        <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
-                                        <p>{{ r.reactor.username }}</p>
-                                    </div>
-                                    <div>
-                                        <img class = 'makeSmaller' src='../../../../static/images/Meh.png'>
-                                    </div>
-                                    {% else %}
-                                    <div class = "speedText">
-                                        <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
-                                        <p>{{ r.reactor.username }}</p>
-                                    </div>
-                                    <div>
-                                        <img class = 'makeSmaller' src='../../../../static/images/Sad.png'>
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
-
+                                    {% for r in reactions_specific %}
+                                        {% if r.reactions == 0 %} <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
+                                            <div class = "speedText">
+                                                <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
+                                                <p>{{ r.reactor.username }}</p>
+                                            </div>
+                                            <div>
+                                                <img class = 'makeSmaller' src='../../../../static/images/Happy.png'>
+                                            </div>
+                                        {% elif r.reactions == 1 %}
+                                            <div class = "speedText">
+                                                <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
+                                                <p>{{ r.reactor.username }}</p>
+                                            </div>
+                                            <div>
+                                                <img class = 'makeSmaller' src='../../../../static/images/Meh.png'>
+                                            </div>
+                                        {% else %}
+                                            <div class = "speedText">
+                                                <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
+                                                <p>{{ r.reactor.username }}</p>
+                                            </div>
+                                            <div>
+                                                <img class = 'makeSmaller' src='../../../../static/images/Sad.png'>
+                                            </div>
+                                        {% endif %}
+                                    
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>

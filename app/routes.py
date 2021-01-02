@@ -451,7 +451,7 @@ def previous_session_data(course_id, session_id):
     course_id = session.course_id # This will give you the course id
 
     signups = Signups.query.filter_by(course=course_id).all() # List of students that are in this specific course
-    reactions_specific = Reactions.query.filter_by(session_id=session_id).all() # List of reactions that happened in this specific course, specific session
+    reactions_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions<5).all() # List of reactions that happened in this specific course, specific session
     speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5).all() # Speeds filtered out by the course ID and by the reaction number
     present_set = set()
     absent_set = set()
