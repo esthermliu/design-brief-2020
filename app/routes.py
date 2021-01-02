@@ -64,7 +64,7 @@ def register():
         db.session.commit()
         flash('Congratulations, you are now a registered user!', 'info')
         return redirect(url_for('login'))
-    else：
+    else:
         print("Invalid form!", form)
     print("role", form.role)
     print("label", form.role.label)
