@@ -39,6 +39,9 @@
         <p>
             {{ form.role.label }}<br>
             {{ form.role }}<br>
+            {% for error in form.role.errors %}
+            <span class="errorSpan">[{{ error }}]</span>
+            {% endfor %}
         </p>
         <p>{{ form.submit() }}</p>
     </form>
