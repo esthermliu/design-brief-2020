@@ -15,7 +15,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    role = SelectField('Teacher or Student?', choices=[(0, 'Teacher'),(1,'Student')])
+    role = SelectField('Teacher or Student?', choices=[(0, 'Teacher'),(1,'Student')], coerce=int)
     submit = SubmitField('Register')
 
     def validate_username(self, username):
