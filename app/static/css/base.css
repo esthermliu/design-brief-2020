@@ -61,7 +61,7 @@
     }
 
     .contentHolder {
-        margin: 20px 20px 60px;   
+        margin: 15px 15px 60px;   
     }
 }
 
@@ -145,8 +145,6 @@ body {
     margin: 0 !important;
     font-family: "Montserrat", sans-serif;
 }
-
-
 
 /* Resetting css from default browser */
 
