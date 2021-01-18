@@ -1,3 +1,18 @@
+@media screen and (max-width: 600px) {
+    .imageBox {
+        display: none
+    }
+
+    .innerBox {
+        background-color: #A8d0E6;
+        width: 100%;
+        min-width: 350px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 header {
     display: none;
 }
@@ -12,11 +27,11 @@ header {
 .innerBox {
     background-color: #A8d0E6;
     width: 40%;
+    min-width: 350px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
 .imageBox {
     width: 60%;
     background-image: url("../images/Student.jpeg");
