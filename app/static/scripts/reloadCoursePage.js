@@ -35,3 +35,5 @@ function init(course_id, course_status) {
         fetchCourseStatus(course_id, course_status);
     }, 5000) // The fetchCourseStatus function will be called every 5 seconds
 }
+
+
