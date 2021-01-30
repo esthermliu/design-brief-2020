@@ -1,3 +1,6 @@
+/* Will likely need more changes, possibly along with 
+changes to rooms.html to look better on small screens*/ 
+
 body {
     background-color: #A8D0E6;
     display: flex;
@@ -6,12 +9,162 @@ body {
     justify-content: center;
 }
 
+#yipyip, #yopyop {
+    display: none;
+}
+
+#long {
+    width: 70%;
+}
+
+.overallContainer {
+    display: flex;
+    justify-content: space-between;
+    /*background-color: lightsalmon;*/
+    width: 100%;
+}
+
+.white {
+    color: white;
+}
+
+.titleHolder {
+    margin-bottom: 3%;
+}
+
+.turtle, .bunny {
+    width: 100%;
+}
+
+#temp, #okay, #bad, #faster, #slower {
+    display: none;
+}
+
+.shadowBox:hover {
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.15), 0 0px 0px 0 rgba(0, 0, 0, 0.1);
+}
+
+#speedVisual {
+    display: none; /* Hiding the speed number */
+}
+
+.vibeHeader {
+    font-weight: 400;
+}
+
+.attendanceBox {
+    width: 20%;
+    border-radius: 30px;
+}
+
+.visual_slow, .visual_fast {
+    width: 20%;
+}
+
+.bigReactionBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+#reactionResults, #speedResults {
+    width: 65%;
+}
+
+.teacherVibe {
+    height: auto !important;
+}
+
+.teacherStuff {
+    width: 20% !important;
+    height: auto !important;
+    object-fit: contain;
+}
+
+.makeSmaller {
+    height: 60px;
+    margin-bottom: 4%;
+}
+
+.teacherVisualHolder {
+    /* flex-wrap: wrap; */
+    background-color: white;
+    height: auto !important;
+    border-radius: 30px;
+    justify-content: center !important;
+    align-items: center !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#speedResults {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.paceStudent {
+    display: none !important;
+}
+
+.teacherSpeed {
+    width: 20%;
+}
+
+.teacherSpeed img {
+    width: 100%;
+}
+
+.speedLine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.teacherVersion {
+    width: 50%;
+}
+
+#paceTitle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2%;
+}
+
+
+.endSessionButton {
+    background-color: #f76c6c;
+    border: 0;
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 20px;
+    width: 100%;
+    font-size: 20px;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    cursor: pointer;
+}
+
+.endSessionButton:hover {
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.19);
+}
+
+.endForm {
+    margin-top: 10%;
+    width: 100%;
+}
+
 /* For larger screens */
-@media screen and (min-width: 600px) { 
+@media all and (min-width: 600px) { 
     h2 {
         font-size: medium;
         font-weight: 500;
     }
+    
     .tempVisual {
         height: 95%;
         width: 100px;
@@ -54,15 +207,6 @@ body {
         border-radius: 50%;
     }
 
-    .thermometer_shell {
-        height: 100%;
-        background-color: pink;
-    }
-
-    #yipyip, #yopyop {
-        display: none;
-    }
-
     .dashes {
         height: 87%;
         width: 30px;
@@ -80,10 +224,6 @@ body {
         background-color: grey;
         height: 3px;
         width: 35%;
-    }
-
-    #long {
-        width: 70%;
     }
 
     .numbers {
@@ -104,28 +244,13 @@ body {
         font-weight: 500;
     }
 
-    .overallContainer {
-        display: flex;
-        justify-content: space-between;
-        /*background-color: lightsalmon;*/
-        width: 100%;
-    }
-
-    .white {
-        color: white;
-    }
-
-    .titleHolder {
-        margin-bottom: 3%;
-    }
-
     .titleHolder h1 {
         font-weight: 400;
         font-size: 45px;
     }
 
     .all {
-        width: 100px;
+        /* width: 50px; */
         display: none;
         margin-bottom: 10px;
     }
@@ -138,13 +263,9 @@ body {
         background-color: red;
     }*/
 
-    .turtle {
-        width: 100%;
-    }
-
-
     .roomsBox {
         width: 90%;
+        max-width: 1400px;
     }
 
     .contentHolder {
@@ -164,14 +285,10 @@ body {
         padding-left: 3%;
         /* flex-wrap: wrap; */
         height: 30%;
-        width: 80%;
-        min-width: 650px;
-        max-width: 800px;
+        width: 100%;
+        min-width: 600px;
+        max-width: 700px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    #temp, #okay, #bad, #faster, #slower {
-        display: none;
     }
 
     .reactionImage {
@@ -189,15 +306,13 @@ body {
 
     .shadowBox {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
-        height: 130px;
+        height: 100px;
         border-radius: 50%;
         cursor: pointer;
         transition-duration: 0.3s;
         -webkit-transition-duration: 0.3s;
-    }
-
-    .shadowBox:hover {
-        box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.15), 0 0px 0px 0 rgba(0, 0, 0, 0.1);
+        margin-left: 10px;
+        margin-right: 10px;
     }
 
     #visualHolder {
@@ -206,22 +321,15 @@ body {
         border-radius: 40px;
         padding-right: 3%;
         padding-left: 3%;
-        width: fit-content;
+        /* width: fit-content; */
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         height: 20%;
+        width: 100%;
+        max-width: 700px;
         align-items: center;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
-        display: flex;
-        justify-content: flex-start;
-        height: 20%;
-        align-items: flex-end;
-    }
-
-    #speedVisual {
-        display: none; /* Hiding the speed number */
     }
 
     #room_vibe {
@@ -233,10 +341,6 @@ body {
         /* height: 40%; */
     }
 
-    .vibeHeader {
-        font-weight: 400;
-    }
-
     #vibe {
         height: 90%;
     }
@@ -246,7 +350,9 @@ body {
         border-radius: 40px;
         padding-right: 3%;
         padding-left: 3%;
-        width: fit-content;
+        /* width: fit-content; */
+        width: 100%;
+        max-width: 700px;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -267,21 +373,6 @@ body {
         width: 48%;
     }
 
-    .attendanceBox {
-        width: 20%;
-        border-radius: 30px;
-    }
-
-    .bigReactionBox {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    #reactionResults, #speedResults {
-        width: 65%;
-    }
-
     .reactionResultsHolder, .paceBox {
         background-color: white;
         min-width: 170px;
@@ -297,34 +388,19 @@ body {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
-    .teacherVibe {
-        height: auto !important;
-    }
-
     .teacherVibeInside {
-        background-color: white;
+        /* background-color: white; */
         height: 100px;
         width: 100%;
         min-width: 170px;
         object-fit: contain;
         border-radius: 40px;
         padding: 5%;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
     }
 
     .teacherVibeHeader {
         font-size: 16px;
-    }
-
-    .teacherStuff {
-        width: 20% !important;
-        height: auto !important;
-        object-fit: contain;
-    }
-
-    .makeSmaller {
-        height: 60px;
-        margin-bottom: 4%;
     }
 
     .userReactionView {
@@ -341,53 +417,6 @@ body {
         font-size: 15px;
         font-family: 'Montserrat', sans-serif;
         letter-spacing: 1px;
-    }
-
-    .teacherVisualHolder {
-        flex-wrap: wrap;
-        background-color: white;
-        height: auto !important;
-        border-radius: 30px;
-        justify-content: center !important;
-        align-items: center !important;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    #speedResults {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .paceStudent {
-        display: none !important;
-    }
-
-    .teacherSpeed {
-        width: 10%;
-    }
-
-    .teacherSpeed img {
-        width: 100%;
-    }
-
-    .speedLine {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .teacherVersion {
-        width: 50%;
-    }
-
-    #paceTitle {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding-bottom: 2%;
     }
 
     .attendanceSection {
@@ -425,34 +454,10 @@ body {
         font-size: medium;
         border-bottom: 2px dashed #91a7c9;
     }
-
-    .endSessionButton {
-        background-color: #f76c6c;
-        border: 0;
-        padding: 20px;
-        font-family: 'Montserrat', sans-serif;
-        border-radius: 20px;
-        width: 100%;
-        font-size: 20px;
-        color: white;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        transition-duration: 0.3s;
-        -webkit-transition-duration: 0.3s;
-        cursor: pointer;
-    }
-
-    .endSessionButton:hover {
-        box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    .endForm {
-        margin-top: 10%;
-        width: 100%;
-    }
 }
 
 /* For phones and devices with smaller screens*/
-@media screen and (max-width: 600px) {
+@media all and (max-width: 600px) {
     .tempVisual {
         height: 95%;
         width: 80px;
@@ -464,17 +469,14 @@ body {
 
     .overallThermoContainer {
         background-color: white;
-        /* position: absolute;
-        top: 0px;
-        left: 0px; */
-        /* justify-self: center; */
-        height: 65vh;
+        height: 55vh;
         display: flex;
         align-items: center;
         justify-content: center;
         width: fit-content;
         padding: 5%;
         border-radius: 30px;
+        margin-right: 15px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         /* transform:matrix(0.00,0.40,-0.40,0.00,0,0);
         -ms-transform:matrix(0.00,0.40,-0.40,0.00,0,0);
@@ -493,21 +495,12 @@ body {
     }
 
     .thermoCircle {
-        height: 18%;
-        width: 80%;
+        height: 70px;
+        width: 70px;
         position: absolute;
         bottom: 0;
         background-color: red;
         border-radius: 50%;
-    }
-
-    .thermometer_shell {
-        height: 100%;
-        background-color: pink;
-    }
-
-    #yipyip, #yopyop {
-        display: none;
     }
 
     .dashes {
@@ -522,10 +515,6 @@ body {
         display: none;
     }
 
-    #long {
-        width: 70%;
-    }
-
     .numbers {
         display: none;
     }
@@ -538,78 +527,47 @@ body {
         display: none;
     }
 
-    .overallContainer {
-        display: flex;
-        justify-content: space-between;
-        /*background-color: lightsalmon;*/
-        width: 100%;
-    }
-
-    .white {
-        color: white;
-    }
-
-    .titleHolder {
-        margin-bottom: 3%;
-    }
-
     .titleHolder h1 {
         font-weight: 400;
-        font-size: 30px;
+        font-size: large;
     }
 
     .all {
-        width: 100px;
+        /* width: 100px; */
         /* display: none; */
         margin-bottom: 10px;
     }
 
-    .visual_slow {
-        /* background-color: orange; */
-        width: 20%;
-    }
-
-    .visual_fast {
-        /* background-color: red; */
-        width: 20%;
-    }
-
-    .turtle {
-        width: 100%;
-    }
-
-    .bunny {
-        width: 100%;
-    }
-
-
     .roomsBox {
         width: 95%;
+        /* height: 60vh; */
     }
 
     .contentHolder {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
+        /* margin-bottom: 500px; */
+        padding-bottom: 300px;
     }
 
 
     .makeReactionBox {
         background-color: white;
+        position: fixed;
+        bottom: 70px;
+        left: 10px;
+        right: 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-radius: 40px;
-        padding: 5%;
-        flex-wrap: wrap;
-        height: 40%;
-        width: 100%;
+        padding: 3%;
+        /* flex-wrap: wrap; */
+        height: 50px;
+        width: auto;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    #temp, #okay, #bad, #faster, #slower {
-        display: none;
     }
 
     .reactionImage {
@@ -618,24 +576,19 @@ body {
 
     .reactionsHolder {
         /*background-color: fuchsia;*/
-        display: none;
         width: 60%;
+        max-width: 700px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
     }
 
     .shadowBox {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
         height: 50px;
         border-radius: 50%;
-        cursor: pointer;
         transition-duration: 0.3s;
         -webkit-transition-duration: 0.3s;
-    }
-
-    .shadowBox:hover {
-        box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.15), 0 0px 0px 0 rgba(0, 0, 0, 0.1);
     }
 
     #visualHolder {
@@ -644,16 +597,14 @@ body {
         padding-right: 3%;
         padding-left: 3%;
         width: 100%;
-        display: flex;
-        flex-wrap: wrap;
+        max-width: 695px;
+        display: inline-flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
         justify-content: center;
         height: 20%;
         align-items: center;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    #speedVisual {
-        display: none; /* Hiding the speed number */
     }
 
     #room_vibe {
@@ -662,10 +613,6 @@ body {
         justify-content: center;
         align-items: center;
         height: 100%;
-    }
-
-    .vibeHeader {
-        font-weight: 400;
     }
 
     #vibe {
@@ -680,6 +627,7 @@ body {
         /* object-fit: contain; */
         border-radius: 40px;
         padding: 5%;
+        margin-bottom: 20px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
@@ -692,21 +640,7 @@ body {
 
     .speedHolder {
         width: 48%;
-    }
-
-    .attendanceBox {
-        width: 20%;
-        border-radius: 30px;
-    }
-
-    .bigReactionBox {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    #reactionResults, #speedResults {
-        width: 65%;
+        margin-right: 20px;
     }
 
     .reactionResultsHolder, .paceBox {
@@ -720,10 +654,6 @@ body {
         justify-content: center;
         align-items: center;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    .teacherVibe {
-        height: auto !important;
     }
 
     .teacherVibeInside {
@@ -740,17 +670,6 @@ body {
         font-size: small;
     }
 
-    .teacherStuff {
-        width: 20% !important;
-        height: auto !important;
-        object-fit: contain;
-    }
-
-    .makeSmaller {
-        height: 60px;
-        margin-bottom: 4%;
-    }
-
     .userReactionView {
         display: flex;
         justify-content: space-between;
@@ -763,53 +682,6 @@ body {
         font-size: 18px;
         font-family: 'Montserrat', sans-serif;
         letter-spacing: 1px;
-    }
-
-    .teacherVisualHolder {
-        flex-wrap: wrap;
-        background-color: white;
-        height: auto !important;
-        border-radius: 30px;
-        justify-content: center !important;
-        align-items: center !important;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    #speedResults {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .paceStudent {
-        display: none !important;
-    }
-
-    .teacherSpeed {
-        width: 10%;
-    }
-
-    .teacherSpeed img {
-        width: 100%;
-    }
-
-    .speedLine {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .teacherVersion {
-        width: 50%;
-    }
-
-    #paceTitle {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding-bottom: 2%;
     }
 
     .attendanceSection {
@@ -842,29 +714,9 @@ body {
     #inside h3 {
         font-size: 15px;
     }
-
-    .endSessionButton {
-        background-color: #f76c6c;
-        border: 0;
-        padding: 20px;
-        font-family: 'Montserrat', sans-serif;
-        border-radius: 20px;
-        width: 100%;
-        font-size: 20px;
-        color: white;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        transition-duration: 0.3s;
-        -webkit-transition-duration: 0.3s;
-        cursor: pointer;
-    }
-
-    .endSessionButton:hover {
-        box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    .endForm {
-        margin-top: 10%;
-        width: 100%;
-    }
 }
 
+.thermometer_shell {
+    height: 100%;
+    background-color: pink;
+}
