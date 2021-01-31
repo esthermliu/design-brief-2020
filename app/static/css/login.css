@@ -13,6 +13,25 @@
     }
 }
 
+@media screen and (min-width: 600px) {
+    .imageBox {
+        width: 60%;
+        background-image: url("../images/Student.jpeg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .innerBox {
+        background-color: #A8d0E6;
+        width: 40%;
+        min-width: 350px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 header {
     display: none;
 }
@@ -22,22 +41,6 @@ header {
     justify-content: space-between;
     height: 100vh;
     width: 100%;
-}
-
-.innerBox {
-    background-color: #A8d0E6;
-    width: 40%;
-    min-width: 350px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.imageBox {
-    width: 60%;
-    background-image: url("../images/Student.jpeg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
 }
 
 .imageHolder img {

@@ -1,3 +1,6 @@
+/* Will likely need more changes, possibly along with 
+changes to rooms.html to look better on small screens*/ 
+
 body {
     background-color: #A8D0E6;
     display: flex;
@@ -6,95 +9,12 @@ body {
     justify-content: center;
 }
 
-
-.tempVisual {
-    height: 95%;
-    width: 100px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.overallThermoContainer {
-    background-color: white;
-    height: 600px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 260px;
-    border-radius: 30px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.thermometer, .thermometer_shell {
-    width: 60px;
-    position: absolute;
-    background-color: red;
-    position: absolute;
-    transition: height 0.25s ease-in;
-    position: absolute;
-    border-radius: 40px;
-    bottom: 0;
-}
-
-.thermoCircle {
-    height: 16%;
-    width: 90%;
-    position: absolute;
-    bottom: 0;
-    background-color: red;
-    border-radius: 50%;
-}
-
-.thermometer_shell {
-    height: 100%;
-    background-color: pink;
-}
-
 #yipyip, #yopyop {
     display: none;
 }
 
-.dashes {
-    height: 87%;
-    width: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
-}
-
-.dashHolder {
-    height: 95%;
-}
-
-.dash {
-    background-color: grey;
-    height: 3px;
-    width: 35%;
-}
-
 #long {
     width: 70%;
-}
-
-.numbers {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    height: 88%;
-}
-
-.numHolder {
-    height: 95%;
-    font-size: 20px;
-}
-
-.num p {
-    margin: 0;
-    font-weight: 500;
 }
 
 .overallContainer {
@@ -112,129 +32,33 @@ body {
     margin-bottom: 3%;
 }
 
-.titleHolder h1 {
-    font-weight: 400;
-    font-size: 45px;
-}
-
-.all {
-    width: 100px;
-    display: none;
-    margin-bottom: 10px;
-}
-
-/*.visual_slow {
-    background-color: orange;
-}
-
-.visual_fast {
-    background-color: red;
-}*/
-
-.turtle {
+.turtle, .bunny {
     width: 100%;
-}
-
-
-.roomsBox {
-    width: 80%;
-}
-
-.contentHolder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.makeReactionBox {
-    background-color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 40px;
-    padding-right: 3%;
-    padding-left: 3%;
-    flex-wrap: wrap;
-    height: 30%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #temp, #okay, #bad, #faster, #slower {
     display: none;
 }
 
-.reactionImage {
-    height: 100%;
-}
-
-.reactionsHolder {
-    /*background-color: fuchsia;*/
-    width: 75%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.shadowBox {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
-    height: 130px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition-duration: 0.3s;
-    -webkit-transition-duration: 0.3s;
-}
-
 .shadowBox:hover {
     box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.15), 0 0px 0px 0 rgba(0, 0, 0, 0.1);
-}
-
-#visualHolder {
-    display: flex;
-    justify-content: flex-start;
-    height: 20%;
-    align-items: flex-end;
 }
 
 #speedVisual {
     display: none; /* Hiding the speed number */
 }
 
-#room_vibe {
-    /*background-color: pink;*/
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
 .vibeHeader {
     font-weight: 400;
-}
-
-#vibe {
-    height: 200px;
-}
-
-.vibeHolder {
-    height: 50%;
-}
-
-
-/* Teacher CSS */
-
-.teacherReactionHolder {
-    width: 48%;
-}
-
-.speedHolder {
-    width: 48%;
 }
 
 .attendanceBox {
     width: 20%;
     border-radius: 30px;
+}
+
+.visual_slow, .visual_fast {
+    width: 20%;
 }
 
 .bigReactionBox {
@@ -247,35 +71,8 @@ body {
     width: 65%;
 }
 
-.reactionResultsHolder, .paceBox {
-    background-color: white;
-    margin-bottom: 10%;
-    padding-top: 2%;
-    padding-bottom: 6%;
-    border-radius: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
 .teacherVibe {
     height: auto !important;
-}
-
-.teacherVibeInside {
-    background-color: white;
-    height: 100px;
-    width: 100%;
-    object-fit: contain;
-    border-radius: 40px;
-    padding-top: 5%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.teacherVibeHeader {
-    font-size: 18px;
 }
 
 .teacherStuff {
@@ -289,22 +86,8 @@ body {
     margin-bottom: 4%;
 }
 
-.userReactionView {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-
-.userReactionView p {
-    font-size: 18px;
-    font-family: 'Montserrat', sans-serif;
-    letter-spacing: 1px;
-}
-
 .teacherVisualHolder {
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     background-color: white;
     height: auto !important;
     border-radius: 30px;
@@ -325,7 +108,7 @@ body {
 }
 
 .teacherSpeed {
-    width: 10%;
+    width: 20%;
 }
 
 .teacherSpeed img {
@@ -350,36 +133,6 @@ body {
     padding-bottom: 2%;
 }
 
-.attendanceSection {
-    padding: 2%;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 30px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    padding-bottom: 8%;
-}
-
-#present, #absent {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#present p, #absent p {
-    margin: 5px;
-}
-
-#inside {
-    text-align: center;
-}
-
-#inside h3 {
-    font-size: 15px;
-}
 
 .endSessionButton {
     background-color: #f76c6c;
@@ -405,3 +158,565 @@ body {
     width: 100%;
 }
 
+/* For larger screens */
+@media all and (min-width: 600px) { 
+    h2 {
+        font-size: medium;
+        font-weight: 500;
+    }
+    
+    .tempVisual {
+        height: 95%;
+        width: 100px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .overallThermoContainer {
+        background-color: white;
+        height: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 260px;
+        min-width: 210px;
+        border-radius: 30px;
+        margin-right: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .thermometer, .thermometer_shell {
+        width: 60px;
+        position: absolute;
+        background-color: red;
+        position: absolute;
+        transition: height 0.25s ease-in;
+        position: absolute;
+        border-radius: 40px;
+        bottom: 0;
+    }
+
+    .thermoCircle {
+        height: 16%;
+        width: 90%;
+        position: absolute;
+        bottom: 0;
+        background-color: red;
+        border-radius: 50%;
+    }
+
+    .dashes {
+        height: 87%;
+        width: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .dashHolder {
+        height: 95%;
+    }
+
+    .dash {
+        background-color: grey;
+        height: 3px;
+        width: 35%;
+    }
+
+    .numbers {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        height: 88%;
+    }
+
+    .numHolder {
+        height: 95%;
+        font-size: 20px;
+    }
+
+    .num p {
+        margin: 0;
+        font-weight: 500;
+    }
+
+    .titleHolder h1 {
+        font-weight: 400;
+        font-size: 45px;
+    }
+
+    .all {
+        /* width: 50px; */
+        display: none;
+        margin-bottom: 10px;
+    }
+
+    /*.visual_slow {
+        background-color: orange;
+    }
+
+    .visual_fast {
+        background-color: red;
+    }*/
+
+    .roomsBox {
+        width: 90%;
+        max-width: 1400px;
+    }
+
+    .contentHolder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .makeReactionBox {
+        background-color: white;
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 40px;
+        padding-right: 3%;
+        padding-left: 3%;
+        /* flex-wrap: wrap; */
+        height: 30%;
+        width: 100%;
+        min-width: 600px;
+        max-width: 700px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .reactionImage {
+        height: 100%;
+    }
+
+    .reactionsHolder {
+        /*background-color: fuchsia;*/
+        width: 75%;
+        margin-right: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .shadowBox {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
+        height: 100px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition-duration: 0.3s;
+        -webkit-transition-duration: 0.3s;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    #visualHolder {
+
+        background-color: white;
+        border-radius: 40px;
+        padding-right: 3%;
+        padding-left: 3%;
+        /* width: fit-content; */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        height: 20%;
+        width: 100%;
+        max-width: 700px;
+        align-items: center;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    #room_vibe {
+        /*background-color: pink;*/
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* height: 40%; */
+    }
+
+    #vibe {
+        height: 90%;
+    }
+
+    .vibeHolder {
+        background-color: white;
+        border-radius: 40px;
+        padding-right: 3%;
+        padding-left: 3%;
+        /* width: fit-content; */
+        width: 100%;
+        max-width: 700px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        height: 35%;
+    }
+
+
+    /* Teacher CSS */
+
+    .teacherReactionHolder {
+        width: 48%;
+        margin-right: 10px;
+    }
+
+    .speedHolder {
+        width: 48%;
+    }
+
+    .reactionResultsHolder, .paceBox {
+        background-color: white;
+        min-width: 170px;
+        width: 100%;
+        margin-bottom: 10%;
+        padding-top: 2%;
+        padding-bottom: 6%;
+        border-radius: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .teacherVibeInside {
+        /* background-color: white; */
+        height: 100px;
+        width: 100%;
+        min-width: 170px;
+        object-fit: contain;
+        border-radius: 40px;
+        padding: 5%;
+        /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+    }
+
+    .teacherVibeHeader {
+        font-size: 16px;
+    }
+
+    .userReactionView {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        border-bottom: 1px solid lightgray;
+        margin-bottom: 5px;
+    }
+
+
+    .userReactionView p {
+        font-size: 15px;
+        font-family: 'Montserrat', sans-serif;
+        letter-spacing: 1px;
+    }
+
+    .attendanceSection {
+        padding: 5%;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 30px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        padding-bottom: 8%;
+    }
+
+    #present, #absent {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: left;
+        align-items: center;
+    }
+
+    #present p, #absent p {
+        margin: 2px;
+        padding: 5px;
+        width: fit-content; 
+        background-color: lightblue;
+        font-size: small;
+    }
+
+    #inside {
+        text-align: left;
+    }
+
+    #inside h3 {
+        font-size: medium;
+        border-bottom: 2px dashed #91a7c9;
+    }
+}
+
+/* For phones and devices with smaller screens*/
+@media all and (max-width: 600px) {
+    .tempVisual {
+        height: 95%;
+        width: 80px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .overallThermoContainer {
+        background-color: white;
+        height: 55vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        padding: 5%;
+        border-radius: 30px;
+        margin-right: 15px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        /* transform:matrix(0.00,0.40,-0.40,0.00,0,0);
+        -ms-transform:matrix(0.00,0.40,-0.40,0.00,0,0);
+        -webkit-transform:matrix(0.00,0.40,-0.40,0.00,0,0); */
+    }
+
+    .thermometer, .thermometer_shell {
+        width: 60%;
+        position: absolute;
+        background-color: red;
+        position: absolute;
+        transition: height 0.25s ease-in;
+        position: absolute;
+        border-radius: 40px;
+        bottom: 0;
+    }
+
+    .thermoCircle {
+        height: 70px;
+        width: 70px;
+        position: absolute;
+        bottom: 0;
+        background-color: red;
+        border-radius: 50%;
+    }
+
+    .dashes {
+        display: none;
+    }
+
+    .dashHolder {
+        display: none;
+    }
+
+    .dash {
+        display: none;
+    }
+
+    .numbers {
+        display: none;
+    }
+
+    .numHolder {
+        display: none;
+    }
+
+    .num p {
+        display: none;
+    }
+
+    .titleHolder h1 {
+        font-weight: 400;
+        font-size: large;
+    }
+
+    .all {
+        /* width: 100px; */
+        /* display: none; */
+        margin-bottom: 10px;
+    }
+
+    .roomsBox {
+        width: 95%;
+        /* height: 60vh; */
+    }
+
+    .contentHolder {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        /* margin-bottom: 500px; */
+        padding-bottom: 300px;
+    }
+
+
+    .makeReactionBox {
+        background-color: white;
+        position: fixed;
+        bottom: 70px;
+        left: 10px;
+        right: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 40px;
+        padding: 3%;
+        /* flex-wrap: wrap; */
+        height: 50px;
+        width: auto;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .reactionImage {
+        height: 50px;
+    }
+
+    .reactionsHolder {
+        /*background-color: fuchsia;*/
+        width: 60%;
+        max-width: 700px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .shadowBox {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
+        height: 50px;
+        border-radius: 50%;
+        transition-duration: 0.3s;
+        -webkit-transition-duration: 0.3s;
+    }
+
+    #visualHolder {
+        background-color: white;
+        border-radius: 40px;
+        padding-right: 3%;
+        padding-left: 3%;
+        width: 100%;
+        max-width: 695px;
+        display: inline-flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        height: 20%;
+        align-items: center;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    #room_vibe {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    #vibe {
+        height: 200px;
+    }
+
+    .vibeHolder {
+        height: 25%;
+        background-color: white;
+        width: 100%;
+        /* min-width: 170px; */
+        /* object-fit: contain; */
+        border-radius: 40px;
+        padding: 5%;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+
+    /* Teacher CSS */
+
+    .teacherReactionHolder {
+        width: 48%;
+    }
+
+    .speedHolder {
+        width: 48%;
+        margin-right: 20px;
+    }
+
+    .reactionResultsHolder, .paceBox {
+        background-color: white;
+        margin-bottom: 10%;
+        padding-top: 2%;
+        padding-bottom: 6%;
+        border-radius: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .teacherVibeInside {
+        background-color: white;
+        height: 100px;
+        width: 100%;
+        object-fit: contain;
+        border-radius: 40px;
+        padding-top: 5%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .teacherVibeHeader {
+        font-size: small;
+    }
+
+    .userReactionView {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+
+    .userReactionView p {
+        font-size: 18px;
+        font-family: 'Montserrat', sans-serif;
+        letter-spacing: 1px;
+    }
+
+    .attendanceSection {
+        padding: 2%;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 30px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        padding-bottom: 8%;
+    }
+
+    #present, #absent {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #present p, #absent p {
+        margin: 5px;
+    }
+
+    #inside {
+        text-align: center;
+    }
+
+    #inside h3 {
+        font-size: 15px;
+    }
+}
+
+.thermometer_shell {
+    height: 100%;
+    background-color: pink;
+}

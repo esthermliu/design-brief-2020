@@ -9,81 +9,6 @@
     .classBlock {
         background-color: #F76C6C;
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding: 2%;
-        padding-right: 1%;
-        padding-left: 1%;
-        cursor: pointer;
-        margin-top: 1%;
-        margin-bottom: 3%;
-        width: 95%;
-        height: 120px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        transition-duration: 0.3s;
-        -webkit-transition-duration: 0.3s;
-    }
-
-    .classImage {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 33%;
-    }
-    
-    .classImage img {
-        width: 100%;
-    }
-
-    .classDescription {
-        color: black;
-        margin-top: 15px;
-        display: flex;
-        flex-direction: column;
-        line-height: 35px;
-        width: 66%;
-    }
-
-    .courseName {
-        font-size: 25px;
-    }
-
-    /* Title underline */
-
-    .titleHolder h1 {
-        position: relative;
-        font-size: 30px;
-        font-weight: 600;
-        color: black;
-        margin-bottom: 30px;
-    }
-
-    .titleHolder h1:after {
-        position: absolute;
-        content: '';
-        height: 4px;
-        bottom: -10px;
-        /*margin: 0 auto; This will center the underline */ 
-        left: 0;
-        right: 0;
-        width: 28%;
-        background: #A8D0E6;
-    }
-
-    .classesTop {
-        margin-bottom: 25px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-    }
-}
-
-@media screen and (min-width: 500px) {
-    .classBlock {
-        background-color: #F76C6C;
-        display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
@@ -165,6 +90,93 @@
     
 }
 
+@media screen and (max-width: 600px) {
+    .classBlockHolder {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: center; */
+    }
+
+    .classBlock {
+        background-color: #F76C6C;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2%;
+        padding-right: 1%;
+        padding-left: 1%;
+        cursor: pointer;
+        margin-top: 1%;
+        margin-bottom: 3%;
+        width: 95%;
+        height: 120px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        transition-duration: 0.3s;
+        -webkit-transition-duration: 0.3s;
+    }
+
+    .classImage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 33%;
+    }
+    
+    .classImage img {
+        width: 100%;
+    }
+
+    .classDescription {
+        color: black;
+        margin: 15px;
+        margin-right: 25px;
+        align-items: flex-end;
+        display: flex;
+        flex-direction: column;
+        line-height: 35px;
+        width: 66%;
+    }
+
+    .courseName {
+        font-size: 25px;
+    }
+
+    /* Title underline */
+
+    .titleHolder h1 {
+        position: relative;
+        font-size: 30px;
+        font-weight: 600;
+        color: black;
+        margin-bottom: 30px;
+    }
+
+    .titleHolder h1:after {
+        position: absolute;
+        content: '';
+        height: 4px;
+        bottom: -10px;
+        /*margin: 0 auto; This will center the underline */ 
+        left: 0;
+        right: 0;
+        width: 28%;
+        background: #A8D0E6;
+    }
+
+    .classesTop {
+        margin-bottom: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
 
 .classBlock:hover {
     box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.19);
@@ -180,6 +192,7 @@
 
 .courseCode {
     font-size: 14px;
+    width: fit-content;
     border-top: 1px solid black;
 }
 
