@@ -1,11 +1,4 @@
-@media screen and (max-width: 500px) {
-    .classBlockHolder {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
+@media screen and (min-width: 600px) {
     .classBlock {
         background-color: #F76C6C;
         display: flex;
