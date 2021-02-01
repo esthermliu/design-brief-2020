@@ -65,7 +65,7 @@
     }
 }
 
-@media screen and (min-width: 601px) {
+@media screen and (min-width: 600px) {
     header {
         height: 100vh;
         width: 80px;
@@ -169,6 +169,7 @@ h2, h3 {
 }
 
 .flashHolder li {
+    z-index: 100;
     width: 80%;
     max-width: 400px;
     display: flex;
@@ -177,7 +178,7 @@ h2, h3 {
     border-radius: 20px;
     list-style-type: none;
     background-color: #F76C6C;
-    padding: 1%;
+    padding: 2%;
     color: white;
     text-align: center;
     box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);

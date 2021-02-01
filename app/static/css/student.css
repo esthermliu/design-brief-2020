@@ -5,7 +5,6 @@ body {
     background-color: #A8D0E6;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
     justify-content: center;
 }
 
@@ -17,19 +16,12 @@ body {
     width: 70%;
 }
 
-.overallContainer {
-    display: flex;
-    justify-content: space-between;
-    /*background-color: lightsalmon;*/
-    width: 100%;
-}
-
 .white {
     color: white;
 }
 
 .titleHolder {
-    margin-bottom: 3%;
+    margin-bottom: 5%;
 }
 
 .turtle, .bunny {
@@ -56,9 +48,13 @@ body {
     width: 20%;
     border-radius: 30px;
 }
+.visualImageHolder {
+    display: flex;
+    flex-direction: column;
+}
 
 .visual_slow, .visual_fast {
-    width: 20%;
+    width: 18%;
 }
 
 .bigReactionBox {
@@ -86,7 +82,7 @@ body {
     margin-bottom: 4%;
 }
 
-.teacherVisualHolder {
+.teacherVisualHolder, .studentVisualHolder {
     /* flex-wrap: wrap; */
     background-color: white;
     height: auto !important;
@@ -131,6 +127,7 @@ body {
     justify-content: center;
     align-items: center;
     padding-bottom: 2%;
+    font-size: small;
 }
 
 
@@ -160,6 +157,13 @@ body {
 
 /* For larger screens */
 @media all and (min-width: 600px) { 
+    .overallContainer {
+        display: flex;
+        justify-content: space-between;
+        /*background-color: lightsalmon;*/
+        width: 100%;
+    }
+
     h2 {
         font-size: medium;
         font-weight: 500;
@@ -264,8 +268,8 @@ body {
     }*/
 
     .roomsBox {
-        width: 90%;
-        max-width: 1400px;
+        width: 95%;
+        max-width: 1500px;
     }
 
     .contentHolder {
@@ -297,7 +301,7 @@ body {
 
     .reactionsHolder {
         /*background-color: fuchsia;*/
-        width: 75%;
+        width: 70%;
         margin-right: 20px;
         display: flex;
         flex-direction: column;
@@ -316,18 +320,19 @@ body {
     }
 
     #visualHolder {
-
         background-color: white;
         border-radius: 40px;
-        padding-right: 3%;
-        padding-left: 3%;
+        /* padding-right: 3%;
+        padding-left: 3%; */
         /* width: fit-content; */
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        height: 20%;
+        height: 25%;
         width: 100%;
         max-width: 700px;
+        padding-top: 10px;
+        padding-bottom: 10px;
         align-items: center;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
@@ -348,8 +353,8 @@ body {
     .vibeHolder {
         background-color: white;
         border-radius: 40px;
-        padding-right: 3%;
-        padding-left: 3%;
+        /* padding-right: 3%;
+        padding-left: 3%; */
         /* width: fit-content; */
         width: 100%;
         max-width: 700px;
@@ -371,6 +376,7 @@ body {
 
     .speedHolder {
         width: 48%;
+        margin-right: 10px;
     }
 
     .reactionResultsHolder, .paceBox {
@@ -458,72 +464,16 @@ body {
 
 /* For phones and devices with smaller screens*/
 @media all and (max-width: 600px) {
-    .tempVisual {
-        height: 95%;
-        width: 80px;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .overallContainer {
+        /* display: flex;
+        flex-direction: column;
+        justify-content: space-between; */
+        /*background-color: lightsalmon;*/
+        width: 100%;
+        height: 80%;
     }
 
     .overallThermoContainer {
-        background-color: white;
-        height: 55vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: fit-content;
-        padding: 5%;
-        border-radius: 30px;
-        margin-right: 15px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        /* transform:matrix(0.00,0.40,-0.40,0.00,0,0);
-        -ms-transform:matrix(0.00,0.40,-0.40,0.00,0,0);
-        -webkit-transform:matrix(0.00,0.40,-0.40,0.00,0,0); */
-    }
-
-    .thermometer, .thermometer_shell {
-        width: 60%;
-        position: absolute;
-        background-color: red;
-        position: absolute;
-        transition: height 0.25s ease-in;
-        position: absolute;
-        border-radius: 40px;
-        bottom: 0;
-    }
-
-    .thermoCircle {
-        height: 70px;
-        width: 70px;
-        position: absolute;
-        bottom: 0;
-        background-color: red;
-        border-radius: 50%;
-    }
-
-    .dashes {
-        display: none;
-    }
-
-    .dashHolder {
-        display: none;
-    }
-
-    .dash {
-        display: none;
-    }
-
-    .numbers {
-        display: none;
-    }
-
-    .numHolder {
-        display: none;
-    }
-
-    .num p {
         display: none;
     }
 
@@ -533,40 +483,45 @@ body {
     }
 
     .all {
-        /* width: 100px; */
-        /* display: none; */
         margin-bottom: 10px;
     }
 
     .roomsBox {
-        width: 95%;
-        /* height: 60vh; */
+        width: 100%;
+        height: 100%;
+        padding: 7%;
     }
 
     .contentHolder {
+        margin: 0;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        /* margin-bottom: 500px; */
-        padding-bottom: 300px;
+        /* width: 100vw; */
+        height: 95vh;
+        /* width: 100%;
+        height: 100%; */
+        padding: 5%;
+        /* To account for navbar */
+        /* padding-bottom: 70px; */
     }
-
 
     .makeReactionBox {
         background-color: white;
-        position: fixed;
-        bottom: 70px;
-        left: 10px;
-        right: 10px;
-        display: flex;
+        /* position: fixed; */
+        /* bottom: 70px; */
+        /* left: 10px; */
+        /* right: 10px; */
+        display: inline-flex;
+        flex-direction: row;
         justify-content: space-between;
         align-items: center;
         border-radius: 40px;
         padding: 3%;
         /* flex-wrap: wrap; */
-        height: 50px;
-        width: auto;
+        height: 60px;
+        width: 100%;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
@@ -576,11 +531,13 @@ body {
 
     .reactionsHolder {
         /*background-color: fuchsia;*/
-        width: 60%;
-        max-width: 700px;
+        width: 100%;
+        height: 100%;
+        /* max-width: 700px; */
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .shadowBox {
@@ -597,12 +554,12 @@ body {
         padding-right: 3%;
         padding-left: 3%;
         width: 100%;
-        max-width: 695px;
+        /* max-width: 695px; */
         display: inline-flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
+        flex-direction: column;
         justify-content: center;
-        height: 20%;
+        /* height: 20%; */
+        margin-bottom: 20px;
         align-items: center;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
@@ -621,12 +578,13 @@ body {
 
     .vibeHolder {
         height: 25%;
+        min-height: 120px;
         background-color: white;
         width: 100%;
         /* min-width: 170px; */
         /* object-fit: contain; */
         border-radius: 40px;
-        padding: 5%;
+        padding: 10px;
         margin-bottom: 20px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
