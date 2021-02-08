@@ -5,7 +5,7 @@ from app.forms import LoginForm
 from app.forms import RegistrationForm
 from app.forms import EditProfileForm
 from flask_login import current_user, login_user
-from app.models import User, Reactions, Post, Courses, Signups, Session
+from app.models import User, Reactions, Post, Courses, Signups, Session, Responses, Prompts
 from flask_login import logout_user
 from flask_login import login_required
 from flask import request
@@ -187,10 +187,9 @@ def add(username):
 def sessions(session_id):
     session = Session.query.get(session_id)
     
-    # If the session as ended, then redirect
+    # If the session has ended, then redirect
     if (session.timestamp_end is not None):
         return redirect(url_for('course_waiting_room', course_id=session.course_id))
-
 
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
@@ -300,8 +299,6 @@ def submit_reaction(session_id, reaction_num):
     db.session.add(reaction)
     db.session.commit() 
     return redirect(url_for('sessions', session_id=session_id)) # Redirects to the room page
-
-
 
 # Fetch Session json (includes reactions, speeds, attendance, percentage, speed num, and course status)
 @app.route('/classes/course/session/<session_id>/session_json', methods=["GET", "POST"])
@@ -537,9 +534,21 @@ def database():
     courses_all = Courses.query.all()
     signups_all = Signups.query.all()
     session_all = Session.query.all()
+    prompts_all = Prompts.query.all()
+    responses_all = Responses.query.all()
+
     #user_signups = User.query.join(Signups, (Signups.user_id == User.id)) 
     user_signups = User.query.join(Signups, (Signups.user_id == User.id)).join(Courses, (Courses.id == Signups.course)) 
-    return render_template('database.html', user_all=user_all, reactions_all=reactions_all, courses_all=courses_all, session_all=session_all, signups_all=signups_all, user_signups=user_signups, title='Database') # Have to pass in your variables above in here
+    return render_template('database.html', 
+                            user_all=user_all, 
+                            reactions_all=reactions_all, 
+                            courses_all=courses_all, 
+                            session_all=session_all, 
+                            signups_all=signups_all, 
+                            user_signups=user_signups, 
+                            title='Database',
+                            responses_all=responses_all,
+                            prompts_all=prompts_all) # Have to pass in your variables above in here
 
 # Testing javascript image reload
 @app.route('/image-reload')

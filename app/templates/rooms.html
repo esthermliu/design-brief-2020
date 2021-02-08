@@ -109,7 +109,9 @@
                 </div>
             {% endif %}
             {% if current_user.role == 1 %} <!-- If the current user is a student, then show all the reaction choices -->
-                <div class = "makeReactionBox">
+            <div id="responseBoxHolder">
+                <div id="formHolder" style="display: none;"></div>
+                <div id="responseBox" class = "makeReactionBox">
                     <!-- Emotions -->
                     <!-- <form id='reaction_form'> Form for feeling good :) -->
                     <label for="temp" class="shadowBox">
@@ -145,12 +147,15 @@
                     </label>
                     <!--</form>-->
                 </div>
+            </div>
             {% endif %}
             
             
             {% if current_user.role == 0 %}<!-- Only show this if the current user is a teacher-->
                 <div class = "bigReactionBox">
-
+                    <div id="formDistributor">
+                        
+                    </div>
                     <div class = "teacherReactionHolder">
                         <div class = "reactionResultsHolder">
                             <h2> Reactions: </h2> <!-- Shows the reaction results-->
