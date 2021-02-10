@@ -248,6 +248,7 @@ function initTeacher(course_id, session_id, course_status) { // Course ID, sessi
     }, 5000) // The fetchSessionInfo function will be called every 5 seconds  
 }
 
+// Have separate functions: initTeacher and initStudent
 function initStudent(course_id, session_id, course_status) {
     console.log("Called INIT Student");
     fetchSessionInfoStudent(course_id, session_id, course_status);
@@ -262,4 +263,19 @@ function pastInfo(course_id, session_id, course_status) {
     fetchPastSessionInfo(course_id, session_id, course_status);
 }
 
-// Have separate functions: initTeacher and initStudent
+// Open a new page on which the teacher can download the report
+function redirectToDownloadPage(session_id) {
+    console.log("Opening DOWNLOAD Page")
+    let url = "/classes/course/session/" + session_id + "/report"
+    window.open(url)
+}
+
+// //download the pdf using jsPDF
+// function create_and_save_pdf(course_name, start_time, end_time) {
+//     pdf = new jsPDF('p', 'pt', 'letter')
+//     let url = "/classes/course/session/" + session_id + "/report"
+//     html_obj = fetch(url, {method: "GET"})
+//     pdf.addHTML(html_obj, function () {
+//         pdf.save('Test.pdf')
+//     })
+// }

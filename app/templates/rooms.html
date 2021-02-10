@@ -263,10 +263,15 @@
                     </div>
                 </div>  
             </div>
+            <div class = "openReportSection">
+                <button title="Download a Report for this Session" id="openReport" type="button" onclick="redirectToDownloadPage( {{ session_id }})">
+                    <img id="downloadImg" src="{{ url_for('static', filename='images/download.svg') }}" alt="Download Report">
+                </button>
+            </div>
             {% if session.timestamp_end == None %} <!-- If the user is a teacher and the session is active --> 
             <div class = "endSection">
                 <form action="/classes/rooms/{{ course.id }}/activate" method='post' class="endForm">
-                    <button type="submit" formaction="/classes/rooms/{{ course.id }}/{{ session.id }}/end" class="endSessionButton">End Session</button>
+                    <button title="End this Session" type="submit" formaction="/classes/rooms/{{ course.id }}/{{ session.id }}/end" class="endSessionButton">End Session</button>
                     <!--<button type="submit" formaction="/classes/course/session/{{ session.id }}/attendance">Get Attendance</button>-->
                 </form>
             </div>

@@ -1,0 +1,111 @@
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>{{ title }}</title> 
+    {% else %}
+    <title>Hey! You forgot a title!</title>
+    {% endif %}
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <!-- css stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <!-- scripts -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+    <!-- <script src="{{ url_for('static', filename='scripts/flash_messages.js') }}"></script> -->
+    <!-- favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}" size = "16x16"/>
+    {% block scripts %} 
+        {{ moment.include_moment() }} <!-- Making sure that the moment library will always be available on each page -->
+    {% endblock %}
+    </head>
+    <body id="bodyAll">
+        <div id="titleHolder">
+            <h1>{{ title }}</h1>
+        </div>
+        <div id="sessionDataHolder">
+            <div id="sessionData">
+                <h2>Class and Session Information</h2>
+                <p><b>Class:  </b>{{ course_name }}</p>
+                <p><b>Session ID:  </b>{{ session_id }} </p>
+                <p><b>Date:  </b>{{ start_date }}</p>
+                <p><b>Start Time:  </b>{{ start_time }}</p>
+                <p><b>End Time:  </b>{{ end_time }}</p>
+            </div>
+        </div> <br> <hr>
+        <div id="attendanceDataHolder">
+            <div id="attendanceData">
+                <h2>Attendance</h2>
+                <h3>Present</h3>
+                <ul id="present">
+                    {% for s in present_list %}
+                        <li> {{ s }}</li>
+                    {% endfor %}
+                </ul>
+                <h3>Absent</h3>
+                <ul id="absent">
+                    {% for s in absent_list %}
+                        <li> {{ s }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div> <br> <hr>
+        <div id="reactionDataHolder">
+            <div id="reactionData">
+                <h2>Reaction Data</h2>
+                <table id="reactionsTable">
+                    <th>
+                        Student
+                    </th>
+                    <th>
+                        Good<br>
+                        <!-- <img src="{{ url_for('static', filename='images/Happy.png')}}" style="width: 30px" class = "reactionImage"> -->
+                    </th>
+                    <th>
+                        Okay<br>
+                        <!-- <img src="{{ url_for('static', filename='images/Meh.png')}}" style="width: 30px" class = "reactionImage"> -->
+                    </th>
+                    <th>
+                        Bad<br>
+                        <!-- <img src="{{ url_for('static', filename='images/Sad.png')}}" style="width: 30px" class = "reactionImage"> -->
+                    </th>
+                    <th>
+                        Slower <br>
+                        <!-- <img src="{{ url_for('static', filename='images/Slow.png')}}" style="width: 30px" class = "reactionImage">   -->
+                    </th>
+                    <th>
+                        Faster<br>
+                        <!-- <img src="{{ url_for('static', filename='images/Fast.png')}}" style="width: 30px" class = "reactionImage"> -->
+                    </th>
+                    {% for s, r in reactions %}
+                        <tr>
+                            <td>{{ s }}</td>
+                            <td>{{ r[0] }}</td>
+                            <td>{{ r[1] }}</td>
+                            <td>{{ r[2] }}</td>
+                            <td>{{ r[7] }}</td>
+                            <td>{{ r[6] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div> <br> <hr>
+        <!-- {% for f in forms %}
+            <div>
+                <h2>f.prompt</h2>
+                <table>
+                    <th>Student</th>    
+                    <th>Response</th>
+                    {% for response in f %}
+                        <tr>
+                            <td> {{ response.student.username }}</td>
+                            <td> {{ response.response }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div> <br> <hr>
+        {% endfor %} -->
+
+    </body>
+</html>

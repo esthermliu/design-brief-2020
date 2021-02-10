@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, jsonify
+from flask import render_template, flash, redirect, url_for, jsonify, send_file
 from app import app
 from app import db
 from app.forms import LoginForm
@@ -12,7 +12,9 @@ from flask import request
 from werkzeug.urls import url_parse
 import random 
 from datetime import datetime, timedelta
-
+from collections import defaultdict
+from flask_weasyprint import HTML, render_pdf
+from flask_moment import Moment
 
 @app.route('/')
 @app.route('/index')
@@ -251,7 +253,7 @@ def attendance(session_id):
     for signup in signups: # Going through the list of signups
         if (signup.student.username not in present_set and signup.student.role == 1):
             absent_set.add(signup.student.username)
-
+    
     return render_template('attendance.html', course=course,
                                             session=session, 
                                             present_set=present_set, 
@@ -287,6 +289,70 @@ def end(course_id, session_id):
 
     return redirect(url_for('course_waiting_room', course_id=course.id))
 
+# **********************************************************************************************************************************
+@app.route('/classes/course/session/<session_id>/report', methods=["GET", "POST"])
+@login_required
+def generate_report(session_id):
+    # Get session info and course name
+    session = Session.query.get(session_id)
+    course_id = session.course_id
+    course_name = Courses.query.get(course_id).course_name
+
+    # get all the students signed up for this course
+    students_all = Signups.query.filter_by(course=course_id).all()
+    
+    # create a dictionary mapping the students' user ids to their usernames for easy access later.
+    ids_and_students = {student.user_id: User.query.get(student.user_id).username for student in students_all}
+
+    # get all reactions for this session
+    reactions_all = Reactions.query.filter_by(session_id=session_id).all()
+    
+    reaction_counts = {ids_and_students[s.user_id]:defaultdict(int) for s in students_all} # To store occurences of each reaction for each student
+
+    attendance_present = set()
+    attendance_absent = set()
+
+    for r in reactions_all:
+        s_id = r.user_id
+        reaction_counts[ids_and_students[s_id]][r.reactions] += 1
+        attendance_present.add(ids_and_students[s_id])
+
+    for s in students_all:
+        s_name = User.query.get(s.user_id).username
+        if s_name not in attendance_present:
+            attendance_absent.add(s_name)
+    
+    # converting the attendance sets to sorted lists
+    attendance_absent = sorted(list(attendance_absent))
+    attendance_present = sorted(list(attendance_present))
+
+    # weasyprint cannot handle moment library, so we must convert to a string here
+    start_date = session.timestamp_start.strftime("%A, %B %d, %Y")
+    start_time = session.timestamp_start.strftime("%I:%M %p")
+    if session.timestamp_end is None:
+        end_time = "In Progress"
+    else:
+        end_time = session.timestamp_end.strftime("%I:%M %p")
+
+    # renders the report template
+    html = render_template('report.html',
+                            title="{} Session Report: {}".format(course_name, session.timestamp_start.strftime("%A, %B %d, %Y")),
+                            course_name=course_name, 
+                            start_date=start_date,
+                            start_time=start_time,
+                            end_time=end_time,
+                            session_id=session.id, 
+                            present_list=attendance_present,
+                            absent_list=attendance_absent,
+                            reactions=sorted(reaction_counts.items())) # Sorts so that reactions are accessed in alphabetical order of students' usernames
+    
+    
+    # renders the html as a pdf using weasyprint
+    return render_pdf(HTML(string=html))
+    
+    
+# **********************************************************************************************************************************
+
 # Function for all the emotions and speeds
 @app.route('/classes/course/session/<session_id>/react/<reaction_num>', methods=["GET", "POST"]) # Adds an emotion, also don't forget to add this methods POST thing!
 @login_required
@@ -299,6 +365,7 @@ def submit_reaction(session_id, reaction_num):
     db.session.add(reaction)
     db.session.commit() 
     return redirect(url_for('sessions', session_id=session_id)) # Redirects to the room page
+
 
 # Fetch Session json (includes reactions, speeds, attendance, percentage, speed num, and course status)
 @app.route('/classes/course/session/<session_id>/session_json', methods=["GET", "POST"])

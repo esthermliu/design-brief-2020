@@ -193,6 +193,11 @@
                     </div>
                 </div>  
             </div>
+            <div class = "openReportSection">
+                <button title="Download a Report for this Session" id="openReport" type="button" onclick="redirectToDownloadPage( {{ session_id }})">
+                    <img id="downloadImg" src="{{ url_for('static', filename='images/download.svg') }}" alt="Download Report">
+                </button>
+            </div>
             <div class = "endSection">
                 <div class="endForm">
                     <a href ="/classes/course/{{ course_id }}/previous_session_list" class="endSessionButton">Return to Sessions List</a>
