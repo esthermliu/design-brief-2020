@@ -14,7 +14,7 @@ import random
 from datetime import datetime, timedelta
 from collections import defaultdict
 from flask_weasyprint import HTML, render_pdf
-from flask_moment import Moment
+import logging
 
 @app.route('/')
 @app.route('/index')
@@ -31,6 +31,7 @@ def index():
     #     }
     # ]
     return render_template('index.html', title="Home")
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -290,13 +291,27 @@ def end(course_id, session_id):
     return redirect(url_for('course_waiting_room', course_id=course.id))
 
 # **********************************************************************************************************************************
+
+def unauthorized_access(error_message=""):
+    flash('Unathorized access\n{}'.format(error_message), 'error')
+    return redirect(url_for('index'))
+
+
 @app.route('/classes/course/session/<session_id>/report', methods=["GET", "POST"])
 @login_required
 def generate_report(session_id):
-    # Get session info and course name
+
+    # Get session info, course info, and teacher id for authorization verification
     session = Session.query.get(session_id)
     course_id = session.course_id
-    course_name = Courses.query.get(course_id).course_name
+    course = Courses.query.get(course_id)
+    teacher_id = course.teacher_id
+
+    # Preventing unauthorized access to this report
+    if teacher_id != current_user.id:
+        return unauthorized_access("You are not the teacher for this class")
+    
+    course_name = course.course_name # Gets the string course name
 
     # get all the students signed up for this course
     students_all = Signups.query.filter_by(course=course_id).all()
@@ -348,7 +363,10 @@ def generate_report(session_id):
     
     
     # renders the html as a pdf using weasyprint
-    return render_pdf(HTML(string=html))
+    return render_pdf(HTML(string=html), stylesheets=[
+                                                    'app/static/css/report.css',
+                                                    "https://fonts.googleapis.com/css2?family=Montserrat&display=swap",
+                                                    "https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"])
     
     
 # **********************************************************************************************************************************

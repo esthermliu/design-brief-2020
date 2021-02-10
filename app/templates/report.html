@@ -1,50 +1,40 @@
 <html>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
-    {% if title %}
-    <title>{{ title }}</title> 
-    {% else %}
-    <title>Hey! You forgot a title!</title>
-    {% endif %}
-    <!-- fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
-    <!-- css stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    <!-- scripts -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
-    <!-- <script src="{{ url_for('static', filename='scripts/flash_messages.js') }}"></script> -->
-    <!-- favicon -->
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}" size = "16x16"/>
-    {% block scripts %} 
-        {{ moment.include_moment() }} <!-- Making sure that the moment library will always be available on each page -->
-    {% endblock %}
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <title>{{ title }}</title> 
+        <!-- favicon -->
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}" size = "16x16"/>
     </head>
     <body id="bodyAll">
         <div id="titleHolder">
-            <h1>{{ title }}</h1>
-        </div>
+            <h2>{{ title }}</h2>
+        </div> <hr>
         <div id="sessionDataHolder">
+            <h3 class="sectionHeaders">Class and Session Information</h3>
             <div id="sessionData">
-                <h2>Class and Session Information</h2>
-                <p><b>Class:  </b>{{ course_name }}</p>
-                <p><b>Session ID:  </b>{{ session_id }} </p>
-                <p><b>Date:  </b>{{ start_date }}</p>
-                <p><b>Start Time:  </b>{{ start_time }}</p>
-                <p><b>End Time:  </b>{{ end_time }}</p>
+                <div id="generalSessionData">
+                    <p><b>Class:  </b>{{ course_name }}</p>
+                    <p><b>Session ID:  </b>{{ session_id }} </p>
+                    <p><b>Date:  </b>{{ start_date }}</p>
+                </div>
+                <div id="startEndTimes">
+                    <p><b>Start Time:  </b>{{ start_time }}</p>
+                    <p><b>End Time:  </b>{{ end_time }}</p>
+                </div>
             </div>
         </div> <br> <hr>
         <div id="attendanceDataHolder">
             <div id="attendanceData">
-                <h2>Attendance</h2>
-                <h3>Present</h3>
-                <ul id="present">
+                <h3 class="sectionHeaders">Attendance</h3>
+                <h4>Present</h4>
+                <ul id="present" class="attendanceList">
                     {% for s in present_list %}
                         <li> {{ s }}</li>
                     {% endfor %}
                 </ul>
-                <h3>Absent</h3>
-                <ul id="absent">
+                <h4>Absent</h4>
+                <ul id="absent" class="attendanceList">
                     {% for s in absent_list %}
                         <li> {{ s }}</li>
                     {% endfor %}
@@ -53,40 +43,44 @@
         </div> <br> <hr>
         <div id="reactionDataHolder">
             <div id="reactionData">
-                <h2>Reaction Data</h2>
+                <h3 class="sectionHeaders">Reaction Data</h3>
                 <table id="reactionsTable">
                     <th>
                         Student
                     </th>
                     <th>
-                        Good<br>
-                        <!-- <img src="{{ url_for('static', filename='images/Happy.png')}}" style="width: 30px" class = "reactionImage"> -->
+                        <!-- <p>Good</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Happy.png')}}" class= "tableImage">
                     </th>
                     <th>
-                        Okay<br>
-                        <!-- <img src="{{ url_for('static', filename='images/Meh.png')}}" style="width: 30px" class = "reactionImage"> -->
+                        <!-- <p>Okay</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Meh.png')}}" class= "tableImage">
                     </th>
                     <th>
-                        Bad<br>
-                        <!-- <img src="{{ url_for('static', filename='images/Sad.png')}}" style="width: 30px" class = "reactionImage"> -->
+                        <!-- <p>Bad</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Sad.png')}}" class= "tableImage">
                     </th>
                     <th>
-                        Slower <br>
-                        <!-- <img src="{{ url_for('static', filename='images/Slow.png')}}" style="width: 30px" class = "reactionImage">   -->
+                        <!-- <p>Slower</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Slow.png')}}" class= "tableImage">  
                     </th>
                     <th>
-                        Faster<br>
-                        <!-- <img src="{{ url_for('static', filename='images/Fast.png')}}" style="width: 30px" class = "reactionImage"> -->
+                        <!-- <p>Faster</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Fast.png')}}" class= "tableImage">
                     </th>
                     {% for s, r in reactions %}
-                        <tr>
-                            <td>{{ s }}</td>
-                            <td>{{ r[0] }}</td>
-                            <td>{{ r[1] }}</td>
-                            <td>{{ r[2] }}</td>
-                            <td>{{ r[7] }}</td>
-                            <td>{{ r[6] }}</td>
-                        </tr>
+                        {% if r.values() | sum() == 0 %}
+                            <tr class="noReactions">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                                <td>{{ s }}</td>
+                                <td>{{ r[0] }}</td>
+                                <td>{{ r[1] }}</td>
+                                <td>{{ r[2] }}</td>
+                                <td>{{ r[7] }}</td>
+                                <td>{{ r[6] }}</td>
+                            </tr>
                     {% endfor %}
                 </table>
             </div>
