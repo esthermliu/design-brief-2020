@@ -12,6 +12,7 @@ from flask import request
 from werkzeug.urls import url_parse
 import random 
 from datetime import datetime, timedelta
+from dateutil import tz
 from collections import defaultdict
 from flask_weasyprint import HTML, render_pdf
 import logging
@@ -293,9 +294,16 @@ def end(course_id, session_id):
 # **********************************************************************************************************************************
 
 def unauthorized_access(error_message=""):
-    flash('Unathorized access\n{}'.format(error_message), 'error')
+    flash('Unathorized access.\n{}'.format(error_message), 'error')
     return redirect(url_for('index'))
 
+# To convert the utc times from the database to local times within python
+def utc_to_local(utc_time):
+    from_zone = tz.tzutc()
+    to_zone = tz.gettz()
+
+    out = utc_time.replace(tzinfo=from_zone)
+    return out.astimezone(to_zone)
 
 @app.route('/classes/course/session/<session_id>/report', methods=["GET", "POST"])
 @login_required
@@ -341,13 +349,18 @@ def generate_report(session_id):
     attendance_absent = sorted(list(attendance_absent))
     attendance_present = sorted(list(attendance_present))
 
-    # weasyprint cannot handle moment library, so we must convert to a string here
-    start_date = session.timestamp_start.strftime("%A, %B %d, %Y")
-    start_time = session.timestamp_start.strftime("%I:%M %p")
+    full_start_info = utc_to_local(session.timestamp_start) # To avoid accessing twice for the start date and start time
+    start_date = full_start_info.strftime("%A, %B %d, %Y")
+    start_time = full_start_info.strftime("%I:%M %p")
+
     if session.timestamp_end is None:
         end_time = "In Progress"
     else:
-        end_time = session.timestamp_end.strftime("%I:%M %p")
+        end_time = utc_to_local(session.timestamp_end).strftime("%I:%M %p")
+
+    # weasyprint cannot handle moment library, so we must convert to a string here
+    print("\n%s - START: %s; represented as %s\n" % (session.id, session.timestamp_start, start_time))
+    print("\n%s - END: %s; represented as %s\n" % (session.id, session.timestamp_end, end_time))
 
     # renders the report template
     html = render_template('report.html',
