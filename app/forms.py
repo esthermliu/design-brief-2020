@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, RadioField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
@@ -32,3 +32,12 @@ class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()]) # Username input field
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)]) # TextAreaField is a multi-line box where the user can enter text, has to be between 0 and 140 characters, 140 matches space in database (check models)
     submit = SubmitField('Submit') 
+
+class TeacherRadioForm(FlaskForm):
+    prompt = StringField('Prompt', validators=[DataRequired()])
+    options = RadioField('', choices=[(0, 'Yes'), (1, 'maybe'), (2, 'No')], coerce=int)
+    submit = SubmitField('Distribute')
+
+class StudentRadioForm(FlaskForm):
+    options = RadioField('', choices=[(0, 'Yes'), (1, 'maybe'), (2, 'No')], coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Submit')
