@@ -42,3 +42,13 @@
     letter-spacing: 1px;
 }
 
+@media (prefers-color-scheme: dark) {
+    .newCourseButton {
+        background-color: #c75858;
+    }
+
+    .newCourseInput {
+        border-bottom: 1px solid #e6e6e6;
+        color: #e6e6e6;
+    }
+}

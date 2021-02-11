@@ -38,3 +38,13 @@ label {
     box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0px 0px 0 rgba(0, 0, 0, 0.19);
 }
 
+@media (prefers-color-scheme: dark) {
+    input, textarea {
+        background-color: transparent !important;
+        color: #e6e6e6;
+    }
+
+    #submit {
+        background-color: #c75858 !important;
+    }   
+}

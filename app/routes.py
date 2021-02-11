@@ -15,7 +15,6 @@ from datetime import datetime, timedelta
 from dateutil import tz
 from collections import defaultdict
 from flask_weasyprint import HTML, render_pdf
-import logging
 
 @app.route('/')
 @app.route('/index')
@@ -86,6 +85,9 @@ def create(username):
 @login_required 
 def newclass(username):
     course_name = request.form.get("course_name")
+    if len(course_name) == 0:
+        flash('You must give your new course a name', 'error')
+        return redirect(url_for('create', username=current_user.username)) # Redirects to the create page
     rand_code = random.randint(100000, 999999) # Generating a random code
     exist_course = Courses.query.filter_by(code=rand_code).first() # Checks if rand_code is already linked to an existing course
     while exist_course is not None: # While an existing course has that code
@@ -123,14 +125,7 @@ def edit_profile():
         current_user.about_me = form.about_me.data # Set about me for current user to input from the form
         db.session.commit() # Commit changes to the database
         flash('Your changes have been saved', 'info')
-        
-        """Code that Anaya replaced
-        return redirect(url_for('edit_profile'))"""
-
-        ### NEW CODE ###
         return redirect(url_for('user', username=current_user.username))
-        ### NEW CODE ###
-
     elif request.method == 'GET': # If this is the first time that the form has been requested
         form.username.data = current_user.username # Then pre-populate the fields with the data in the database
         form.about_me.data = current_user.about_me
@@ -157,19 +152,11 @@ def classes(username): # the word after def has to be the same as the text in th
 def add(username):
     user = User.query.filter_by(username=username).first_or_404()
     code = request.form.get("title") # This stores the user code that the student enters
-
-    """Code that Anaya replaced
-    course = Courses.query.filter_by(code=code).first_or_404() # Filter through courses by this code
-    """
-    ### NEW CODE ###
     course = Courses.query.filter_by(code=code).first() # Filter through courses by this code
     if course is None:
         flash('The code you entered (%s) is invalid. Try again' % (code), 'error')
-        # return redirect('/user/<username')
-        return redirect(url_for('classes', username=user.username))
-    ### NEW CODE ###
-    
-
+        return redirect(url_for('classes', username=user.username)) 
+        
     new_signup = Signups(user_id = user.id, course=course.id) # Now that you have that course, take the course id and enter that into the course field
     # TODO: Remove this for loop later by querying with a filter and checking if none
     signups_all = Signups.query.all() # Getting all of the sign-ups

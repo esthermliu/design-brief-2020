@@ -60,3 +60,13 @@ p {
     margin-left: 15px;
 }
 
+@media (prefers-color-scheme: dark) {
+    #role, #submit {
+        filter: brightness(0.9)
+    }
+
+    input {
+        color: #e6e6e6;
+        border-bottom: 1px solid #e6e6e6;
+    }
+}

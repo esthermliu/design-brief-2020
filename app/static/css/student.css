@@ -1,7 +1,15 @@
 /* Will likely need more changes, possibly along with 
 changes to rooms.html to look better on small screens*/ 
 
+html {
+    min-width: fit-content;
+    width: 100%;
+    height: 100%;
+}
+
 body {
+    width: 100%;
+    height: 100%;
     background-color: #A8D0E6;
     display: flex;
     flex-direction: column;
@@ -706,4 +714,37 @@ body {
 .thermometer_shell {
     height: 100%;
     background-color: pink;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: transparent !important;
+    }
+
+    .overallThermoContainer, 
+    .vibeHolder, 
+    .studentVisualHolder, 
+    .makeReactionBox, 
+    .reactionResultsHolder, 
+    .paceBox, 
+    #visualHolder,
+    .attendanceSection{
+        background-color: #233741 !important;
+    }
+
+    .thermometer, .thermometer_shell, .thermoCircle {
+        filter: brightness(0.9)
+    }
+
+    #openReport {
+        background-color: rgb(58, 58, 129);
+    }
+
+    .endSessionButton {
+        background-color: #c75858;
+    }
+
+    #present p, #absent p {
+        background-color: #297499;   
+    }
 }
