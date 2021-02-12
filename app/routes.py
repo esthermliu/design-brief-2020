@@ -133,12 +133,12 @@ def edit_profile():
 
 
 
-
-
 @app.route('/user/<username>/classes') # User's classes
 @login_required
 def classes(username): # the word after def has to be the same as the text in the urlfor quotation marks 
     user = User.query.filter_by(username=username).first_or_404()
+    if current_user.id != user.id:
+        return unauthorized_access()
     user_signups_filtered = User.query.join(Signups, (Signups.user_id == User.id)).\
                                         join(Courses, (Courses.id == Signups.course)).\
                                         with_entities(Signups).\
@@ -151,6 +151,8 @@ def classes(username): # the word after def has to be the same as the text in th
 @login_required
 def add(username):
     user = User.query.filter_by(username=username).first_or_404()
+    if current_user.id != user.id:
+        return unauthorized_access()
     code = request.form.get("title") # This stores the user code that the student enters
     course = Courses.query.filter_by(code=code).first() # Filter through courses by this code
     if course is None:
@@ -220,6 +222,22 @@ def course_waiting_room(course_id):
         return redirect(url_for('sessions', session_id=session_filtered.id))     
 
 
+@app.route('/classes/course/<course_id>/manage')
+@login_required
+def manage_course_page(course_id):
+    course = Courses.query.get(course_id)
+    teacher_id = course.teacher_id
+    if current_user.id != teacher_id:
+        return unauthorized_access("You are not the teacher for this class.")
+    
+    student_signups = Signups.query.filter_by(course=course.id).all()
+    students_user_info = [User.query.get(s.user_id) for s in student_signups]
+    
+    return render_template('manage_class.html', 
+                            course_name=course.course_name, 
+                            students=students_user_info)
+
+
 
 
 
@@ -281,7 +299,7 @@ def end(course_id, session_id):
 # **********************************************************************************************************************************
 
 def unauthorized_access(error_message=""):
-    flash('Unathorized access.\n{}'.format(error_message), 'error')
+    flash('Unauthorized access.\n{}'.format(error_message), 'error')
     return redirect(url_for('index'))
 
 # To convert the utc times from the database to local times within python
