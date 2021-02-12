@@ -63,6 +63,11 @@
     .contentHolder {
         margin: 15px 15px 60px;   
     }
+
+    #themeBox {
+        bottom: 70px;
+        right: 10px;
+    }
 }
 
 @media screen and (min-width: 600px) {
@@ -139,6 +144,11 @@
     .contentHolder {
         margin: 45px 45px 45px 125px;   
     }
+
+    #themeBox {
+        bottom: 30px;
+        right: 10px;
+    }
 }
 
 body {
@@ -154,6 +164,25 @@ h1, p {
 
 h2, h3 {
     font-weight: 400;
+}
+
+#themeBox {
+    background-color: white;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+#moon {
+    width: 90%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .flashHolder {
@@ -187,4 +216,19 @@ h2, h3 {
 
 .info {
     background-color: #A9D099  !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        background-color: rgb(32, 30, 31);
+        color: #e6e6e6;
+    }
+
+    img {
+        filter: brightness(0.9)
+    }
+
+    header {
+        background-color: #000000 !important;
+    }
 }

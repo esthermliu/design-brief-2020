@@ -14,8 +14,7 @@ import random
 from datetime import datetime, timedelta
 from dateutil import tz
 from collections import defaultdict
-#from flask_weasyprint import HTML, render_pdf
-import logging
+from flask_weasyprint import HTML, render_pdf
 
 @app.route('/')
 @app.route('/index')
@@ -86,6 +85,9 @@ def create(username):
 @login_required 
 def newclass(username):
     course_name = request.form.get("course_name")
+    if len(course_name) == 0:
+        flash('You must give your new course a name', 'error')
+        return redirect(url_for('create', username=current_user.username)) # Redirects to the create page
     course_icon = request.form.get("icon")
     rand_code = random.randint(100000, 999999) # Generating a random code
     exist_course = Courses.query.filter_by(code=rand_code).first() # Checks if rand_code is already linked to an existing course
@@ -124,12 +126,7 @@ def edit_profile():
         current_user.about_me = form.about_me.data # Set about me for current user to input from the form
         db.session.commit() # Commit changes to the database
         flash('Your changes have been saved', 'info')
-        
-        """Code that Anaya replaced
-        return redirect(url_for('edit_profile'))"""
-
         return redirect(url_for('user', username=current_user.username))
-
     elif request.method == 'GET': # If this is the first time that the form has been requested
         form.username.data = current_user.username # Then pre-populate the fields with the data in the database
         form.about_me.data = current_user.about_me
@@ -140,6 +137,8 @@ def edit_profile():
 @login_required
 def classes(username): # the word after def has to be the same as the text in the urlfor quotation marks 
     user = User.query.filter_by(username=username).first_or_404()
+    if current_user.id != user.id:
+        return unauthorized_access()
     user_signups_filtered = User.query.join(Signups, (Signups.user_id == User.id)).\
                                         join(Courses, (Courses.id == Signups.course)).\
                                         with_entities(Signups).\
@@ -155,18 +154,14 @@ def classes(username): # the word after def has to be the same as the text in th
 @login_required
 def add(username):
     user = User.query.filter_by(username=username).first_or_404()
+    if current_user.id != user.id:
+        return unauthorized_access()
     code = request.form.get("title") # This stores the user code that the student enters
-
-    """Code that Anaya replaced
-    course = Courses.query.filter_by(code=code).first_or_404() # Filter through courses by this code
-    """
     course = Courses.query.filter_by(code=code).first() # Filter through courses by this code
     if course is None:
         flash('The code you entered (%s) is invalid. Try again' % (code), 'error')
-        # return redirect('/user/<username')
-        return redirect(url_for('classes', username=user.username))
-    
-
+        return redirect(url_for('classes', username=user.username)) 
+        
     new_signup = Signups(user_id = user.id, course=course.id) # Now that you have that course, take the course id and enter that into the course field
     # TODO: Remove this for loop later by querying with a filter and checking if none
     signups_all = Signups.query.all() # Getting all of the sign-ups
@@ -243,6 +238,22 @@ def course_waiting_room(course_id):
         return redirect(url_for('sessions', session_id=session_filtered.id))     
 
 
+@app.route('/classes/course/<course_id>/manage')
+@login_required
+def manage_course_page(course_id):
+    course = Courses.query.get(course_id)
+    teacher_id = course.teacher_id
+    if current_user.id != teacher_id:
+        return unauthorized_access("You are not the teacher for this class.")
+    
+    student_signups = Signups.query.filter_by(course=course.id).all()
+    students_user_info = [User.query.get(s.user_id) for s in student_signups]
+    
+    return render_template('manage_class.html', 
+                            course_name=course.course_name, 
+                            students=students_user_info)
+
+
 
 
 
@@ -304,7 +315,7 @@ def end(course_id, session_id):
 # **********************************************************************************************************************************
 
 def unauthorized_access(error_message=""):
-    flash('Unathorized access.\n{}'.format(error_message), 'error')
+    flash('Unauthorized access.\n{}'.format(error_message), 'error')
     return redirect(url_for('index'))
 
 # To convert the utc times from the database to local times within python

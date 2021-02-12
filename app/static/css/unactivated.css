@@ -47,3 +47,8 @@
     background-color: #A8D0E6;
 }
 
+@media (prefers-color-scheme: dark) {
+    a, button {
+        filter: brightness(0.9)
+    }
+}

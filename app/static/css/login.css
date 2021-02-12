@@ -138,3 +138,96 @@ span {
     margin: 0 !important;
 }
 
+@media (prefers-color-scheme: dark){
+    .innerBox {
+        background-color: #12436b;
+    }
+
+    h1, h3 {
+        color: #e6e6e6;
+    }
+
+    label {
+        color: #e6e6e6;
+    }
+    
+    input[type="submit" i] {
+        background-color: #297499;
+        border: 2px solid #297499;
+    }
+    
+    input {
+        color: #e6e6e6;
+    }
+    
+    input[type="submit" i]:hover {
+        color: #297499;
+    }
+
+    input[type="text" i], input[type="password" i] {
+        border-bottom: 2px solid #e6e6e6;
+    }
+    
+    .registerLink {
+        color: #e6e6e6;
+        border: 2px solid #297499;
+        background-color: #297499;
+    }
+    
+    .registerLink:hover {
+        color: #297499;
+    }
+    
+    span {
+        color: #e6e6e6;
+    }
+
+    img {
+        filter: brightness(.8) contrast(1.2);
+    }
+}
+
+@media (prefers-color-scheme: light){
+    .innerBox {
+        background-color: #A8d0E6;
+    }
+
+    h1, h3 {
+        color: black;
+    }
+    
+    label {
+        color: black;
+    }
+    
+    input[type="submit" i] {
+        background-color: white;
+        border: 2px solid white;
+    }
+    
+    input[type="text" i], input[type="password" i] {
+        border-bottom: 2px solid gray;
+    }
+
+    input {
+        color: black;
+    }
+    
+    input[type="submit" i]:hover {
+        color: white;
+    }
+    
+    .registerLink {
+        color: black;
+        border: 2px solid white;
+        background-color: white;
+    }
+    
+    .registerLink:hover {
+        color: white;
+    }
+    
+    span {
+        color: black;
+    }
+}

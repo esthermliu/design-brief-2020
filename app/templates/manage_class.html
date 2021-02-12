@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="classInfo">
+    <h1>Manage {{ course_name }}</h1>
+</div>
+<div id="studentinfo">
+    <h2>Students</h2>
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Email Adress</th>
+            <th>Remove User</th>
+        </tr>
+        {% for s in students %}
+        <tr class="studentRow">
+            <td class="usernameHolder">{{ s.username }}</td>
+            <td class="emailHolder">{{ s.email }}</td>
+            <td class="removeUserHolder">
+                <button style="width: 80px; height: 80px;" type="button" onclick="removeUser({{ s.username }}, {{ s.id }})">
+                    <img style="width: 90%" src="{{url_for('static', filename='images/x_black.svg')}}" alt="remove user">
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    <script></script>
+    </table>
+</div>
+{% endblock %}
