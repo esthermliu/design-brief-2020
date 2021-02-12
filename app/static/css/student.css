@@ -358,8 +358,6 @@ body {
     #visualHolder {
         background-color: white;
         border-radius: 40px;
-        /* padding-right: 3%;
-        padding-left: 3%; */
         /* width: fit-content; */
         display: flex;
         flex-wrap: wrap;
@@ -389,8 +387,6 @@ body {
     .vibeHolder {
         background-color: white;
         border-radius: 40px;
-        /* padding-right: 3%;
-        padding-left: 3%; */
         /* width: fit-content; */
         width: 100%;
         max-width: 700px;
@@ -588,8 +584,6 @@ body {
     #visualHolder {
         background-color: white;
         border-radius: 40px;
-        padding-right: 3%;
-        padding-left: 3%;
         width: 100%;
         /* max-width: 695px; */
         display: inline-flex;
