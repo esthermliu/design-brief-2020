@@ -37,7 +37,7 @@
     }
     
     .classImage img {
-        width: 100%;
+        height: 100%;
     }
     
     .classDescription {
@@ -79,6 +79,8 @@
         justify-content: space-between;
         align-items: center;
     }
+
+    
     
 }
 
@@ -223,6 +225,17 @@
     background-color: #a8d0e6 !important;
 }
 
+.orange {
+    background-color: rgb(245, 187, 111);
+}
+
+.green {
+    background-color: rgb(147, 218, 147);
+}
+
+.purple {
+    background-color: #808fca !important;
+}
 @media (prefers-color-scheme: dark){
     .classDescription {
         color: #e6e6e6;

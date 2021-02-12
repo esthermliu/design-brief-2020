@@ -4,26 +4,29 @@
 <div id="classInfo">
     <h1>Manage {{ course_name }}</h1>
 </div>
+{% if current_user.role == 0 %} <!-- Only teachers should have access to this page -->
 <div id="studentinfo">
     <h2>Students</h2>
-    <table>
-        <tr>
-            <th>Username</th>
-            <th>Email Adress</th>
-            <th>Remove User</th>
-        </tr>
-        {% for s in students %}
+    <table id = "studentRow">
+        <!--{% for s in students %}-->
         <tr class="studentRow">
-            <td class="usernameHolder">{{ s.username }}</td>
+            <!--<td class="usernameHolder">{{ s.username }}</td>
             <td class="emailHolder">{{ s.email }}</td>
             <td class="removeUserHolder">
-                <button style="width: 80px; height: 80px;" type="button" onclick="removeUser({{ s.username }}, {{ s.id }})">
-                    <img style="width: 90%" src="{{url_for('static', filename='images/x_black.svg')}}" alt="remove user">
-                </button>
-            </td>
+                <form action="/classes/course/{{ course_id }}/manage/remove/{{ s.id }}" method='POST'> <!-- This form will execute the code in routes with the def add-->
+                        <!--<button type="submit" class = "removeButton">Remove Student</button>
+                </form> 
+            </td>-->
         </tr>
-        {% endfor %}
-    <script></script>
+        <!--{% endfor %}-->
     </table>
 </div>
+<script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
+        {% if current_user.role == 0 %} <!-- if current user is a teacher -->
+            <script type="text/javascript">
+                initManage({{course_id}}); // Passing in course ID, session ID, and course status into the javascript
+            </script>
+        {% endif %} <!-- current user is a student-->
+{% endif %}
+
 {% endblock %}

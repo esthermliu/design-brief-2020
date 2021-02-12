@@ -42,6 +42,54 @@ function fetchSessionFormsInfo(course_id, session_id, status) {
         .catch(handleError);
 }
 
+// Fetches users in the course
+function fetchCourseInfo(course_id) { 
+    let url = "/classes/course/" + course_id + "/manage/course_json";
+    fetch(url, {method: "GET"})
+        .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
+        .then(response => response.json()) 
+        .then((data) => displayCourseInfo(data, course_id)) // Data passed into function displayCourseInfo
+        .catch(handleError); 
+}
+
+// Function for displaying the course information
+function displayCourseInfo(data, course_id) {
+    console.log("COURSE INFO DISPLAYED");
+    displayStudents(data["students"], course_id);
+}
+
+function confirm_message(username) {
+    if (confirm("Are you sure you want to remove " + username + "?" )) {
+        return true;
+    } else {
+        return false;
+    }
+    
+}
+
+// Displaying the students in the course
+function displayStudents(studentInfo, course_id) {
+    studentHTML = document.getElementById("studentRow");
+    console.log("Students")
+    studentHTML.innerHTML = '<tr>' + '<th>Username</th>' + 
+                                    '<th>Email</th>' + 
+                                    '<th>Remove User</th>' + 
+                            '</tr>'; // clearing all the content in the div
+    for (s = 0; s < studentInfo.length; s++) {
+        console.log("WOOT")
+        var student_username = studentInfo[s]["username"] // Getting the student's username
+        var student_email = studentInfo[s]["email"] // Getting the student's email
+        var student_id = studentInfo[s]["student_id"] // Getting the student's ID
+        studentHTML.innerHTML += ('<tr><td class="usernameHolder">' + student_username + '</td>' +
+                                    '<td class="emailHolder">' + student_email + '</td>' + 
+                                    '<td class="removeUserHolder">' + 
+                                        '<form action="/classes/course/' + course_id + '/manage/remove/' + student_id + '"method="POST">' +
+                                            '<button type="submit" class = "removeButton" onclick="return confirm_message(' + "'"+ student_username + "'" + ')">Remove Student</button>' +
+                                        '</form>' +
+                                    '</td></tr>')
+    }
+}
+
 // Calls functions to display the PAST information
 function displayPast(status, data) {
     console.log("DISPLAYED");
@@ -331,6 +379,16 @@ function initFormsAll(course_id, session_id, course_status) {
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchSessionFormsInfo(course_id, session_id, course_status);
+    }, 5000) 
+}
+
+// function for manage class
+function initManage(course_id) {
+    console.log("Called INIT Forms");
+    fetchCourseInfo(course_id);
+    const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
+        console.log("Update");
+        fetchCourseInfo(course_id);
     }, 5000) 
 }
 

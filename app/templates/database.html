@@ -97,6 +97,7 @@
         <th>Teacher</th>
         <th>Course Status</th>
         <th>Course Icon</th>
+        <th>Course Color</th>
         <th>Timestamp</th>
     </tr>
     {% for c in courses_all %}
@@ -107,6 +108,7 @@
             <td>{{ c.teacher }}</td>
             <td>{{ c.status }}</td>
             <td>{{ c.icon }}</td>
+            <td>{{ c.color }}</td>
             <td>{{ c.timestamp }}</td>
         </tr>
     {% endfor %}

@@ -26,7 +26,21 @@
     <!-- Students and their signups -->
     <div class = "classBlockHolder">
         {% for u in user_signups_filtered %} 
-            <div class = "{{ loop.cycle('classBlock red', 'classBlock yellow', 'classBlock blue') }}" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
+            {% if u.course_id.color == 0 %}
+                <div class = "classBlock red" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
+            {% elif u.course_id.color == 1 %}
+                <div class = "classBlock yellow" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
+            {% elif u.course_id.color == 2 %}
+                <div class = "classBlock blue" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
+            {% elif u.course_id.color == 3 %}
+                <div class = "classBlock green" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
+            {% elif u.course_id.color == 4 %}
+                <div class = "classBlock orange" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
+            {% elif u.course_id.color == 5 %}
+                <div class = "classBlock purple" id = "classBlock" onclick="divLink({{ u.course_id.id }})">    
+            {% else %}
+                <div class = "classBlock red" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
+            {% endif %}
                 
                 <div class = "classImage">
                     <img src = "{{ u.course_id.icon }}">
@@ -46,7 +60,21 @@
         <!-- Teachers and their courses -->
         
             {% for t in teacher_courses %} <!-- Loops through all of the courses that teacher teaches -->
-            <div class = "{{ loop.cycle('classBlock red', 'classBlock yellow', 'classBlock blue') }}" id = "classBlock" onclick="divLink({{ t.id }})">
+                {% if t.color == 0 %}
+                    <div class = "classBlock red" id = "classBlock" onclick="divLink({{ t.id }})">
+                {% elif t.color == 1 %}
+                    <div class = "classBlock yellow" id = "classBlock" onclick="divLink({{ t.id }})">
+                {% elif t.color == 2 %}
+                    <div class = "classBlock blue" id = "classBlock" onclick="divLink({{ t.id }})">
+                {% elif t.color == 3 %}
+                    <div class = "classBlock green" id = "classBlock" onclick="divLink({{ t.id }})">
+                {% elif t.color == 4 %}
+                    <div class = "classBlock orange" id = "classBlock" onclick="divLink({{ t.id }})">
+                {% elif t.color == 5 %}
+                    <div class = "classBlock purple" id = "classBlock" onclick="divLink({{ t.id }})">    
+                {% else %}
+                    <div class = "classBlock red" id = "classBlock" onclick="divLink({{ t.id }})">
+                {% endif %}
                
                     <div class = "classImage">
                         <img src = "{{ t.icon }}">

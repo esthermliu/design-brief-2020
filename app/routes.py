@@ -14,7 +14,7 @@ import random
 from datetime import datetime, timedelta
 from dateutil import tz
 from collections import defaultdict
-from flask_weasyprint import HTML, render_pdf
+#from flask_weasyprint import HTML, render_pdf
 
 @app.route('/')
 @app.route('/index')
@@ -84,20 +84,22 @@ def create(username):
 @app.route('/user/<username>/create_class/new', methods=["POST"]) # This is a POST method
 @login_required 
 def newclass(username):
-    course_name = request.form.get("course_name")
+    course_name = request.form.get("course_name") # getting the course name from the form
     if len(course_name) == 0:
         flash('You must give your new course a name', 'error')
         return redirect(url_for('create', username=current_user.username)) # Redirects to the create page
-    course_icon = request.form.get("icon")
+    course_icon = request.form.get("icon") # getting the course icon from the form
+    course_color = request.form.get("color") # getting the course color from the form
     rand_code = random.randint(100000, 999999) # Generating a random code
     exist_course = Courses.query.filter_by(code=rand_code).first() # Checks if rand_code is already linked to an existing course
     while exist_course is not None: # While an existing course has that code
         rand_code = random.randint(100000, 999999) # Generate a random code again
         exist_course = Courses.query.filter_by(code=rand_code).first() # Check the database again
-    new_course = Courses(course_name=course_name, code=rand_code, teacher_id=current_user.id, icon=course_icon)
+    new_course = Courses(course_name=course_name, code=rand_code, teacher_id=current_user.id, icon=course_icon, color=course_color)
     db.session.add(new_course)
     db.session.commit()
-    return redirect(url_for('create', username=current_user.username)) # Redirects to the create page
+    flash('Congratulations! You have successfully created a new course.', 'info')
+    return redirect(url_for('classes', username=current_user.username)) # Redirects to the create page
 
 @app.route('/user/<username>') # User profile page
 @login_required
@@ -177,6 +179,8 @@ def add(username):
 
 
 
+
+
 # Route for each session
 @app.route('/classes/course/session/<session_id>') # The text inside the <> has to be the same as the parameter in the def room()
 @login_required # Have to be logged in to see these rooms
@@ -250,11 +254,43 @@ def manage_course_page(course_id):
     students_user_info = [User.query.get(s.user_id) for s in student_signups]
     
     return render_template('manage_class.html', 
-                            course_name=course.course_name, 
-                            students=students_user_info)
+                            course_name=course.course_name,
+                            course_id=course_id, 
+                            students=students_user_info,
+                            title='Manage ' + course.course_name)
 
+@app.route('/classes/course/<course_id>/manage/remove/<user_id>', methods=["POST"]) # POST method
+@login_required
+def remove(course_id, user_id):
+    course = Courses.query.get(course_id) # gets the right course
+    student_removed = Signups.query.filter_by(course=course_id, user_id=user_id).first() # getting the student that is removed
 
+    db.session.delete(student_removed) # removing the student from the database
+    db.session.commit()
 
+    return redirect(url_for('manage_course_page', course_id=course_id))
+
+@app.route('/classes/course/<course_id>/manage/course_json', methods=["GET", "POST"])
+@login_required
+def course_json(course_id):
+    student_list=[]
+    student_info={}
+
+    course = Courses.query.get(course_id) # Gets the appropriate course
+    signups = course.signups # Gets a list of all of the signups in the course
+
+    for s in signups: # each s represents a <Signups>
+        student_info = {
+            "student_id": s.student.id,
+            "username": s.student.username,
+            "email": s.student.email
+        }
+        student_list.append(student_info)
+
+    result = {
+            "students": list(student_list)
+        }
+    return jsonify(result)
 
 
 # Attendance 
