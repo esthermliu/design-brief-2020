@@ -42,6 +42,10 @@ class StudentRadioForm(FlaskForm):
     options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
     submit = SubmitField('Submit')
 
+class EditClassForm(FlaskForm):
+    class_name = StringField('Class Name', validators=[DataRequired()])
+    class_icon = RadioField('Class Icon', choices=[('0', 'Yes')])
+
 # class RadioForm(Form):
 #     options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
 

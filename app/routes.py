@@ -526,7 +526,8 @@ def session_json(session_id):
             "responses": responses_list,
             "form_course_id": f.form_course_id,
             "session_id": f.session_id,
-            "timestamp": f.timestamp
+            "timestamp": f.timestamp,
+            "forms_url": url_for('form_response', session_id=f.session_id)
         }
         forms_list.append(forms_dict)
 

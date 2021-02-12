@@ -120,7 +120,9 @@ function displaySome(status, data, session_id) {
     checkIfShouldRefresh(status, data["course_status"]); // To check whether to refresh
     displayPercentage(data["percentage"]);  // For the percentage
     displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
-    displayFormLink(data["forms"], session_id);
+    if (data["forms"].length != 0) {
+        displayFormLink(data["forms"], session_id);
+    }
 }
 
 
@@ -146,11 +148,15 @@ function displayPercentage(data) {
 
 function displayFormLink(formData, session_id) {
     studentFormHTML = document.getElementById("formHolder"); // getting the HTML element for the forms button
-    studentFormHTML.innerHTML = ""; // clearing all content inside the div first
+    document.getElementById("formHolder").innerHTML = ""; // clearing all content inside the div first
+    console.log("DISPLAY FORM LINK")
     if (formData.length != 0) {
-        studentFormHTML.innerHTML += ("<a href='{{ url_for('form_response', session_id=" + session_id + ") }}'>Respond to Form</a>");
+        var form_url = formData[0]["forms_url"]
+        studentFormHTML.innerHTML += ('<a href="' + form_url + '">Respond to Form</a>');
     }
 }
+
+//<a href="{{ url_for(' + "'" + 'form_response' + "'" + ', session_id=' + '' + session_id + ') }}
 
 function handleError(err) {
     console.log("Ran into error:", err);
