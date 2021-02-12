@@ -92,7 +92,9 @@ def create(username):
 @app.route('/user/<username>/create_class/new', methods=["POST"]) # This is a POST method
 @login_required 
 def newclass(username):
-    if current_user.id == User.query.filter_by(username).first():
+    print("!!! " + username)
+    print("CU id is %s but user id is %s" % (current_user.id, User.query.filter_by(username=username).first().id))
+    if current_user.id != User.query.filter_by(username=username).first().id:
         return unauthorized_access()
     course_name = request.form.get("course_name")
     if len(course_name) == 0:
@@ -112,7 +114,7 @@ def newclass(username):
 @app.route('/user/<username>') # User profile page
 @login_required
 def user(username):
-    if current_user.id == User.query.filter_by(username).first():
+    if current_user.id == User.query.filter_by(username=username).first():
         return unauthorized_access()
     user = User.query.filter_by(username=username).first_or_404()
     posts = [
@@ -786,5 +788,5 @@ def form_data(session_id):
     teacher_id = Courses.query.get(course_id).teacher_id
     if current_user.id != teacher_id:
         return unauthorized_access()
-        
+
     return render_template('form_data.html', title="Form Data", session_id=session_id, course_id=course_id, course=course)
