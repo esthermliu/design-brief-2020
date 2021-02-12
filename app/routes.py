@@ -3,7 +3,7 @@ from app import app
 from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
-from app.forms import EditProfileForm
+from app.forms import EditProfileForm, TeacherRadioForm, StudentRadioForm
 from flask_login import current_user, login_user
 from app.models import User, Reactions, Post, Courses, Signups, Session, Responses, Prompts
 from flask_login import logout_user
@@ -14,7 +14,7 @@ import random
 from datetime import datetime, timedelta
 from dateutil import tz
 from collections import defaultdict
-from flask_weasyprint import HTML, render_pdf
+#from flask_weasyprint import HTML, render_pdf
 import logging
 
 @app.route('/')
@@ -86,12 +86,13 @@ def create(username):
 @login_required 
 def newclass(username):
     course_name = request.form.get("course_name")
+    course_icon = request.form.get("icon")
     rand_code = random.randint(100000, 999999) # Generating a random code
     exist_course = Courses.query.filter_by(code=rand_code).first() # Checks if rand_code is already linked to an existing course
     while exist_course is not None: # While an existing course has that code
         rand_code = random.randint(100000, 999999) # Generate a random code again
         exist_course = Courses.query.filter_by(code=rand_code).first() # Check the database again
-    new_course = Courses(course_name=course_name, code=rand_code, teacher_id=current_user.id)
+    new_course = Courses(course_name=course_name, code=rand_code, teacher_id=current_user.id, icon=course_icon)
     db.session.add(new_course)
     db.session.commit()
     return redirect(url_for('create', username=current_user.username)) # Redirects to the create page
@@ -127,17 +128,12 @@ def edit_profile():
         """Code that Anaya replaced
         return redirect(url_for('edit_profile'))"""
 
-        ### NEW CODE ###
         return redirect(url_for('user', username=current_user.username))
-        ### NEW CODE ###
 
     elif request.method == 'GET': # If this is the first time that the form has been requested
         form.username.data = current_user.username # Then pre-populate the fields with the data in the database
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form=form, title="Edit Profile")
-
-
-
 
 
 @app.route('/user/<username>/classes') # User's classes
@@ -149,7 +145,10 @@ def classes(username): # the word after def has to be the same as the text in th
                                         with_entities(Signups).\
                                         filter(Signups.user_id == user.id)
     teacher_courses = Courses.query.filter_by(teacher_id=user.id).all()
-    return render_template('classes.html', user=user, user_signups_filtered=user_signups_filtered, teacher_courses=teacher_courses, title="Classes")
+    return render_template('classes.html', user=user,
+                                             user_signups_filtered=user_signups_filtered, 
+                                             teacher_courses=teacher_courses, 
+                                             title="Classes")
 
 # Add a new class
 @app.route('/user/<username>/classes/add', methods=["POST"]) # This is a POST method
@@ -161,13 +160,11 @@ def add(username):
     """Code that Anaya replaced
     course = Courses.query.filter_by(code=code).first_or_404() # Filter through courses by this code
     """
-    ### NEW CODE ###
     course = Courses.query.filter_by(code=code).first() # Filter through courses by this code
     if course is None:
         flash('The code you entered (%s) is invalid. Try again' % (code), 'error')
         # return redirect('/user/<username')
         return redirect(url_for('classes', username=user.username))
-    ### NEW CODE ###
     
 
     new_signup = Signups(user_id = user.id, course=course.id) # Now that you have that course, take the course id and enter that into the course field
@@ -209,6 +206,16 @@ def sessions(session_id):
     for signup in signups: # Going through the list of signups
         if (signup.student.username not in present_set and signup.student.role == 1):
             absent_set.add(signup.student.username)
+
+    forms_all = Prompts.query.filter_by(session_id=session_id).all() # getting all the forms in the session
+    forms_exist = False # first setting forms as not existing
+    forms_first = Prompts.query.filter_by(session_id=session_id).first() # getting first form in the session
+
+    if (forms_first != None): # if there is a form in the session
+        forms_exist = True # then a form does exist
+       
+    latest_form = Prompts.query.order_by(Prompts.id.desc()).filter_by(session_id=session_id).first() # Gets you the latest form in that session
+
     
     return render_template('rooms.html', course=course,
                                         reactions_specific=reactions_specific,
@@ -216,7 +223,10 @@ def sessions(session_id):
                                         session_id=session_id,
                                         present_list=list(present_set), 
                                         absent_list=list(absent_set), 
-                                        title=course.course_name) 
+                                        title=course.course_name,
+                                        form=latest_form,
+                                        forms_all=forms_all,
+                                        forms_exist=forms_exist) 
 
 # Course waiting room, if there is an active session, then redirect to session. Otherwise, redirect to unactivated html
 @app.route('/classes/course/<course_id>')
@@ -305,81 +315,81 @@ def utc_to_local(utc_time):
     out = utc_time.replace(tzinfo=from_zone)
     return out.astimezone(to_zone)
 
-@app.route('/classes/course/session/<session_id>/report', methods=["GET", "POST"])
-@login_required
-def generate_report(session_id):
+# @app.route('/classes/course/session/<session_id>/report', methods=["GET", "POST"])
+# @login_required
+# def generate_report(session_id):
 
-    # Get session info, course info, and teacher id for authorization verification
-    session = Session.query.get(session_id)
-    course_id = session.course_id
-    course = Courses.query.get(course_id)
-    teacher_id = course.teacher_id
+#     # Get session info, course info, and teacher id for authorization verification
+#     session = Session.query.get(session_id)
+#     course_id = session.course_id
+#     course = Courses.query.get(course_id)
+#     teacher_id = course.teacher_id
 
-    # Preventing unauthorized access to this report
-    if teacher_id != current_user.id:
-        return unauthorized_access("You are not the teacher for this class")
+#     # Preventing unauthorized access to this report
+#     if teacher_id != current_user.id:
+#         return unauthorized_access("You are not the teacher for this class")
     
-    course_name = course.course_name # Gets the string course name
+#     course_name = course.course_name # Gets the string course name
 
-    # get all the students signed up for this course
-    students_all = Signups.query.filter_by(course=course_id).all()
+#     # get all the students signed up for this course
+#     students_all = Signups.query.filter_by(course=course_id).all()
     
-    # create a dictionary mapping the students' user ids to their usernames for easy access later.
-    ids_and_students = {student.user_id: User.query.get(student.user_id).username for student in students_all}
+#     # create a dictionary mapping the students' user ids to their usernames for easy access later.
+#     ids_and_students = {student.user_id: User.query.get(student.user_id).username for student in students_all}
 
-    # get all reactions for this session
-    reactions_all = Reactions.query.filter_by(session_id=session_id).all()
+#     # get all reactions for this session
+#     reactions_all = Reactions.query.filter_by(session_id=session_id).all()
     
-    reaction_counts = {ids_and_students[s.user_id]:defaultdict(int) for s in students_all} # To store occurences of each reaction for each student
+#     reaction_counts = {ids_and_students[s.user_id]:defaultdict(int) for s in students_all} # To store occurences of each reaction for each student
 
-    attendance_present = set()
-    attendance_absent = set()
+#     attendance_present = set()
+#     attendance_absent = set()
 
-    for r in reactions_all:
-        s_id = r.user_id
-        reaction_counts[ids_and_students[s_id]][r.reactions] += 1
-        attendance_present.add(ids_and_students[s_id])
+#     for r in reactions_all:
+#         s_id = r.user_id
+#         reaction_counts[ids_and_students[s_id]][r.reactions] += 1
+#         attendance_present.add(ids_and_students[s_id])
 
-    for s in students_all:
-        s_name = User.query.get(s.user_id).username
-        if s_name not in attendance_present:
-            attendance_absent.add(s_name)
+#     for s in students_all:
+#         s_name = User.query.get(s.user_id).username
+#         if s_name not in attendance_present:
+#             attendance_absent.add(s_name)
     
-    # converting the attendance sets to sorted lists
-    attendance_absent = sorted(list(attendance_absent))
-    attendance_present = sorted(list(attendance_present))
+#     # converting the attendance sets to sorted lists
+#     attendance_absent = sorted(list(attendance_absent))
+#     attendance_present = sorted(list(attendance_present))
 
-    full_start_info = utc_to_local(session.timestamp_start) # To avoid accessing twice for the start date and start time
-    start_date = full_start_info.strftime("%A, %B %d, %Y")
-    start_time = full_start_info.strftime("%I:%M %p")
+#     full_start_info = utc_to_local(session.timestamp_start) # To avoid accessing twice for the start date and start time
+#     start_date = full_start_info.strftime("%A, %B %d, %Y")
+#     start_time = full_start_info.strftime("%I:%M %p")
 
-    if session.timestamp_end is None:
-        end_time = "In Progress"
-    else:
-        end_time = utc_to_local(session.timestamp_end).strftime("%I:%M %p")
+#     if session.timestamp_end is None:
+#         end_time = "In Progress"
+#     else:
+#         end_time = utc_to_local(session.timestamp_end).strftime("%I:%M %p")
 
-    # weasyprint cannot handle moment library, so we must convert to a string here
-    print("\n%s - START: %s; represented as %s\n" % (session.id, session.timestamp_start, start_time))
-    print("\n%s - END: %s; represented as %s\n" % (session.id, session.timestamp_end, end_time))
+#     # weasyprint cannot handle moment library, so we must convert to a string here
+#     print("\n%s - START: %s; represented as %s\n" % (session.id, session.timestamp_start, start_time))
+#     print("\n%s - END: %s; represented as %s\n" % (session.id, session.timestamp_end, end_time))
 
-    # renders the report template
-    html = render_template('report.html',
-                            title="{} Session Report: {}".format(course_name, session.timestamp_start.strftime("%A, %B %d, %Y")),
-                            course_name=course_name, 
-                            start_date=start_date,
-                            start_time=start_time,
-                            end_time=end_time,
-                            session_id=session.id, 
-                            present_list=attendance_present,
-                            absent_list=attendance_absent,
-                            reactions=sorted(reaction_counts.items())) # Sorts so that reactions are accessed in alphabetical order of students' usernames
+#     # renders the report template
+#     html = render_template('report.html',
+#                             title="{} Session Report: {}".format(course_name, session.timestamp_start.strftime("%A, %B %d, %Y")),
+#                             course_name=course_name, 
+#                             start_date=start_date,
+#                             start_time=start_time,
+#                             end_time=end_time,
+#                             session_id=session.id, 
+#                             present_list=attendance_present,
+#                             absent_list=attendance_absent,
+#                             reactions=sorted(reaction_counts.items())) # Sorts so that reactions are accessed in alphabetical order of students' usernames
     
     
-    # renders the html as a pdf using weasyprint
-    return render_pdf(HTML(string=html), stylesheets=[
-                                                    'app/static/css/report.css',
-                                                    "https://fonts.googleapis.com/css2?family=Montserrat&display=swap",
-                                                    "https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"])
+#     # renders the html as a pdf using weasyprint
+#     return render_pdf(HTML(string=html), stylesheets=[
+#                                                     'app/static/css/report.css',
+#                                                     "https://fonts.googleapis.com/css2?family=Montserrat&display=swap",
+#                                                     "https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"])
     
     
 # **********************************************************************************************************************************
@@ -409,6 +419,8 @@ def session_json(session_id):
     reaction_list = []
     speed_list = []
     attendance_list = []
+    forms_list=[]
+
     for r in reactions:
         if (r.reactions <= 5): # Then it is an emotion, add to emotion dictionary
             emotions_dict = {
@@ -429,6 +441,36 @@ def session_json(session_id):
                 "speed_timestamp": r.timestamp
             }
             speed_list.append(speed_dict)
+
+    # To get the forms information
+    forms_all = Prompts.query.filter_by(session_id=session_id).all() # Getting the entire list of forms for the session
+    responses_all = Responses.query.filter_by(session_id=session_id).all()
+    for f in forms_all:
+        responses_list=[]
+        responses_dict = {}
+        responses_specific = Responses.query.filter_by(session_id=session_id, form_prompt_id=f.id).all() # These are the responses for each specific form
+        for r in responses_specific:
+            responses_dict = {
+                "response_id": r.id,
+                "student_id": r.student_responder.username,
+                "form_prompt_id": r.form_prompt_id,
+                "form_responses": r.form_responses,
+                "form_course_id": r.form_course_id,
+                "session_id": r.session_id,
+                "timestamp": r.timestamp
+            }
+            responses_list.append(responses_dict)
+        forms_dict = {
+            "forms_id": f.id,
+            "teacher_id": f.teacher_prompter.username,
+            "form_question": f.form_question,
+            "responses": responses_list,
+            "form_course_id": f.form_course_id,
+            "session_id": f.session_id,
+            "timestamp": f.timestamp
+        }
+        forms_list.append(forms_dict)
+
 
     # To get the attendance information
     session = Session.query.get(session_id)
@@ -524,6 +566,8 @@ def session_json(session_id):
     else:
         course_status = 0 # The session is over
 
+    
+
     result = {
         "reactions": reaction_list, 
         "speeds": speed_list,
@@ -531,7 +575,8 @@ def session_json(session_id):
         "course_status": course_status,
         "percentage": percent_happy,    
         "speed_num": speed_number,
-        "speed_percentage": calculated_number  
+        "speed_percentage": calculated_number,
+        "forms": forms_list  
     }
     return jsonify(result)
 
@@ -652,3 +697,63 @@ def database():
 @app.route('/image-reload')
 def reload():
     return render_template('image-reload.html', title="Image Reload") 
+
+# creating forms
+@app.route('/classes/course/session/<session_id>/create-form', methods=['GET', 'POST'])
+@login_required
+def create_form(session_id):
+    form = TeacherRadioForm() # setting form to the TeaderRadioForm
+
+    session = Session.query.get(session_id) # Get the correct session
+    
+    # If the session has ended, then redirect
+    if (session.timestamp_end is not None):
+        return redirect(url_for('course_waiting_room', course_id=session.course_id))
+
+    course = session.session_course_id # This gives you the actual course
+    course_id = session.course_id # This will give you the course id
+
+    if form.validate_on_submit():
+        flash('Form has been successfully distributed', 'info')
+        new_prompt = Prompts(teacher_id=current_user.id, form_question=form.prompt.data, form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
+        db.session.add(new_prompt) # Adding and committing the new propmt to the database
+        db.session.commit()
+        return redirect(url_for('sessions', session_id=session_id))
+    # else:
+    #     flash('Error in form', 'error')
+    return render_template('teacher_form.html', form=form, session_id=session_id, title='Create Form')
+
+# student response to the form
+@app.route('/classes/course/session/<session_id>/form-response', methods=['GET', 'POST'])
+@login_required
+def form_response(session_id):
+    form = StudentRadioForm() # setting form to the TeaderRadioForm
+
+    session = Session.query.get(session_id) # Get the correct session
+    
+    teacher_form = Prompts.query.order_by(Prompts.id.desc()).filter_by(session_id=session_id).first()
+    prompt = teacher_form.form_question
+    # If the session has ended, then redirect
+    if (session.timestamp_end is not None):
+        return redirect(url_for('course_waiting_room', course_id=session.course_id))
+
+    course = session.session_course_id # This gives you the actual course
+    course_id = session.course_id # This will give you the course id
+
+    if form.validate_on_submit():
+        flash('Form has been successfully  submitted', 'info')
+        new_response = Responses(student_id=current_user.id, form_prompt_id=teacher_form.id, form_responses=form.options.data, form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
+        db.session.add(new_response) # Adding and committing the new propmt to the database
+        db.session.commit()
+        return redirect(url_for('sessions', session_id=session_id))
+
+    return render_template('student_response.html', form=form, session_id=session_id, title='Form Response', prompt=prompt)
+
+@app.route('/classes/course/session/<session_id>/form-data', methods=['GET', 'POST'])
+@login_required
+def form_data(session_id):
+    session = Session.query.get(session_id) # Get the correct session
+    course = session.session_course_id # This gives you the actual course
+    course_id = session.course_id # This will give you the course id
+
+    return render_template('form_data.html', title="Form Data", session_id=session_id, course_id=course_id, course=course)

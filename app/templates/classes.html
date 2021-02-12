@@ -29,7 +29,7 @@
             <div class = "{{ loop.cycle('classBlock red', 'classBlock yellow', 'classBlock blue') }}" id = "classBlock" onclick="divLink({{ u.course_id.id }})">
                 
                 <div class = "classImage">
-                    <img src = "{{ url_for('static', filename = 'images/Turtle.gif') }}">
+                    <img src = "{{ u.course_id.icon }}">
                 </div>
 
                 <div class = "classDescription">
@@ -49,7 +49,7 @@
             <div class = "{{ loop.cycle('classBlock red', 'classBlock yellow', 'classBlock blue') }}" id = "classBlock" onclick="divLink({{ t.id }})">
                
                     <div class = "classImage">
-                        <img src = "{{ url_for('static', filename = 'images/Turtle.gif') }}">
+                        <img src = "{{ t.icon }}">
                     </div>
 
                     <div class = "classDescription">

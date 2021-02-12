@@ -35,9 +35,9 @@ class EditProfileForm(FlaskForm):
 
 class TeacherRadioForm(FlaskForm):
     prompt = StringField('Prompt', validators=[DataRequired()])
-    options = RadioField('', choices=[(0, 'Yes'), (1, 'maybe'), (2, 'No')], coerce=int)
+    #options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
     submit = SubmitField('Distribute')
 
 class StudentRadioForm(FlaskForm):
-    options = RadioField('', choices=[(0, 'Yes'), (1, 'maybe'), (2, 'No')], coerce=int, validators=[DataRequired()])
+    options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
     submit = SubmitField('Submit')
