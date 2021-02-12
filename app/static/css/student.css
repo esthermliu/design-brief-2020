@@ -191,6 +191,10 @@ body {
     width: 100%;
 }
 
+.hideForm {
+    display: none !important;
+}
+
 /* For larger screens */
 @media all and (min-width: 600px) { 
     .overallContainer {

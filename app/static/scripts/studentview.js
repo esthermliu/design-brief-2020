@@ -16,7 +16,7 @@ function fetchSessionInfoStudent(course_id, session_id, status) {
     fetch(url, {method: "GET"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .then(response => response.json()) 
-        .then((data) => displaySome(status, data)) // Calls the displayData function, which will update the thermometer visually
+        .then((data) => displaySome(status, data, session_id)) // Calls the displayData function, which will update the thermometer visually
         .catch(handleError);
 }
 
@@ -116,10 +116,11 @@ function displayAll(status, data) {
 }
 
 // Only calls some of the functions to display certain features for the student
-function displaySome(status, data) { 
+function displaySome(status, data, session_id) { 
     checkIfShouldRefresh(status, data["course_status"]); // To check whether to refresh
     displayPercentage(data["percentage"]);  // For the percentage
     displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
+    displayFormLink(data["forms"], session_id);
 }
 
 
@@ -141,6 +142,14 @@ function checkStatus(response) {
 function displayPercentage(data) { 
     console.log(data); // shows the percent number in the console, the data is the percentage, e.g. 50 or 33.333
     updateThermometer(data);// Calls the updateThermometer function, which updates the thermometer's height 
+}
+
+function displayFormLink(formData, session_id) {
+    studentFormHTML = document.getElementById("formHolder"); // getting the HTML element for the forms button
+    studentFormHTML.innerHTML = ""; // clearing all content inside the div first
+    if (formData.length != 0) {
+        studentFormHTML.innerHTML += ("<a href='{{ url_for('form_response', session_id=" + session_id + ") }}'>Respond to Form</a>");
+    }
 }
 
 function handleError(err) {

@@ -108,13 +108,17 @@
                     </div>
                 </div>
             {% endif %}
+
+            <div id="formHolder" class = "hideForm"> <!-- Putting it out here so JS doesn't cause an error--> 
+            </div>
+            
             {% if current_user.role == 1 %} <!-- If the current user is a student, then show all the reaction choices -->
             <div id="responseBoxHolder">
-                {% if forms_exist %} <!-- If a form exists in the session, allow the student to respond -->
+                <!--{% if forms_exist %}--> <!-- If a form exists in the session, allow the student to respond -->
                     <div id="formHolder">
                         <a href="{{ url_for('form_response', session_id=session_id) }}">Respond to Form</a>
                     </div>
-                {% endif %}
+                <!--{% endif %}-->
 
                 <div id="responseBox" class = "makeReactionBox">
                     <!-- Emotions -->

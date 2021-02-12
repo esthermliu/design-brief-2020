@@ -282,6 +282,7 @@ def remove(course_id, user_id):
 
     db.session.delete(student_removed) # removing the student from the database
     db.session.commit()
+    flash("Student removed", 'info')
 
     return redirect(url_for('manage_course_page', course_id=course_id))
 
