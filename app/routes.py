@@ -32,6 +32,10 @@ def index():
     # ]
     return render_template('index.html', title="Home")
 
+def unauthorized_access(error_message=""):
+    flash('Unauthorized access.\n{}'.format(error_message), 'error')
+    return redirect(url_for('index'))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -77,7 +81,11 @@ def register():
 @app.route('/user/<username>/create_class') 
 @login_required # Have to be logged in as a teacher for this to work
 def create(username):
+    if User.query.filter_by(username=username).first().role == 1:
+        flash('You must be a teacher to create classes', 'error')
+        return redirect(url_for('index'))
     t_courses_all = Courses.query.filter_by(teacher_id=current_user.id) # All of that teacher's courses   
+    # return render_template('create_class.html', t_courses_all=t_courses_all, title="Create a Class")
     return render_template('create_class.html', t_courses_all=t_courses_all, title="Create a Class")
 
 # Adds the new course to the database 
@@ -85,6 +93,10 @@ def create(username):
 @login_required 
 def newclass(username):
     course_name = request.form.get("course_name") # getting the course name from the form
+    print("!!! " + username)
+    print("CU id is %s but user id is %s" % (current_user.id, User.query.filter_by(username=username).first().id))
+    if current_user.id != User.query.filter_by(username=username).first().id:
+        return unauthorized_access()
     if len(course_name) == 0:
         flash('You must give your new course a name', 'error')
         return redirect(url_for('create', username=current_user.username)) # Redirects to the create page
@@ -104,6 +116,8 @@ def newclass(username):
 @app.route('/user/<username>') # User profile page
 @login_required
 def user(username):
+    if current_user.id == User.query.filter_by(username=username).first():
+        return unauthorized_access()
     user = User.query.filter_by(username=username).first_or_404()
     posts = [
         {'author': user, 'body': 'Test post #1'},
@@ -145,6 +159,7 @@ def classes(username): # the word after def has to be the same as the text in th
                                         join(Courses, (Courses.id == Signups.course)).\
                                         with_entities(Signups).\
                                         filter(Signups.user_id == user.id)
+    print(x + "\n" for x in user_signups_filtered)
     teacher_courses = Courses.query.filter_by(teacher_id=user.id).all()
     return render_template('classes.html', user=user,
                                              user_signups_filtered=user_signups_filtered, 
@@ -325,7 +340,9 @@ def attendance(session_id):
 @login_required
 def activate(course_id):
     course = Courses.query.filter_by(id=course_id).first_or_404()
-    if (current_user.id == course.teacher_id and course.status != 1):
+    if current_user.id != course.teacher_id:
+        return unauthorized_access()
+    if course.status != 1:
         session = Session(course_id=course_id)
         course.status = 1
         db.session.add(course)
@@ -337,9 +354,11 @@ def activate(course_id):
 @app.route('/classes/rooms/<course_id>/<session_id>/end', methods=["GET", "POST"]) # POST method, important declaration
 @login_required
 def end(course_id, session_id):
-    course = Courses.query.get(course_id)
-    session = Session.query.get(session_id) # Getting the correct session
+    course = Courses.query.filter_by(id=course_id).first_or_404()
+    if current_user.id != course.teacher_id:
+        return unauthorized_access()
     
+    session = Session.query.get(session_id) # Getting the correct session
     session.timestamp_end = datetime.utcnow() # Setting the end timestamp for the session
     course.status = 0 # Setting course status to 0 (unactivated)
     db.session.add(course)
@@ -347,12 +366,6 @@ def end(course_id, session_id):
     db.session.commit()
 
     return redirect(url_for('course_waiting_room', course_id=course.id))
-
-# **********************************************************************************************************************************
-
-def unauthorized_access(error_message=""):
-    flash('Unauthorized access.\n{}'.format(error_message), 'error')
-    return redirect(url_for('index'))
 
 # To convert the utc times from the database to local times within python
 def utc_to_local(utc_time):
@@ -362,84 +375,78 @@ def utc_to_local(utc_time):
     out = utc_time.replace(tzinfo=from_zone)
     return out.astimezone(to_zone)
 
-# @app.route('/classes/course/session/<session_id>/report', methods=["GET", "POST"])
-# @login_required
-# def generate_report(session_id):
+@app.route('/classes/course/session/<session_id>/report', methods=["GET", "POST"])
+@login_required
+def generate_report(session_id):
 
-#     # Get session info, course info, and teacher id for authorization verification
-#     session = Session.query.get(session_id)
-#     course_id = session.course_id
-#     course = Courses.query.get(course_id)
-#     teacher_id = course.teacher_id
+    # Get session info, course info, and teacher id for authorization verification
+    session = Session.query.get(session_id)
+    course_id = session.course_id
+    course = Courses.query.get(course_id)
+    teacher_id = course.teacher_id
 
-#     # Preventing unauthorized access to this report
-#     if teacher_id != current_user.id:
-#         return unauthorized_access("You are not the teacher for this class")
+    # Preventing unauthorized access to this report
+    if teacher_id != current_user.id:
+        return unauthorized_access("You are not the teacher for this class")
     
-#     course_name = course.course_name # Gets the string course name
+    course_name = course.course_name # Gets the string course name
 
-#     # get all the students signed up for this course
-#     students_all = Signups.query.filter_by(course=course_id).all()
+    # get all the students signed up for this course
+    students_all = Signups.query.filter_by(course=course_id).all()
     
-#     # create a dictionary mapping the students' user ids to their usernames for easy access later.
-#     ids_and_students = {student.user_id: User.query.get(student.user_id).username for student in students_all}
+    # create a dictionary mapping the students' user ids to their usernames for easy access later.
+    ids_and_students = {student.user_id: User.query.get(student.user_id).username for student in students_all}
 
-#     # get all reactions for this session
-#     reactions_all = Reactions.query.filter_by(session_id=session_id).all()
+    # get all reactions for this session
+    reactions_all = Reactions.query.filter_by(session_id=session_id).all()
     
-#     reaction_counts = {ids_and_students[s.user_id]:defaultdict(int) for s in students_all} # To store occurences of each reaction for each student
+    reaction_counts = {ids_and_students[s.user_id]:defaultdict(int) for s in students_all} # To store occurences of each reaction for each student
 
-#     attendance_present = set()
-#     attendance_absent = set()
+    attendance_present = set()
+    attendance_absent = set()
 
-#     for r in reactions_all:
-#         s_id = r.user_id
-#         reaction_counts[ids_and_students[s_id]][r.reactions] += 1
-#         attendance_present.add(ids_and_students[s_id])
+    for r in reactions_all:
+        s_id = r.user_id
+        reaction_counts[ids_and_students[s_id]][r.reactions] += 1
+        attendance_present.add(ids_and_students[s_id])
 
-#     for s in students_all:
-#         s_name = User.query.get(s.user_id).username
-#         if s_name not in attendance_present:
-#             attendance_absent.add(s_name)
+    for s in students_all:
+        s_name = User.query.get(s.user_id).username
+        if s_name not in attendance_present:
+            attendance_absent.add(s_name)
     
-#     # converting the attendance sets to sorted lists
-#     attendance_absent = sorted(list(attendance_absent))
-#     attendance_present = sorted(list(attendance_present))
+    # converting the attendance sets to sorted lists
+    attendance_absent = sorted(list(attendance_absent))
+    attendance_present = sorted(list(attendance_present))
 
-#     full_start_info = utc_to_local(session.timestamp_start) # To avoid accessing twice for the start date and start time
-#     start_date = full_start_info.strftime("%A, %B %d, %Y")
-#     start_time = full_start_info.strftime("%I:%M %p")
+    full_start_info = utc_to_local(session.timestamp_start) # To avoid accessing twice for the start date and start time
+    start_date = full_start_info.strftime("%A, %B %d, %Y")
+    start_time = full_start_info.strftime("%I:%M %p")
 
-#     if session.timestamp_end is None:
-#         end_time = "In Progress"
-#     else:
-#         end_time = utc_to_local(session.timestamp_end).strftime("%I:%M %p")
+    if session.timestamp_end is None:
+        end_time = "In Progress"
+    else:
+        end_time = utc_to_local(session.timestamp_end).strftime("%I:%M %p")
 
-#     # weasyprint cannot handle moment library, so we must convert to a string here
-#     print("\n%s - START: %s; represented as %s\n" % (session.id, session.timestamp_start, start_time))
-#     print("\n%s - END: %s; represented as %s\n" % (session.id, session.timestamp_end, end_time))
-
-#     # renders the report template
-#     html = render_template('report.html',
-#                             title="{} Session Report: {}".format(course_name, session.timestamp_start.strftime("%A, %B %d, %Y")),
-#                             course_name=course_name, 
-#                             start_date=start_date,
-#                             start_time=start_time,
-#                             end_time=end_time,
-#                             session_id=session.id, 
-#                             present_list=attendance_present,
-#                             absent_list=attendance_absent,
-#                             reactions=sorted(reaction_counts.items())) # Sorts so that reactions are accessed in alphabetical order of students' usernames
+    # renders the report template
+    html = render_template('report.html',
+                            title="{} Session Report: {}".format(course_name, session.timestamp_start.strftime("%A, %B %d, %Y")),
+                            course_name=course_name, 
+                            start_date=start_date,
+                            start_time=start_time,
+                            end_time=end_time,
+                            session_id=session.id, 
+                            present_list=attendance_present,
+                            absent_list=attendance_absent,
+                            reactions=sorted(reaction_counts.items())) # Sorts so that reactions are accessed in alphabetical order of students' usernames
     
     
-#     # renders the html as a pdf using weasyprint
-#     return render_pdf(HTML(string=html), stylesheets=[
-#                                                     'app/static/css/report.css',
-#                                                     "https://fonts.googleapis.com/css2?family=Montserrat&display=swap",
-#                                                     "https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"])
-    
-    
-# **********************************************************************************************************************************
+    # renders the html as a pdf using weasyprint
+    return render_pdf(HTML(string=html), stylesheets=[
+                                                    'app/static/css/report.css',
+                                                    "https://fonts.googleapis.com/css2?family=Montserrat&display=swap",
+                                                    "https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"])
+
 
 # Function for all the emotions and speeds
 @app.route('/classes/course/session/<session_id>/react/<reaction_num>', methods=["GET", "POST"]) # Adds an emotion, also don't forget to add this methods POST thing!
@@ -448,6 +455,10 @@ def submit_reaction(session_id, reaction_num):
     session = Session.query.get(session_id)
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
+    student = Signups.query.filter_by(course=course_id, user_id=current_user.id).first()
+    
+    if student is None:
+        return unauthorized_access("You are not in this class.")
 
     reaction = Reactions(user_id=current_user.id, reactions=reaction_num, reactions_course_id=course_id, session_id=session_id) # This is the user's reaction based on the button pressed
     db.session.add(reaction)
@@ -639,6 +650,9 @@ def course_status(course_id):
 @app.route('/classes/course/<course_id>/previous_session_list')
 @login_required
 def previous_session_list(course_id):
+    teacher_id = Courses.query.get(course_id).teacher_id
+    if current_user.id != teacher_id:
+        return unauthorized_access()
     sessions = Session.query.filter_by(course_id=course_id).filter(Session.timestamp_end!=None).all() # This is all the sessions for that course id that are inactive
     return render_template('previous_session_list.html', course_id=course_id, sessions=sessions, title="Previous Sessions")
     # Inside of the HTML page, there are links that will show the specific info for that session
@@ -648,8 +662,11 @@ def previous_session_list(course_id):
 @app.route('/classes/course/<course_id>/previous_session_data/<session_id>')
 @login_required
 def previous_session_data(course_id, session_id):
-    session = Session.query.get(session_id)
+    teacher_id = Courses.query.get(course_id).teacher_id
+    if current_user.id != teacher_id:
+        return unauthorized_access()
     
+    session = Session.query.get(session_id)
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
 
@@ -752,13 +769,17 @@ def create_form(session_id):
     form = TeacherRadioForm() # setting form to the TeaderRadioForm
 
     session = Session.query.get(session_id) # Get the correct session
+    course = session.session_course_id # This gives you the actual course
+    course_id = session.course_id # This will give you the course id
+    teacher_id = Courses.query.get(course_id).teacher_id
+    
+    if current_user.id != teacher_id:
+        return unauthorized_access()
     
     # If the session has ended, then redirect
     if (session.timestamp_end is not None):
         return redirect(url_for('course_waiting_room', course_id=session.course_id))
 
-    course = session.session_course_id # This gives you the actual course
-    course_id = session.course_id # This will give you the course id
 
     if form.validate_on_submit():
         flash('Form has been successfully distributed', 'info')
@@ -802,5 +823,9 @@ def form_data(session_id):
     session = Session.query.get(session_id) # Get the correct session
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
+    
+    teacher_id = Courses.query.get(course_id).teacher_id
+    if current_user.id != teacher_id:
+        return unauthorized_access()
 
     return render_template('form_data.html', title="Form Data", session_id=session_id, course_id=course_id, course=course)
