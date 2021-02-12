@@ -96,6 +96,7 @@
         <th>Course Code</th>
         <th>Teacher</th>
         <th>Course Status</th>
+        <th>Course Icon</th>
         <th>Timestamp</th>
     </tr>
     {% for c in courses_all %}
@@ -105,6 +106,7 @@
             <td>{{ c.code }}</td>
             <td>{{ c.teacher }}</td>
             <td>{{ c.status }}</td>
+            <td>{{ c.icon }}</td>
             <td>{{ c.timestamp }}</td>
         </tr>
     {% endfor %}
@@ -183,6 +185,7 @@
         <th>Course ID</th>
         <th>Course Name</th>
         <th>Teacher</th>
+        <th>Icon</th>
         <th>Timestamp</th>
     </tr>
     {% for u in user_signups %} <!-- user_signups will give you the User object, like <User Cat 1> -->
@@ -243,7 +246,11 @@
             <td>{{ r.id }}</td>
             <td>{{ r.teacher_id }}</td>
             <td>{{ r.form_question }}</td>
-            <td>{{ r.responses }}</td>
+            <td>
+                {% for response in r.responses %}
+                    {{ response }}
+                {% endfor %}
+            </td>
             <td>{{ r.course_form }}</td>
             <td>{{ r.session_form }}</td>
             <td>{{ r.timestamp }}</td>

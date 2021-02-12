@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/student_response.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>{{ prompt }}</h2>
+<form action="" method="post" class="studentResponse">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.options.label }}<br>
+        {{ form.options }}
+        {% for error in form.options.errors %}
+            <span class="errorSpan">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit() }}</p>
+</form>
+{% endblock %}

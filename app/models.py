@@ -103,13 +103,14 @@ class Courses(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow) # Timestamp
     status = db.Column(db.Integer, index=False, unique=False, default=0) # 0 means the class is inactive, 1 is active
     teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Taking the user ID from the user model, using backref of teacher will show you the actual teacher
+    icon = db.Column(db.String(220), index=False, unique=False, default="/static/images/Turtle.gif") # Icon option, turtle gif is set as the default 
     signups = db.relationship('Signups', backref='course_id', lazy='dynamic') # This will show all the student signups for this course
     reactions = db.relationship('Reactions', backref='course_actual', lazy='dynamic') # This will show all the reactions for this course
     #speed = db.relationship('Speed', backref='course_s', lazy='dynamic') # This will show all the speed complaints for this course 
     session = db.relationship('Session', backref='session_course_id', lazy='dynamic') # This will show you all the sessions of the course
     forms = db.relationship('Prompts', backref='course_form', lazy='dynamic') # This will show you all of the forms of the course
     responses = db.relationship('Responses', backref='course_response', lazy='dynamic') # This will show you all of the responses of the course
-    
+
     def __repr__(self):
         return '<Courses {} {} {} {} {} {}>'.format(self.id, self.course_name, self.code, self.teacher_id, self.status, self.timestamp)
 

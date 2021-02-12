@@ -31,10 +31,27 @@ function fetchPastSessionInfo(course_id, session_id, status) {
         .catch(handleError);
 }
 
+// Fetches information for all of the forms
+function fetchSessionFormsInfo(course_id, session_id, status) {
+    let url = "/classes/course/session/" + session_id + "/session_json";
+    console.log("FORMS INFO FETCHED");
+    fetch(url, {method: "GET"})
+        .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
+        .then(response => response.json()) 
+        .then((data) => displayForms(status, data)) // Calls the displayData function, which will update the thermometer visually
+        .catch(handleError);
+}
+
 // Calls functions to display the PAST information
 function displayPast(status, data) {
     console.log("DISPLAYED");
     displayPercentage(data["percentage"]); // Displays the percentage on the thermometer
+}
+
+// Calls function to display the FORMS information
+function displayForms(status, data) {
+    console.log("DISPLAYED FORMS");
+    displayFormResultsAll(data["forms"]); 
 }
 
 
@@ -47,6 +64,7 @@ function displayAll(status, data) {
     displaySpeeds(data["speeds"]); // Display speeds
     displayCalculatedSpeed(data["speed_num"]); // Display the calculated speed number
     displayAttendance(data["attendance"]); // Display the attendance
+    displayFormResults(data["forms"][data["forms"].length - 1]["responses"]); // Display the Forms responses
 }
 
 // Only calls some of the functions to display certain features for the student
@@ -114,6 +132,54 @@ function submitFormGeneral(session_id, react_num) {
     fetch(url, {method: "POST"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .catch(handleError); 
+}
+
+
+// Display results to the form
+function displayFormResults(form) {
+    console.log("DISPLAYING FORMS")
+    forms_html = document.getElementById("formsBox");
+    document.getElementById("formsBox").innerHTML = ""; // Clearing all the content in the div
+    console.log("YIP YOP")
+    for (f = form.length - 1; f >= 0; f--) {
+        user = form[f]["student_id"]
+        response = form[f]["form_responses"]
+        response_timestamp = form[f]["timestamp"]
+        if (response == 0) {
+            response = "Yes"
+        } else if (response == 1) {
+            response = "Maybe"
+        } else {
+            response = "No"
+        }
+        forms_html.innerHTML += ('<p>' +  user + ' | ' + response + ' | ' + moment(response_timestamp).format('hh:mm a') + '</p>')
+    }
+}
+
+function displayFormResultsAll(form) {
+    forms_html2 = document.getElementById("formsBox2");
+    console.log("HELLO??")
+    document.getElementById("formsBox2").innerHTML = ""; // Clearing all the content in the div
+    for (f=form.length - 1; f >= 0; f--) {
+        form_question = form[f]["form_question"] // getting the form question, teacher, timestamp
+        form_teacher = form[f]["teacher_id"]
+        form_timestamp = form[f]["timestamp"]
+        responses_list = form[f]["responses"] // responses list from the json file
+        forms_html2.innerHTML += ('<h2>' + form_question + '</h2><h3>' + form_teacher + '</h3><h4>' + moment(form_timestamp).format('MMMM Do YYYY, h:mm a') + '</h4>')
+        for (r = responses_list.length - 1; r >=0; r--) { // going through responses to get the student id and their responses
+            user_responder = responses_list[r]["student_id"]
+            response_user = responses_list[r]["form_responses"]            
+            timestamp_response = responses_list[r]["form_responses"]    
+            if (response_user == 0) {
+                response_user = "Yes"
+            } else if (response_user == 1) {
+                response_user = "Maybe"
+            } else {
+                response_user = "No"
+            }   
+            forms_html2.innerHTML += ('<p>' +  user_responder + ' | ' + response_user + ' | ' + moment(timestamp_response).format('hh:mm a') + '</p>')
+        }
+    }
 }
 
 function displayReactions(reactions) {
@@ -255,6 +321,16 @@ function initStudent(course_id, session_id, course_status) {
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchSessionInfoStudent(course_id, session_id, course_status);
+    }, 5000) 
+}
+
+// initFormsAll
+function initFormsAll(course_id, session_id, course_status) {
+    console.log("Called INIT Forms");
+    fetchSessionFormsInfo(course_id, session_id, course_status);
+    const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
+        console.log("Update");
+        fetchSessionFormsInfo(course_id, session_id, course_status);
     }, 5000) 
 }
 

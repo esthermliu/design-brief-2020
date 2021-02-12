@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form_data.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class = "formsResults">
+    <h2>Forms Results</h2>
+    <div id = "formsBox2" class = "formsBox">
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
+{% if current_user.role == 0 %} <!-- if current user is a teacher -->
+    <script type="text/javascript">
+        initFormsAll({{course_id}}, {{session_id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
+    </script>
+{% endif %}
+
+{% endblock %}

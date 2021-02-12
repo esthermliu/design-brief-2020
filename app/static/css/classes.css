@@ -33,6 +33,7 @@
         align-items: center;
         justify-content: center;
         width: 95%;
+        height: 50%
     }
     
     .classImage img {
@@ -115,7 +116,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 33%;
+        width: 80%;
+        height: 50%
     }
     
     .classImage img {

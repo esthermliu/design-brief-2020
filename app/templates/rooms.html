@@ -110,7 +110,12 @@
             {% endif %}
             {% if current_user.role == 1 %} <!-- If the current user is a student, then show all the reaction choices -->
             <div id="responseBoxHolder">
-                <div id="formHolder" style="display: none;"></div>
+                {% if forms_exist %} <!-- If a form exists in the session, allow the student to respond -->
+                    <div id="formHolder">
+                        <a href="{{ url_for('form_response', session_id=session_id) }}">Respond to Form</a>
+                    </div>
+                {% endif %}
+
                 <div id="responseBox" class = "makeReactionBox">
                     <!-- Emotions -->
                     <!-- <form id='reaction_form'> Form for feeling good :) -->
@@ -234,6 +239,25 @@
                     </div>
 
                 </div>
+
+                <!-- Will only show the most recent form's results-->
+                {% if forms_exist %} <!-- Will only show forms results if a form even exists in the session-->
+                    <div class = "formsResults">
+                        <h2>Forms Results</h2>
+                        <div id = "formsBox" class = "formsBox">
+                            <!--{% for r in form.responses %}
+                                {% if r.form_responses == 0 %}
+                                    <p>{{ r.student_responder.username }} | Yes</p>
+                                {% elif r.form_responses == 1%}
+                                    <p>{{ r.student_responder.username }} | Maybe</p>
+                                {% else %}
+                                    <p>{{ r.student_responder.username }} | No</p>
+                                {% endif %}
+                            {% endfor %}-->
+                        </div>
+                    </div>
+                {% endif %}
+
             {% endif %}
 
         </div>
@@ -262,6 +286,12 @@
                         {% endfor %}-->
                     </div>
                 </div>  
+            </div>
+            <div class = "makeForm">
+                <a href="{{ url_for('create_form', session_id=session_id) }}">Create Form</a>
+            </div>
+            <div class = "viewForm">
+                <a href="{{ url_for('form_data', session_id=session_id) }}" target = "_blank">View Forms Data</a>
             </div>
             <div class = "openReportSection">
                 <button title="Download a Report for this Session" id="openReport" type="button" onclick="redirectToDownloadPage( {{ session_id }})">
