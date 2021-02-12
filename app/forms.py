@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, RadioField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, RadioField, FormField, FieldList, Form
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
@@ -41,3 +41,11 @@ class TeacherRadioForm(FlaskForm):
 class StudentRadioForm(FlaskForm):
     options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
     submit = SubmitField('Submit')
+
+# class RadioForm(Form):
+#     options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
+
+# class StudentRadioForm(FlaskForm):
+#     options = FieldList(FormField(RadioForm), min_entries=2, max_entries=8)
+#     submit = SubmitField('Submit')
+
