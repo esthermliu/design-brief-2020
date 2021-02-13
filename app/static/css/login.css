@@ -4,11 +4,11 @@
     }
 
     .innerBox {
-        background-color: #A8d0E6;
+        background-color: white;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 5% 3% 5% 3%;
+        padding: 5% 4% 5% 4%;
     }
 }
 
@@ -22,14 +22,18 @@
     }
 
     .innerBox {
-        background-color: #A8d0E6;
+        background-color: white;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 5% 3% 5% 3%;
+        padding: 5% 4% 5% 4%;
     }
 
     
+}
+
+.forgot {
+    background-image: url("/static/images/Student5.jpeg") !important;
 }
 
 .giveSpace {
@@ -76,12 +80,16 @@ header {
     font-weight: 500;
 }
 
+.formError {
+    color: #f76c6c;
+    line-height: 45px;
+}
+
 input[type="text" i], input[type="password" i] {
     border: 0;
     background-color: transparent;
     border-bottom: 2px solid gray;
     padding: 12px 0px;
-    border-radius: 4px;
     width: 220px;
 }
 
@@ -110,6 +118,14 @@ input[type="submit" i] {
     -webkit-transition-duration: 0.3s;
 }
 
+.formTitle {
+    margin-bottom: 10%;
+}
+
+.buttonSpace {
+    margin-top: 12%;
+}
+
 input {
     font-family: 'Montserrat', sans-serif;
     letter-spacing: 1.5px;
@@ -117,6 +133,7 @@ input {
     text-align: center;
     color: black ;
 }
+
 
 input[type="submit" i]:hover {
     background-color: transparent;
@@ -232,10 +249,11 @@ span {
         border-radius: 50px;
         color: white;
         border: 2px solid  #8ab5cc !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         animation: MoveUpDown 2s linear infinite;
         cursor: pointer;
     }
+
 
     @keyframes MoveUpDown {
         0%, 100% {
@@ -265,8 +283,7 @@ span {
     }
     
     input[type="submit" i]:hover {
-        background-color: white !important;
-        color:  #8ab5cc;
+        box-shadow: 0 0px 0px 0 rgba(0,0,0,0);
     }
     
     .registerLink {

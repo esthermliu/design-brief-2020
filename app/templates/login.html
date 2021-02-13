@@ -22,7 +22,7 @@
                         </p>
                         <p>
                             {% for error in form.username.errors %}
-                            <span>[{{ error }}]</span>
+                            <span class = "formError">[{{ error }}]</span>
                             {% endfor %}
                         </p>
                         <p>
@@ -31,7 +31,7 @@
                         </p>
                         <p>
                             {% for error in form.password.errors %}
-                            <span>[{{ error }}]</span>
+                            <span class = "formError">[{{ error }}]</span>
                             {% endfor %}
                         </p>
                         <div class = "giveSpace"> {{ form.remember_me() }} {{ form.remember_me.label }}</div>
