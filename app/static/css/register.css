@@ -6,6 +6,10 @@
     margin-bottom: 10px;
 }
 
+header {
+    display: none;
+}
+
 input {
     padding: 15px;
     font-family: 'Montserrat', sans-serif;
@@ -14,6 +18,13 @@ input {
     background: transparent;
     margin-top: 10px;
     letter-spacing: 1px;
+    width: 50%;
+    text-align: center;
+    border-bottom: 2px solid gray;
+}
+
+.submitSpace {
+    margin-top: 3%;
 }
 
 select {
@@ -24,10 +35,12 @@ select {
     font-family: 'Montserrat';
     letter-spacing: 1px;
     background-color: #a8d0e6;
+    cursor: pointer;
 }
 
 option {
     background-color: white;
+    cursor: pointer;
 }
 
 
@@ -41,10 +54,13 @@ option {
     border-radius: 50px;
     transition-duration: 0.3s;
     -webkit-transition-duration: 0.3s;
-    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     font-size: 15px;
     border: 0;
     margin-top: 2%;
+    width: auto !important;
+    animation: MoveUpDown 2s linear infinite;
+    cursor: pointer;
 }
 
 #submit:hover {
@@ -59,6 +75,71 @@ p {
     color: #f76c6c;
     margin-left: 15px;
 }
+
+.bigBox {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("/static/images/Student4.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.contentHolder {
+    margin: 0 !important;
+}
+
+.transparentBox {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(rgba(43, 122, 120, 0.6), rgba(145, 75, 173, 0.4));
+}
+
+.signInBox {
+    text-align: center;
+    width: 100%;
+}
+
+.signInBox h1 {
+    font-weight: 500;
+}
+
+.innerBox {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3% 0% 3% 0%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 12px 30px 0 rgba(0, 0, 0, 0.3);
+}
+
+@keyframes MoveUpDown {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+}
+
+@keyframes MoveUpOther {
+    0%, 100% {
+      transform: translateY(-3px);
+    }
+    50% {
+      transform: translateY(0);
+    }
+}
+
 
 @media (prefers-color-scheme: dark) {
     #role, #submit {
