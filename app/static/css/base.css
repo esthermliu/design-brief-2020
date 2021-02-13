@@ -195,11 +195,11 @@ h2, h3 {
     align-items: center;
     justify-content: center;
     margin-top: 2%;
+    padding-inline-start: 0px !important;
 }
 
 .flashHolder li {
     z-index: 100;
-    width: 80%;
     max-width: 400px;
     display: flex;
     align-items: center;

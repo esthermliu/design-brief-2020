@@ -5,44 +5,44 @@
 
 {% block content %}
     <div class = "bigBox">
-        <div class = "imageBox">
-            <div class = "imageHolder">
-                <a href = "{{ url_for('index') }}"><img src = "{{ url_for('static', filename='images/FillerLogo.png') }}"></a>
-            </div>
-        </div>
-        <div class = "innerBox">
-            <div class = "signInBox">
-                <h1>Welcome!</h1>
-                <form action="" method="post" novalidate class = "signIn">
-                    {{ form.hidden_tag() }}
-                    <p class = "username">
-                        {{ form.username.label }}<br>
-                        {{ form.username(size=32) }}
-                    </p>
-                    <p>
-                        {% for error in form.username.errors %}
-                        <span>[{{ error }}]</span>
-                        {% endfor %}
-                    </p>
-                    <p>
-                        {{ form.password.label }}<br>
-                        {{ form.password(size=32) }}
-                    </p>
-                    <p>
-                        {% for error in form.password.errors %}
-                        <span>[{{ error }}]</span>
-                        {% endfor %}
-                    </p>
-                    <p> {{ form.remember_me() }} {{ form.remember_me.label }}</p>
-                    <p>{{ form.submit() }}</p>
-                </form>
-                <div class = "newUser">
-                    <h3>New User? </h3>
-                    <a class = "registerLink" href="{{ url_for('register') }}">Register here!</a>
-                </div>
-                <div class = "newUser">
-                    <h3>Forgot Your Password? </h3>
-                    <a class = "registerLink" href="{{ url_for('reset_password_request') }}">Reset your password. </a>
+        <div class = "transparentBox">
+            <!--<div class = "imageBox">-->
+                <!--<div class = "imageHolder">
+                    <a href = "{{ url_for('index') }}"><img src = "{{ url_for('static', filename='images/FillerLogo.png') }}"></a>
+                </div>-->
+            <!--</div>-->
+            <div class = "innerBox">
+                <div class = "signInBox">
+                    <h1>Welcome!</h1>
+                    <form action="" method="post" novalidate class = "signIn">
+                        {{ form.hidden_tag() }}
+                        <p class = "username">
+                            {{ form.username.label }}<br>
+                            {{ form.username(size=32) }}
+                        </p>
+                        <p>
+                            {% for error in form.username.errors %}
+                            <span>[{{ error }}]</span>
+                            {% endfor %}
+                        </p>
+                        <p>
+                            {{ form.password.label }}<br>
+                            {{ form.password(size=32) }}
+                        </p>
+                        <p>
+                            {% for error in form.password.errors %}
+                            <span>[{{ error }}]</span>
+                            {% endfor %}
+                        </p>
+                        <div class = "giveSpace"> {{ form.remember_me() }} {{ form.remember_me.label }}</div>
+                        <p>{{ form.submit() }}</p>
+                    </form>
+                    <div class = "newUser">
+                        <a class = "registerLink" href="{{ url_for('register') }}">New User? Register here!</a>
+                    </div>
+                    <div class = "newUser">
+                        <a class = "registerLink" href="{{ url_for('reset_password_request') }}">Forgot Password? Reset it here.</a>
+                    </div>
                 </div>
             </div>
         </div>
