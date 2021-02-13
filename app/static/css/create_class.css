@@ -6,10 +6,6 @@
     align-items: center;
 }
 
-.classTitle h1 {
-    text-align: center;
-}
-
 .iconBox {
     display: flex;
     justify-content: space-evenly;
@@ -21,13 +17,13 @@
 .radioBox {
     margin: 2%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: center;
     align-items: center;
 }
 
 .radioBox input {
-    margin-bottom: 15px;
+    margin-top: 15px;
 }
 
 .newCourseInput {
@@ -83,6 +79,7 @@
     font-size: 40px;
     font-weight: 600;
     color: rgb(23, 37, 42);
+    text-align: center;
 }
 
 .classTitle h1:after {

@@ -3,7 +3,7 @@ from app import app
 from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
-from app.forms import EditProfileForm, TeacherRadioForm, StudentRadioForm
+from app.forms import EditProfileForm, TeacherRadioForm, StudentRadioForm, EditClassForm
 from flask_login import current_user, login_user
 from app.models import User, Reactions, Post, Courses, Signups, Session, Responses, Prompts
 from flask_login import logout_user
@@ -257,22 +257,38 @@ def course_waiting_room(course_id):
         return redirect(url_for('sessions', session_id=session_filtered.id))     
 
 
-@app.route('/classes/course/<course_id>/manage')
+@app.route('/classes/course/<course_id>/manage', methods=['GET', 'POST'])
 @login_required
 def manage_course_page(course_id):
-    course = Courses.query.get(course_id)
-    teacher_id = course.teacher_id
-    if current_user.id != teacher_id:
-        return unauthorized_access("You are not the teacher for this class.")
+    course = Courses.query.get(course_id) # getting the correct course with the course_id
+    teacher_id = course.teacher_id # getting the appropriate teacher_id
+    if current_user.id != teacher_id: # If the current user's id is not the same as the teacher id
+        return unauthorized_access("You are not the teacher for this class.") # return an error message
     
     student_signups = Signups.query.filter_by(course=course.id).all()
-    students_user_info = [User.query.get(s.user_id) for s in student_signups]
+    # students_user_info = [User.query.get(s.user_id) for s in student_signups]
+    
+    form = EditClassForm() # Setting form to the edit class form
+
+    if form.validate_on_submit(): # If the form successfully submitted
+        course.course_name = form.class_name.data # Set the course name to what they entered in the form
+        course.icon = form.class_icon.data # Set icon for course from the form
+        course.color = form.class_color.data # Set color for course from the form
+        db.session.commit() # Commit changes to the database
+        flash('Your changes have been saved', 'info')
+        return redirect(url_for('manage_course_page', course_id=course_id))
+    elif request.method == 'GET': # If this is the first time that the form has been requested
+        form.class_name.data = course.course_name # Then pre-populate the fields with the data in the database
+        form.class_icon.data = course.icon
+        form.class_color.data = course.color
+    else:
+        flash('Please fill in every section', 'error')
     
     return render_template('manage_class.html', 
                             course_name=course.course_name,
                             course_id=course_id, 
-                            students=students_user_info,
-                            title='Manage ' + course.course_name)
+                            title='Manage ' + course.course_name,
+                            form=form)
 
 @app.route('/classes/course/<course_id>/manage/remove/<user_id>', methods=["POST"]) # POST method
 @login_required

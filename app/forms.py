@@ -43,8 +43,28 @@ class StudentRadioForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class EditClassForm(FlaskForm):
-    class_name = StringField('Class Name', validators=[DataRequired()])
-    class_icon = RadioField('Class Icon', choices=[('0', 'Yes')])
+    class_name = StringField('Change Class Name', validators=[DataRequired()])
+    class_icon = RadioField('Class Icon', choices=[('/static/images/classes_art.png', 'Art'), 
+                                                    ('/static/images/classes_atom.png', 'Atom'),
+                                                    ('/static/images/classes_books.png', 'Books'),
+                                                    ('/static/images/classes_calculator.png', 'Calculator'),
+                                                    ('/static/images/classes_chemistry.png', 'Chemistry'),
+                                                    ('/static/images/classes_dna.png', 'DNA'),
+                                                    ('/static/images/classes_fishbowl.png', 'Fishbowl'),
+                                                    ('/static/images/classes_language.png', 'Language'),
+                                                    ('/static/images/classes_laptop.png', 'Laptop'),
+                                                    ('/static/images/classes_laurel.png', 'Laurel'),
+                                                    ('/static/images/classes_numbers.png', 'Numbers'),
+                                                    ('/static/images/classes_operators.png', 'Operators'),
+                                                    ('/static/images/classes_PE.png', 'PE')])
+    class_color = RadioField('Class Color', choices = [(0, 'Red'),
+                                                        (1, 'Yellow'),
+                                                        (2, 'Blue'),
+                                                        (3, 'Green'),
+                                                        (4, 'Orange'),
+                                                        (5, 'Purple')],
+                                                        coerce=int)
+    submit = SubmitField('Save Changes')
 
 # class RadioForm(Form):
 #     options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)

@@ -1,0 +1,189 @@
+.colorLabel {
+    height: 30px;
+    width: 30px;
+    background-color: #F76c6c;
+}
+
+.colorBox {
+    display: flex;
+    justify-content: space-evenly;
+    width: 50%;
+}
+
+.colorTitle {
+    margin-top: 3%;
+}
+
+.yellow {
+    background-color: #F8E9A1 !important;
+}
+
+.blue {
+    background-color: #a8d0e6 !important;
+}
+
+.orange {
+    background-color: rgb(245, 187, 111);
+}
+
+.green {
+    background-color: rgb(147, 218, 147);
+}
+
+.purple {
+    background-color: #808fca !important;
+}
+
+.studentInfo {
+    
+    margin-bottom: 5%;
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.studentTable {
+    width: 80%;
+    border-collapse: collapse;
+}
+
+.studentRowEach  {
+    text-align: center;
+    padding: 15px;
+}
+
+.studentRowEach td {
+    padding: 15px;
+}
+
+.heading th {
+    padding: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.heading {
+    background-color: #a8d0e6 !important;
+}
+
+.studentTitle {
+    text-align: left;
+}
+
+.removeButton {
+    background-color: #F76c6c;
+    text-decoration: none;
+    color: white;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+    padding: 20px 20px;
+    border-radius: 50px;
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    border: 0;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.greenButton {
+    background-color: rgb(132, 196, 132) !important;
+    margin-top: 20%;
+}
+
+.removeButton:hover {
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.15);
+}
+
+.miniTitle h2 {
+    font-weight: 500;
+}
+
+.classTitle h1 {
+    font-weight: 500;
+    position: relative;
+    font-size: 40px;
+    font-weight: 600;
+    color: rgb(23, 37, 42);
+    text-align: center;
+}
+
+.classTitle h1:after {
+    position: absolute;
+	content: '';
+	height: 3px;
+	bottom: -20px;
+	margin: 0 auto;
+	left: 0;
+    right: 0;
+	width: 4%;
+	background: #3aafa9;
+}
+
+.formHolder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.editClassForm {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.newCourseInput {
+    border: 0;
+    padding: 15px;
+    border-bottom: 1px solid black;
+    background-color: transparent;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.colorLabel {
+    margin-bottom: 15px;
+}
+
+.classNameHolder {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.studentTitle h2 {
+    font-weight: 500;
+}
+
+.titleClass {
+    font-weight: 500;
+}
+
+.difSection {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: stretch;
+    flex-wrap: wrap;
+    width: 80%;
+    margin-bottom: 3%;
+}
+
+.iconBox {
+    margin: 2%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
+.radioBox input {
+    margin-top: 15px;
+}

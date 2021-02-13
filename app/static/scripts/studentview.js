@@ -71,16 +71,16 @@ function confirm_message(username) {
 function displayStudents(studentInfo, course_id) {
     studentHTML = document.getElementById("studentRow");
     console.log("Students")
-    studentHTML.innerHTML = '<tr>' + '<th>Username</th>' + 
+    studentHTML.innerHTML = '<tr class = "heading">' + '<th>Username</th>' + 
                                     '<th>Email</th>' + 
-                                    '<th>Remove User</th>' + 
+                                    '<th>Actions</th>' + 
                             '</tr>'; // clearing all the content in the div
     for (s = 0; s < studentInfo.length; s++) {
         console.log("WOOT")
         var student_username = studentInfo[s]["username"] // Getting the student's username
         var student_email = studentInfo[s]["email"] // Getting the student's email
         var student_id = studentInfo[s]["student_id"] // Getting the student's ID
-        studentHTML.innerHTML += ('<tr><td class="usernameHolder">' + student_username + '</td>' +
+        studentHTML.innerHTML += ('<tr class = "studentRowEach"><td class="usernameHolder">' + student_username + '</td>' +
                                     '<td class="emailHolder">' + student_email + '</td>' + 
                                     '<td class="removeUserHolder">' + 
                                         '<form action="/classes/course/' + course_id + '/manage/remove/' + student_id + '"method="POST">' +
