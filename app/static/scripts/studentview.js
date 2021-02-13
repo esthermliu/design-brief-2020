@@ -153,7 +153,7 @@ function displayFormLink(formData, session_id) {
     console.log("DISPLAY FORM LINK")
     if (formData.length != 0) {
         var form_url = formData[0]["forms_url"]
-        studentFormHTML.innerHTML += ('<a href="' + form_url + '">Respond to Form</a>');
+        studentFormHTML.innerHTML += ('<a class = "formAlertHolder" href="' + form_url + '"><img src = "/static/images/FormsAlert4.png"></a>');
     }
 }
 
@@ -169,20 +169,20 @@ function updateThermometer(temp) {
     room_vibe.innerHTML = ""; // Clearing everything in the room_vibe div
     if (temp > 67) {
         console.log("Happy Room Vibe");
-        room_vibe.innerHTML += ('<img id = "vibe" class = "teacherStuff" src="../../../../static/images/HappyShadow.png">');
-        room_vibe.innerHTML += ('<h2 class = "vibeHeader teacherVibeHeader">Happy Room Vibes!</h2>');
+        room_vibe.innerHTML += ('<div class = "faceHolder"><img id = "vibe" class = "teacherStuff" src="../../../../static/images/HappyShadow.png"><div>');
+        room_vibe.innerHTML += ('<div class = "textVibe"><h2 class = "vibeHeader teacherVibeHeader">Happy Room Vibes!</h2></div>');
     } else if (temp > 34) {
         console.log("Meh Room Vibe");
-        room_vibe.innerHTML += ('<img id = "vibe" class = "teacherStuff" src="../../../../static/images/MehShadow.png">');
-        room_vibe.innerHTML += ('<h2 class = "vibeHeader teacherVibeHeader">Unamused Room Vibes...</h2>');
+        room_vibe.innerHTML += ('<div class = "faceHolder"><img id = "vibe" class = "teacherStuff" src="../../../../static/images/MehShadow.png"></div>');
+        room_vibe.innerHTML += ('<div class = "textVibe"><h2 class = "vibeHeader teacherVibeHeader">Unamused Room Vibes...</h2></div>');
     } else if (temp > 0) {
         console.log("Sad Room Vibe");
-        room_vibe.innerHTML += ('<img id = "vibe" class = "teacherStuff" src="../../../../static/images/SadShadow2.png">');
-        room_vibe.innerHTML += ('<h2 class = "vibeHeader teacherVibeHeader">Struggling Room Vibes!</h2>');
+        room_vibe.innerHTML += ('<div class = "faceHolder"><img id = "vibe" class = "teacherStuff" src="../../../../static/images/SadShadow2.png"></div>');
+        room_vibe.innerHTML += ('<div class = "textVibe"><h2 class = "vibeHeader teacherVibeHeader">Struggling Room Vibes!</h2></div>');
     } else {
         console.log("No Room Vibe");
-        room_vibe.innerHTML += ('<img id = "vibe" class = "teacherStuff" src="../../../../static/images/NoneShadow.png">');
-        room_vibe.innerHTML += ('<h2 class = "vibeHeader teacherVibeHeader">No Room Vibes Yet</h2>');
+        room_vibe.innerHTML += ('<div class = "faceHolder"><img id = "vibe" class = "teacherStuff" src="../../../../static/images/NoneShadow.png"></div>');
+        room_vibe.innerHTML += ('<div class = "textVibe"><h2 class = "vibeHeader teacherVibeHeader">No Room Vibes Yet</h2></div>');
     }
     console.log("Thermometer" + thermometer[0]) 
     console.log("Temperature: " + temp)
