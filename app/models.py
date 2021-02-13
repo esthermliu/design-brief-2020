@@ -4,6 +4,9 @@ from app import login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+from time import time
+import jwt 
+from app import app
 
 class User(UserMixin, db.Model):
     # columns of the database
@@ -34,6 +37,20 @@ class User(UserMixin, db.Model):
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size) 
+
+    def get_reset_password_token(self, expires_in=600): # returns a JWT token as a string, which is generated through the jwt.encode() function
+        return jwt.encode(
+            {'reset_password': self.id, 'exp': time() + expires_in},
+            app.config['SECRET_KEY'], algorithm='HS256')
+
+    @staticmethod 
+    def verify_reset_password_token(token): # static method, so it can be invoked directly from the class; takes a token and attempts to decode it through the jwt.decode() function. If the token cannot be validated or is expired, then it raises an exception
+        try:
+            id = jwt.decode(token, app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['reset_password']
+        except:
+            return
+        return User.query.get(id)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -103,7 +120,8 @@ class Courses(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow) # Timestamp
     status = db.Column(db.Integer, index=False, unique=False, default=0) # 0 means the class is inactive, 1 is active
     teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Taking the user ID from the user model, using backref of teacher will show you the actual teacher
-    icon = db.Column(db.String(220), index=False, unique=False, default="/static/images/Turtle.gif") # Icon option, turtle gif is set as the default 
+    icon = db.Column(db.String(220), index=False, unique=False, default="/static/images/classes_books.png") # Icon option, turtle gif is set as the default 
+    color = db.Column(db.Integer, index=False, unique=False, default=0) # Adding the option to decide the color of the class
     signups = db.relationship('Signups', backref='course_id', lazy='dynamic') # This will show all the student signups for this course
     reactions = db.relationship('Reactions', backref='course_actual', lazy='dynamic') # This will show all the reactions for this course
     #speed = db.relationship('Speed', backref='course_s', lazy='dynamic') # This will show all the speed complaints for this course 

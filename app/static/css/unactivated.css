@@ -47,8 +47,8 @@
     background-color: #A8D0E6;
 }
 
-.orange {
-    background-color: lightsalmon;
+.green {
+    background-color: rgb(147, 218, 147);
 }
 
 @media (prefers-color-scheme: dark) {

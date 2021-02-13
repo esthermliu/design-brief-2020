@@ -3,7 +3,7 @@ from app import app
 from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
-from app.forms import EditProfileForm, TeacherRadioForm, StudentRadioForm
+from app.forms import EditProfileForm, TeacherRadioForm, StudentRadioForm, EditClassForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user, login_user
 from app.models import User, Reactions, Post, Courses, Signups, Session, Responses, Prompts
 from flask_login import logout_user
@@ -14,7 +14,8 @@ import random
 from datetime import datetime, timedelta
 from dateutil import tz
 from collections import defaultdict
-from flask_weasyprint import HTML, render_pdf
+from app.email import send_password_reset_email
+#from flask_weasyprint import HTML, render_pdf
 
 @app.route('/')
 @app.route('/index')
@@ -92,24 +93,26 @@ def create(username):
 @app.route('/user/<username>/create_class/new', methods=["POST"]) # This is a POST method
 @login_required 
 def newclass(username):
+    course_name = request.form.get("course_name") # getting the course name from the form
     print("!!! " + username)
     print("CU id is %s but user id is %s" % (current_user.id, User.query.filter_by(username=username).first().id))
     if current_user.id != User.query.filter_by(username=username).first().id:
         return unauthorized_access()
-    course_name = request.form.get("course_name")
     if len(course_name) == 0:
         flash('You must give your new course a name', 'error')
         return redirect(url_for('create', username=current_user.username)) # Redirects to the create page
-    course_icon = request.form.get("icon")
+    course_icon = request.form.get("icon") # getting the course icon from the form
+    course_color = request.form.get("color") # getting the course color from the form
     rand_code = random.randint(100000, 999999) # Generating a random code
     exist_course = Courses.query.filter_by(code=rand_code).first() # Checks if rand_code is already linked to an existing course
     while exist_course is not None: # While an existing course has that code
         rand_code = random.randint(100000, 999999) # Generate a random code again
         exist_course = Courses.query.filter_by(code=rand_code).first() # Check the database again
-    new_course = Courses(course_name=course_name, code=rand_code, teacher_id=current_user.id, icon=course_icon)
+    new_course = Courses(course_name=course_name, code=rand_code, teacher_id=current_user.id, icon=course_icon, color=course_color)
     db.session.add(new_course)
     db.session.commit()
-    return redirect(url_for('create', username=current_user.username)) # Redirects to the create page
+    flash('Congratulations! You have successfully created a new course.', 'info')
+    return redirect(url_for('classes', username=current_user.username)) # Redirects to the create page
 
 @app.route('/user/<username>') # User profile page
 @login_required
@@ -192,6 +195,8 @@ def add(username):
 
 
 
+
+
 # Route for each session
 @app.route('/classes/course/session/<session_id>') # The text inside the <> has to be the same as the parameter in the def room()
 @login_required # Have to be logged in to see these rooms
@@ -257,41 +262,72 @@ def course_waiting_room(course_id):
         return redirect(url_for('sessions', session_id=session_filtered.id))     
 
 
-@app.route('/classes/course/<course_id>/manage')
+@app.route('/classes/course/<course_id>/manage', methods=['GET', 'POST'])
 @login_required
 def manage_course_page(course_id):
-    course = Courses.query.get(course_id)
-    teacher_id = course.teacher_id
-    if current_user.id != teacher_id:
-        return unauthorized_access("You are not the teacher for this class.")
+    course = Courses.query.get(course_id) # getting the correct course with the course_id
+    teacher_id = course.teacher_id # getting the appropriate teacher_id
+    if current_user.id != teacher_id: # If the current user's id is not the same as the teacher id
+        return unauthorized_access("You are not the teacher for this class.") # return an error message
     
     student_signups = Signups.query.filter_by(course=course.id).all()
-    students_user_info = [User.query.get(s.user_id) for s in student_signups]
+    # students_user_info = [User.query.get(s.user_id) for s in student_signups]
+    
+    form = EditClassForm() # Setting form to the edit class form
+
+    if form.validate_on_submit(): # If the form successfully submitted
+        course.course_name = form.class_name.data # Set the course name to what they entered in the form
+        course.icon = form.class_icon.data # Set icon for course from the form
+        course.color = form.class_color.data # Set color for course from the form
+        db.session.commit() # Commit changes to the database
+        flash('Your changes have been saved', 'info')
+        return redirect(url_for('manage_course_page', course_id=course_id))
+    elif request.method == 'GET': # If this is the first time that the form has been requested
+        form.class_name.data = course.course_name # Then pre-populate the fields with the data in the database
+        form.class_icon.data = course.icon
+        form.class_color.data = course.color
+    else:
+        flash('Please fill in every section', 'error')
     
     return render_template('manage_class.html', 
-                            course=course, 
-                            students=students_user_info)
+                            course_name=course.course_name,
+                            course_id=course_id, 
+                            title='Manage ' + course.course_name,
+                            form=form)
 
-
-@app.route('/classes/course/course/<course_id>/remove/<user_id>')
+@app.route('/classes/course/<course_id>/remove/<user_id>', methods=["POST"]) # POST method
 @login_required
-def remove_user(course_id, user_id):
-    course = Courses.query.get(course_id)
-    if course is None:
-        flash('This course does not exist', 'error')
-        return redirect(url_for('index'))
-    if User.query.get(user_id) is None:
-        flash('This user does not exist', 'error')
-        return redirect(url_for('index'))
-    if current_user.id != course.teacher_id:
-        return unauthorized_access()
-    
-    user = Signups.query.filter_by(course=course_id, user_id=user_id).first()
-    db.session.delete(user)
+def remove(course_id, user_id):
+    course = Courses.query.get(course_id) # gets the right course
+    student_removed = Signups.query.filter_by(course=course_id, user_id=user_id).first() # getting the student that is removed
+
+    db.session.delete(student_removed) # removing the student from the database
     db.session.commit()
+    flash("Student removed", 'info')
 
-    return redirect(url_for('manage_course_page'))
+    return redirect(url_for('manage_course_page', course_id=course_id))
 
+@app.route('/classes/course/<course_id>/manage/course_json', methods=["GET", "POST"])
+@login_required
+def course_json(course_id):
+    student_list=[]
+    student_info={}
+
+    course = Courses.query.get(course_id) # Gets the appropriate course
+    signups = course.signups # Gets a list of all of the signups in the course
+
+    for s in signups: # each s represents a <Signups>
+        student_info = {
+            "student_id": s.student.id,
+            "username": s.student.username,
+            "email": s.student.email
+        }
+        student_list.append(student_info)
+
+    result = {
+            "students": list(student_list)
+        }
+    return jsonify(result)
 
 # Attendance 
 # @app.route('/classes/course/session/<session_id>/attendance', methods=["GET", "POST"]) 
@@ -549,7 +585,8 @@ def session_json(session_id):
             "responses": responses_list,
             "form_course_id": f.form_course_id,
             "session_id": f.session_id,
-            "timestamp": f.timestamp
+            "timestamp": f.timestamp,
+            "forms_url": url_for('form_response', session_id=f.session_id)
         }
         
         forms_list.append(forms_dict)
@@ -563,6 +600,8 @@ def session_json(session_id):
     signups = Signups.query.filter_by(course=course_id).all() # List of students that are in this specific course
     reactions_specific = Reactions.query.filter_by(session_id=session_id).all() # List of reactions that happened in this specific course, specific session
     # speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
+    responses_specific = Responses.query.filter_by(session_id=session_id).all() # List of all the responses made for any forms in the session
+    
     present_set = set()
     absent_set = set()
     present_list = list()
@@ -570,6 +609,11 @@ def session_json(session_id):
     for r in reactions_specific: 
         if (r.reactor.role == 1):
             present_set.add(r.reactor.username) # Then add to the present list
+    
+    for response in responses_specific: # Goes through the list of responses made in the session and adds the student's username
+        if (response.student_responder.role == 1): # Checking that the responder is indeed a student
+            present_set.add(response.student_responder.username)
+
     for signup in signups: # Going through the list of signups
         if (signup.student.username not in present_set and signup.student.role == 1):
             absent_set.add(signup.student.username)
@@ -883,3 +927,36 @@ def form_data(session_id):
                             session_id=session_id, 
                             course_id=course_id, 
                             course=course)
+
+# Reset password request function
+@app.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated: # redirect user if they are alread logged in
+        return redirect(url_for('index'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first() # getting the user by their email they inputted into the form
+        if user: # If the user exists, then send the password reset email
+            send_password_reset_email(user)
+        flash('Check your email for the instructions to reset your password', 'info')
+        return redirect(url_for('login'))
+    return render_template('reset_password_request.html',
+                            title='Reset Password',
+                            form=form)
+
+# Reset password 
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated: # if the user is already logged in, redirect them
+        return redirect(url_for('index'))
+    user = User.verify_reset_password_token(token) # figuring out which user it is, returns user if the token is valid and None if not
+    if not user: # if token is invalid, then redirect them to the homepage
+        return redirect(url_for('index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit(): # if the form validates, then reset their password and redirect them tot he login page
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset', 'info')
+        return redirect(url_for('login')) 
+    return render_template('reset_password.html', form=form)
+

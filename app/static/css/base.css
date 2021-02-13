@@ -207,8 +207,7 @@ h2, h3 {
     border-radius: 20px;
     list-style-type: none;
     background-color: #F76C6C;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
     color: white;
     text-align: center;
     box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);

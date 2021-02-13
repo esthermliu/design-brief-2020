@@ -16,7 +16,7 @@ function fetchSessionInfoStudent(course_id, session_id, status) {
     fetch(url, {method: "GET"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .then(response => response.json()) 
-        .then((data) => displaySome(status, data)) // Calls the displayData function, which will update the thermometer visually
+        .then((data) => displaySome(status, data, session_id)) // Calls the displayData function, which will update the thermometer visually
         .catch(handleError);
 }
 
@@ -40,6 +40,54 @@ function fetchSessionFormsInfo(course_id, session_id, status) {
         .then(response => response.json()) 
         .then((data) => displayForms(status, data)) // Calls the displayForms function, which will update the form data visually
         .catch(handleError);
+}
+
+// Fetches users in the course
+function fetchCourseInfo(course_id) { 
+    let url = "/classes/course/" + course_id + "/manage/course_json";
+    fetch(url, {method: "GET"})
+        .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
+        .then(response => response.json()) 
+        .then((data) => displayCourseInfo(data, course_id)) // Data passed into function displayCourseInfo
+        .catch(handleError); 
+}
+
+// Function for displaying the course information
+function displayCourseInfo(data, course_id) {
+    console.log("COURSE INFO DISPLAYED");
+    displayStudents(data["students"], course_id);
+}
+
+function confirm_message(username) {
+    if (confirm("Are you sure you want to remove " + username + "?" )) {
+        return true;
+    } else {
+        return false;
+    }
+    
+}
+
+// Displaying the students in the course
+function displayStudents(studentInfo, course_id) {
+    studentHTML = document.getElementById("studentRow");
+    console.log("Students")
+    studentHTML.innerHTML = '<tr class = "heading">' + '<th>Username</th>' + 
+                                    '<th>Email</th>' + 
+                                    '<th>Actions</th>' + 
+                            '</tr>'; // clearing all the content in the div
+    for (s = 0; s < studentInfo.length; s++) {
+        console.log("WOOT")
+        var student_username = studentInfo[s]["username"] // Getting the student's username
+        var student_email = studentInfo[s]["email"] // Getting the student's email
+        var student_id = studentInfo[s]["student_id"] // Getting the student's ID
+        studentHTML.innerHTML += ('<tr class = "studentRowEach"><td class="usernameHolder">' + student_username + '</td>' +
+                                    '<td class="emailHolder">' + student_email + '</td>' + 
+                                    '<td class="removeUserHolder">' + 
+                                        '<form action="/classes/course/' + course_id + '/manage/remove/' + student_id + '"method="POST">' +
+                                            '<button type="submit" class = "removeButton" onclick="return confirm_message(' + "'"+ student_username + "'" + ')">Remove Student</button>' +
+                                        '</form>' +
+                                    '</td></tr>')
+    }
 }
 
 // Calls functions to display the PAST information
@@ -69,10 +117,13 @@ function displayAll(status, data) {
 }
 
 // Only calls some of the functions to display certain features for the student
-function displaySome(status, data) { 
+function displaySome(status, data, session_id) { 
     checkIfShouldRefresh(status, data["course_status"]); // To check whether to refresh
     displayPercentage(data["percentage"]);  // For the percentage
     displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
+    if (data["forms"].length != 0) {
+        displayFormLink(data["forms"], session_id);
+    }
 }
 
 
@@ -95,6 +146,18 @@ function displayPercentage(data) {
     console.log(data); // shows the percent number in the console, the data is the percentage, e.g. 50 or 33.333
     updateThermometer(data);// Calls the updateThermometer function, which updates the thermometer's height 
 }
+
+function displayFormLink(formData, session_id) {
+    studentFormHTML = document.getElementById("formHolder"); // getting the HTML element for the forms button
+    document.getElementById("formHolder").innerHTML = ""; // clearing all content inside the div first
+    console.log("DISPLAY FORM LINK")
+    if (formData.length != 0) {
+        var form_url = formData[0]["forms_url"]
+        studentFormHTML.innerHTML += ('<a href="' + form_url + '">Respond to Form</a>');
+    }
+}
+
+//<a href="{{ url_for(' + "'" + 'form_response' + "'" + ', session_id=' + '' + session_id + ') }}
 
 function handleError(err) {
     console.log("Ran into error:", err);
@@ -379,6 +442,16 @@ function initFormsAll(course_id, session_id, course_status) {
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchSessionFormsInfo(course_id, session_id, course_status);
+    }, 5000) 
+}
+
+// function for manage class
+function initManage(course_id) {
+    console.log("Called INIT Forms");
+    fetchCourseInfo(course_id);
+    const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
+        console.log("Update");
+        fetchCourseInfo(course_id);
     }, 5000) 
 }
 

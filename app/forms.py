@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, RadioField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, RadioField, FormField, FieldList, Form
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
@@ -41,3 +41,44 @@ class TeacherRadioForm(FlaskForm):
 class StudentRadioForm(FlaskForm):
     options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
     submit = SubmitField('Submit')
+
+class EditClassForm(FlaskForm):
+    class_name = StringField('Change Class Name', validators=[DataRequired()])
+    class_icon = RadioField('Class Icon', choices=[('/static/images/classes_art.png', 'Art'), 
+                                                    ('/static/images/classes_atom.png', 'Atom'),
+                                                    ('/static/images/classes_books.png', 'Books'),
+                                                    ('/static/images/classes_calculator.png', 'Calculator'),
+                                                    ('/static/images/classes_chemistry.png', 'Chemistry'),
+                                                    ('/static/images/classes_dna.png', 'DNA'),
+                                                    ('/static/images/classes_fishbowl.png', 'Fishbowl'),
+                                                    ('/static/images/classes_language.png', 'Language'),
+                                                    ('/static/images/classes_laptop.png', 'Laptop'),
+                                                    ('/static/images/classes_laurel.png', 'Laurel'),
+                                                    ('/static/images/classes_numbers.png', 'Numbers'),
+                                                    ('/static/images/classes_operators.png', 'Operators'),
+                                                    ('/static/images/classes_PE.png', 'PE')])
+    class_color = RadioField('Class Color', choices = [(0, 'Red'),
+                                                        (1, 'Yellow'),
+                                                        (2, 'Blue'),
+                                                        (3, 'Green'),
+                                                        (4, 'Orange'),
+                                                        (5, 'Purple')],
+                                                        coerce=int)
+    submit = SubmitField('Save Changes')
+
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
+
+# class RadioForm(Form):
+#     options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
+
+# class StudentRadioForm(FlaskForm):
+#     options = FieldList(FormField(RadioForm), min_entries=2, max_entries=8)
+#     submit = SubmitField('Submit')
+

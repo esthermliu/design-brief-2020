@@ -20,7 +20,7 @@
                 <button type="submit" class = "activateButton">Activate Class</button>
             </form>
             <a href = "{{ url_for('previous_session_list', course_id=course.id) }}" class = "createLink">Access Data from Previous Sessions</a>
-            <a href = "{{ url_for('manage_course_page', course_id=course.id) }}" class = "createLink orange">Manage Class</a>
+            <a href = "{{ url_for('manage_course_page', course_id=course.id) }}" class = "createLink green">Manage Class</a>
         {% endif %}
 
         <a href = "{{ url_for('classes', username=current_user.username) }}" class = "createLink blue">Return to Classes List</a> 

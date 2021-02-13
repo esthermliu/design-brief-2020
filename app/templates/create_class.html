@@ -5,23 +5,160 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Create a Class</h1>
+    <div class = "classTitle">
+        <h1>Create a Course</h1>
+    </div>
     <form action="/user/{{ current_user.username }}/create_class/new" method='post' class="createClassForm"> 
         <!--<label for="title">Enter Class Name: </label>-->
-        <input type="text" name="course_name" placeholder="Enter Class Name..." class="newCourseInput"> <!-- This is where the teacher can enter the name of the course -->
-        <br>
-        <input type="radio" id ="icon1" name="icon" value="/static/images/Turtle.gif">
-        <label for="icon1">Icon 1</label>
-        <input type="radio" id ="icon2" name="icon" value="/static/images/Bunny.gif">
-        <label for="icon2">Icon 2</label>
-        <button type="submit" class="newCourseButton">Create</button>
+        <div class = "classNameHolder">
+            <input type="text" name="course_name" placeholder="Enter Class Name..." class="newCourseInput"> <!-- This is where the teacher can enter the name of the course -->
+        </div>
+        <div class = "iconTitle">
+            <h3>Select an Icon: </h3>
+        </div>
+        <div class = "iconBox">
+            <div class = "radioBox">
+                <input type="radio" id ="icon1" name="icon" value="/static/images/classes_art.png">
+                <label for="icon1">
+                    <img src = "{{ url_for('static', filename='images/classes_art.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon2" name="icon" value="/static/images/classes_atom.png">
+                <label for="icon2">
+                    <img src = "{{ url_for('static', filename='images/classes_atom.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon3" name="icon" value="/static/images/classes_books.png">
+                <label for="icon3">
+                    <img src = "{{ url_for('static', filename='images/classes_books.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon4" name="icon" value="/static/images/classes_calculator.png">
+                <label for="icon4">
+                    <img src = "{{ url_for('static', filename='images/classes_calculator.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon5" name="icon" value="/static/images/classes_chemistry.png">
+                <label for="icon5">
+                    <img src = "{{ url_for('static', filename='images/classes_chemistry.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon6" name="icon" value="/static/images/classes_dna.png">
+                <label for="icon6">
+                    <img src = "{{ url_for('static', filename='images/classes_dna.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon7" name="icon" value="/static/images/classes_fishbowl.png">
+                <label for="icon7">
+                    <img src = "{{ url_for('static', filename='images/classes_fishbowl.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon8" name="icon" value="/static/images/classes_language.png">
+                <label for="icon8">
+                    <img src = "{{ url_for('static', filename='images/classes_language.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon9" name="icon" value="/static/images/classes_laptop.png">
+                <label for="icon9">
+                    <img src = "{{ url_for('static', filename='images/classes_laptop.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon10" name="icon" value="/static/images/classes_laurel.png">
+                <label for="icon10">
+                    <img src = "{{ url_for('static', filename='images/classes_laurel.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon11" name="icon" value="/static/images/classes_numbers.png">
+                <label for="icon11">
+                    <img src = "{{ url_for('static', filename='images/classes_numbers.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon12" name="icon" value="/static/images/classes_operators.png">
+                <label for="icon12">
+                    <img src = "{{ url_for('static', filename='images/classes_operators.png') }}">
+                </label>
+            </div>
+
+            <div class = "radioBox">
+                <input type="radio" id ="icon13" name="icon" value="/static/images/classes_PE.png">
+                <label for="icon13">
+                    <img src = "{{ url_for('static', filename='images/classes_PE.png') }}">
+                </label>
+            </div>
+        </div>
+        <div class = "iconTitle colorTitle">
+            <h3>Select a Color: </h3>
+        </div>
+        <div class = "colorBox">
+            <div class = "radioBox">
+                <input type="radio" id ="color1" name="color" value="0">
+                <label for="color1">
+                    <div class = "colorLabel red"></div>
+                </label>
+            </div>
+            <div class = "radioBox">
+                <input type="radio" id ="color2" name="color" value="1">
+                <label for="color2">
+                    <div class = "colorLabel yellow"></div>
+                </label>
+            </div>
+            <div class = "radioBox">
+                <input type="radio" id ="color3" name="color" value="2">
+                <label for="color3">
+                    <div class = "colorLabel blue"></div>
+                </label>
+            </div>
+            <div class = "radioBox">
+                <input type="radio" id ="color4" name="color" value="3">
+                <label for="color4">
+                    <div class = "colorLabel green"></div>
+                </label>
+            </div>
+            <div class = "radioBox">
+                <input type="radio" id ="color5" name="color" value="4">
+                <label for="color5">
+                    <div class = "colorLabel orange"></div>
+                </label>
+            </div>
+            <div class = "radioBox">
+                <input type="radio" id ="color6" name="color" value="5">
+                <label for="color6">
+                    <div class = "colorLabel purple"></div>
+                </label>
+            </div>
+        </div>
+        <div class = "createButtonHolder">
+            <button type="submit" class="newCourseButton">Create</button>
+        </div>
     </form>
     
-    <div class = "classCodesBox">
+    <!--<div class = "classCodesBox">
         <div class = "codeText">
             {% for t in t_courses_all %}
                 <p>{{ t.course_name }} | Class Code: {{ t.code }}</p>
             {% endfor %}
         </div>
-    </div>
+    </div>-->
 {% endblock %}
