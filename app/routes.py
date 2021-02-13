@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 from dateutil import tz
 from collections import defaultdict
 from app.email import send_password_reset_email
-#from flask_weasyprint import HTML, render_pdf
+from flask_weasyprint import HTML, render_pdf
 
 @app.route('/')
 @app.route('/index')
