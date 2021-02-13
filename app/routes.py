@@ -556,6 +556,8 @@ def session_json(session_id):
     signups = Signups.query.filter_by(course=course_id).all() # List of students that are in this specific course
     reactions_specific = Reactions.query.filter_by(session_id=session_id).all() # List of reactions that happened in this specific course, specific session
     # speeds_specific = Reactions.query.filter_by(session_id=session_id).filter(Reactions.reactions>5) # Speeds filtered out by the course ID and by the reaction number
+    responses_specific = Responses.query.filter_by(session_id=session_id).all() # List of all the responses made for any forms in the session
+    
     present_set = set()
     absent_set = set()
     present_list = list()
@@ -563,6 +565,11 @@ def session_json(session_id):
     for r in reactions_specific: 
         if (r.reactor.role == 1):
             present_set.add(r.reactor.username) # Then add to the present list
+    
+    for response in responses_specific: # Goes through the list of responses made in the session and adds the student's username
+        if (response.student_responder.role == 1): # Checking that the responder is indeed a student
+            present_set.add(response.student_responder.username)
+
     for signup in signups: # Going through the list of signups
         if (signup.student.username not in present_set and signup.student.role == 1):
             absent_set.add(signup.student.username)

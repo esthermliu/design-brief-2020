@@ -483,10 +483,11 @@ body {
 
     #present p, #absent p {
         margin: 2px;
-        padding: 5px;
+        padding: 8px;
         width: fit-content; 
         background-color: lightblue;
         font-size: small;
+        border-radius: 15px;
     }
 
     #inside {
