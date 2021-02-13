@@ -2,7 +2,7 @@
 
 {% block content %}
 <div id="classInfo">
-    <h1>Manage {{ course_name }}</h1>
+    <h1>Manage {{ course.course_name }}</h1>
 </div>
 <div id="studentinfo">
     <h2>Students</h2>
@@ -17,13 +17,13 @@
             <td class="usernameHolder">{{ s.username }}</td>
             <td class="emailHolder">{{ s.email }}</td>
             <td class="removeUserHolder">
-                <button style="width: 80px; height: 80px;" type="button" onclick="removeUser({{ s.username }}, {{ s.id }})">
+                <button style="width: 80px; height: 80px;" type="button" onclick="removeUser({{ s.username }}, {{ s.id }}, {{ course.id }})">
                     <img style="width: 90%" src="{{url_for('static', filename='images/x_black.svg')}}" alt="remove user">
                 </button>
             </td>
         </tr>
         {% endfor %}
-    <script></script>
     </table>
 </div>
+<script src="{{ url_for('static', filename='scripts/manageClass.js') }}"></script>
 {% endblock %}

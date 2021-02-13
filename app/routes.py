@@ -225,7 +225,10 @@ def sessions(session_id):
         forms_exist = True # then a form does exist
        
     latest_form = Prompts.query.order_by(Prompts.id.desc()).filter_by(session_id=session_id).first() # Gets you the latest form in that session
-
+    if latest_form != None:
+        has_responded = Responses.query.filter_by(form_prompt_id=latest_form.id, student_id=current_user.id).first() is not None
+    else:
+        has_responded = True
     
     return render_template('rooms.html', course=course,
                                         reactions_specific=reactions_specific,
@@ -236,7 +239,8 @@ def sessions(session_id):
                                         title=course.course_name,
                                         form=latest_form,
                                         forms_all=forms_all,
-                                        forms_exist=forms_exist) 
+                                        forms_exist=forms_exist,
+                                        has_responded=has_responded) 
 
 # Course waiting room, if there is an active session, then redirect to session. Otherwise, redirect to unactivated html
 @app.route('/classes/course/<course_id>')
@@ -265,8 +269,28 @@ def manage_course_page(course_id):
     students_user_info = [User.query.get(s.user_id) for s in student_signups]
     
     return render_template('manage_class.html', 
-                            course_name=course.course_name, 
+                            course=course, 
                             students=students_user_info)
+
+
+@app.route('/classes/course/course/<course_id>/remove/<user_id>')
+@login_required
+def remove_user(course_id, user_id):
+    course = Courses.query.get(course_id)
+    if course is None:
+        flash('This course does not exist', 'error')
+        return redirect(url_for('index'))
+    if User.query.get(user_id) is None:
+        flash('This user does not exist', 'error')
+        return redirect(url_for('index'))
+    if current_user.id != course.teacher_id:
+        return unauthorized_access()
+    
+    user = Signups.query.filter_by(course=course_id, user_id=user_id).first()
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect(url_for('manage_course_page'))
 
 
 # Attendance 
@@ -426,6 +450,44 @@ def submit_reaction(session_id, reaction_num):
     db.session.commit() 
     return redirect(url_for('sessions', session_id=session_id)) # Redirects to the room page
 
+@app.route('/classes/course/session/<session_id>/session_forms_json', methods=["GET", "POST"])
+@login_required
+def session_form_json(session_id):
+    all_forms_dict = {}
+    forms_all = Prompts.query.filter_by(session_id=session_id).all() # Getting the entire list of forms for the session
+    responses_all = Responses.query.filter_by(session_id=session_id).all()
+    
+    for f in forms_all:
+        responses_list=[]
+        responses_dict = {}
+        responses_specific = Responses.query.filter_by(session_id=session_id, form_prompt_id=f.id).all() # These are the responses for each specific form
+        for r in responses_specific:
+            responses_dict = {
+                "response_id": r.id,
+                "student_id": r.student_responder.username,
+                "form_prompt_id": r.form_prompt_id,
+                "form_responses": r.form_responses,
+                "form_course_id": r.form_course_id,
+                "session_id": r.session_id,
+                "timestamp": r.timestamp
+            }
+            
+            responses_list.append(responses_dict)
+
+        forms_dict = {
+            "forms_id": f.id,
+            "teacher_id": f.teacher_prompter.username,
+            "form_question": f.form_question,
+            "responses": responses_list,
+            "form_course_id": f.form_course_id,
+            "session_id": f.session_id,
+            "timestamp": f.timestamp
+        }
+        
+        all_forms_dict[f.id] = forms_dict
+
+    return jsonify(all_forms_dict)
+        
 
 # Fetch Session json (includes reactions, speeds, attendance, percentage, speed num, and course status)
 @app.route('/classes/course/session/<session_id>/session_json', methods=["GET", "POST"])
@@ -479,6 +541,7 @@ def session_json(session_id):
                 "timestamp": r.timestamp
             }
             responses_list.append(responses_dict)
+
         forms_dict = {
             "forms_id": f.id,
             "teacher_id": f.teacher_prompter.username,
@@ -488,6 +551,7 @@ def session_json(session_id):
             "session_id": f.session_id,
             "timestamp": f.timestamp
         }
+        
         forms_list.append(forms_dict)
 
 
@@ -585,8 +649,7 @@ def session_json(session_id):
     else:
         course_status = 0 # The session is over
 
-    
-
+    # print("FORMS LIST: %s" % (forms_list))
     result = {
         "reactions": reaction_list, 
         "speeds": speed_list,
@@ -595,8 +658,9 @@ def session_json(session_id):
         "percentage": percent_happy,    
         "speed_num": speed_number,
         "speed_percentage": calculated_number,
-        "forms": forms_list  
+        "forms": forms_list
     }
+
     return jsonify(result)
 
 
@@ -784,9 +848,38 @@ def form_data(session_id):
     session = Session.query.get(session_id) # Get the correct session
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
-    
+    prompts = Prompts.query.filter_by(session_id=session.id).all()
+    forms_list = []
+    for p in prompts:
+        form_info = {}
+        form_info['id'] = p.id
+        form_info['question'] = p.form_question
+        form_info['time'] = utc_to_local(p.timestamp).strftime("%I:%M %p")
+        form_info['responses'] = []
+        form_info['summary'] = defaultdict(int)
+        response_keys = {0: 'Yes', 1: 'Maybe', 2:'No'}
+        # user_keys = {}
+        for r in Responses.query.filter_by(form_prompt_id=p.id):
+            form_info['responses'].append((User.query.get(r.student_id).username,
+                                            response_keys[r.form_responses],
+                                            utc_to_local(r.timestamp).strftime("%I:%M %p")))
+            print("STU ID: %s" % (User.query.get(r.student_id).username))
+            form_info['summary'][r.form_responses] +=1
+        print("\n%s\n" %(form_info['responses']))
+        forms_list.append(form_info)
+
+
+    users = User.query.filter
+    # start_time = full_start_info.strftime("%I:%M %p")
     teacher_id = Courses.query.get(course_id).teacher_id
     if current_user.id != teacher_id:
         return unauthorized_access()
 
-    return render_template('form_data.html', title="Form Data", session_id=session_id, course_id=course_id, course=course)
+    return render_template('form_data.html', 
+                            title="Form Data", 
+                            forms_list=forms_list, 
+                            # user_keys=user_keys,
+                            response_keys=response_keys,
+                            session_id=session_id, 
+                            course_id=course_id, 
+                            course=course)
