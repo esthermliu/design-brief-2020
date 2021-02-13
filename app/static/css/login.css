@@ -5,18 +5,17 @@
 
     .innerBox {
         background-color: #A8d0E6;
-        width: 100%;
-        min-width: 350px;
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 5% 3% 5% 3%;
     }
 }
 
 @media screen and (min-width: 600px) {
     .imageBox {
         width: 60%;
-        background-image: url("../images/Student.jpeg");
+        background-image: url("../images/Student2.jpeg");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -24,12 +23,17 @@
 
     .innerBox {
         background-color: #A8d0E6;
-        width: 40%;
-        min-width: 350px;
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 5% 3% 5% 3%;
     }
+
+    
+}
+
+.giveSpace {
+    margin-top: 10px;
 }
 
 header {
@@ -38,9 +42,25 @@ header {
 
 .bigBox {
     display: flex;
-    justify-content: space-between;
-    height: 100vh;
+    justify-content: center;
     width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("/static/images/Student3.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.transparentBox {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(rgba(43, 122, 120, 0.6), rgba(145, 75, 173, 0.4));
 }
 
 .imageHolder img {
@@ -48,8 +68,12 @@ header {
 }
 
 .signInBox {
-    width: 90%;
     text-align: center;
+    width: 100%;
+}
+
+.signInBox h1 {
+    font-weight: 500;
 }
 
 input[type="text" i], input[type="password" i] {
@@ -102,22 +126,24 @@ input[type="submit" i]:hover {
 .registerLink {
     color: black;
     text-decoration: none;
-    border: 2px solid white;
-    padding: 20px 20px;
-    border-radius: 4px;
-    background-color: white;
     transition-duration: 0.3s;
     -webkit-transition-duration: 0.3s;
+    line-height: 30px;
+    letter-spacing: 0.5px;
+    font-size: 15px;
 }
 
 .registerLink:hover {
-    background-color: transparent;
-    color: white;
+    color: #6d78a5 !important;
 }
 
 .newUser h3 {
     line-height: 40px;
     margin-bottom: 30px;
+}
+
+.newUser {
+    margin-top: 5%;
 }
 
 .imageHolder {
@@ -137,8 +163,6 @@ span {
 .contentHolder {
     margin: 0 !important;
 }
-
-
 
 @media (prefers-color-scheme: dark){
     .innerBox {
@@ -172,12 +196,12 @@ span {
     
     .registerLink {
         color: #e6e6e6;
-        border: 2px solid #297499;
         background-color: #297499;
     }
     
     .registerLink:hover {
         color: #297499;
+        transform: translateY(-2px);
     }
     
     span {
@@ -191,7 +215,8 @@ span {
 
 @media (prefers-color-scheme: light){
     .innerBox {
-        background-color: #A8d0E6;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 12px 30px 0 rgba(0, 0, 0, 0.3);
     }
 
     h1, h3 {
@@ -203,9 +228,33 @@ span {
     }
     
     input[type="submit" i] {
-        background-color: white;
-        border: 2px solid white;
+        background-color: #8ab5cc !important;
+        border-radius: 50px;
+        color: white;
+        border: 2px solid  #8ab5cc !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        animation: MoveUpDown 2s linear infinite;
+        cursor: pointer;
     }
+
+    @keyframes MoveUpDown {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-3px);
+        }
+    }
+    
+    @keyframes MoveUpOther {
+        0%, 100% {
+          transform: translateY(-3px);
+        }
+        50% {
+          transform: translateY(0);
+        }
+    }
+    
     
     input[type="text" i], input[type="password" i] {
         border-bottom: 2px solid gray;
@@ -216,17 +265,19 @@ span {
     }
     
     input[type="submit" i]:hover {
-        color: white;
+        background-color: white !important;
+        color:  #8ab5cc;
     }
     
     .registerLink {
         color: black;
-        border: 2px solid white;
         background-color: white;
+        display: inline-block !important;
     }
     
     .registerLink:hover {
         color: white;
+        transform: translateY(-2px);
     }
     
     span {
