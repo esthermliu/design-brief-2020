@@ -3,7 +3,7 @@ from app import app
 from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
-from app.forms import EditProfileForm, TeacherRadioForm, StudentRadioForm, EditClassForm
+from app.forms import EditProfileForm, TeacherRadioForm, StudentRadioForm, EditClassForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user, login_user
 from app.models import User, Reactions, Post, Courses, Signups, Session, Responses, Prompts
 from flask_login import logout_user
@@ -14,6 +14,7 @@ import random
 from datetime import datetime, timedelta
 from dateutil import tz
 from collections import defaultdict
+from app.email import send_password_reset_email
 #from flask_weasyprint import HTML, render_pdf
 
 @app.route('/')
@@ -854,3 +855,35 @@ def form_data(session_id):
         return unauthorized_access()
 
     return render_template('form_data.html', title="Form Data", session_id=session_id, course_id=course_id, course=course)
+
+# Reset password request function
+@app.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated: # redirect user if they are alread logged in
+        return redirect(url_for('index'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first() # getting the user by their email they inputted into the form
+        if user: # If the user exists, then send the password reset email
+            send_password_reset_email(user)
+        flash('Check your email for the instructions to reset your password', 'info')
+        return redirect(url_for('login'))
+    return render_template('reset_password_request.html',
+                            title='Reset Password',
+                            form=form)
+
+# Reset password 
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated: # if the user is already logged in, redirect them
+        return redirect(url_for('index'))
+    user = User.verify_reset_password_token(token) # figuring out which user it is, returns user if the token is valid and None if not
+    if not user: # if token is invalid, then redirect them to the homepage
+        return redirect(url_for('index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit(): # if the form validates, then reset their password and redirect them tot he login page
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset', 'info')
+        return redirect(url_for('login')) 
+    return render_template('reset_password.html', form=form)
