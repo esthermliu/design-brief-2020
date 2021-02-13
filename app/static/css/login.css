@@ -138,6 +138,8 @@ span {
     margin: 0 !important;
 }
 
+
+
 @media (prefers-color-scheme: dark){
     .innerBox {
         background-color: #12436b;
