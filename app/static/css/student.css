@@ -13,7 +13,6 @@ body {
     background-color: #A8D0E6;
     display: flex;
     flex-direction: column;
-    justify-content: center;
 }
 
 #yipyip, #yopyop {
@@ -54,6 +53,7 @@ body {
 
 .attendanceBox {
     width: 20%;
+    min-width: 250px;
     border-radius: 30px;
 }
 .visualImageHolder {
@@ -65,15 +65,10 @@ body {
     width: 10%;
 }
 
-
-.teacherVersion {
-    display: flex;
-    justify-content: flex-start;
-    width: 50%;
-}
-
 .bigReactionBox {
+    /* height: auto; */
     display: flex;
+    /* flex-wrap: wrap; */
     justify-content: space-between;
     align-items: flex-start;
 }
@@ -84,6 +79,7 @@ body {
 
 .teacherVibe {
     height: auto !important;
+    margin-bottom: 20px;
 }
 
 .teacherStuff {
@@ -101,6 +97,7 @@ body {
     /* flex-wrap: wrap; */
     background-color: white;
     height: auto !important;
+    margin-bottom: 20px;
     border-radius: 30px;
     justify-content: center !important;
     align-items: center !important;
@@ -114,8 +111,14 @@ body {
     justify-content: flex-start !important;
 }
 
-
-
+.keepClose {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: left;
+}
 
 #speedResults {
     display: flex;
@@ -147,10 +150,6 @@ body {
     width: 100%;
 }
 
-.teacherVersion {
-    width: 50%;
-}
-
 #paceTitle {
     display: flex;
     flex-direction: column;
@@ -160,14 +159,23 @@ body {
     font-size: small;
 }
 
+.formLink {
+    display: inline-flex;
+    justify-content: flex-end;
+}
+
 .makeForm, .viewForm {
-    background-color: #297499;
+    background-color: rgb(134, 183, 199);
+    display: inline-flex;
+    flex-direction: row;
+    justify-items: flex-end;
     border: 0;
     margin-bottom: 5px;
-    padding: 12px;
+    padding: 20px;
     font-family: 'Montserrat', sans-serif;
     border-radius: 20px;
     width: 30%;
+    height: 49%;
     font-size: 20px;
     color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -176,24 +184,26 @@ body {
     cursor: pointer;
 }
 
-.endSessionButton, #formHolder {
-    background-color: #f76c6c;
+.makeForm:hover, .viewForm:hover {
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.19);
+}
+
+.formHolder {
+    background-color: white;
     border: 0;
     padding: 20px;
-    font-family: 'Montserrat', sans-serif;
     border-radius: 20px;
-    width: 100%;
-    font-size: 20px;
-    color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    transition-duration: 0.3s;
-    -webkit-transition-duration: 0.3s;
-    cursor: pointer;
+    height: 40%;
+}
+
+.formButtonImg {
+    width: 80%;
 }
 
 .openReportSection {
     width: 100%;
-    height: fit-content;
+    height: 60px;
+    margin-bottom: 20px;
 }
 
 #openReport {
@@ -203,6 +213,19 @@ body {
     font-family: 'Montserrat', sans-serif;
     border-radius: 20px;
     width: 100%;
+    height: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    cursor: pointer;
+}
+.endSessionButton {
+    width: 100%;
+    background-color: #f76c6c;
+    border: 0;
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 20px;
     font-size: 20px;
     color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -212,7 +235,8 @@ body {
 }
 
 #downloadImg {
-    width: 40%;
+    /* width: 40%; */
+    height: 90%;
 }
 
 #openReport:hover {
@@ -242,7 +266,8 @@ body {
 }
 
 #vibe {
-    width: 28% !important;
+    /* width: 20% !important; */
+    height: 50% !important;
 }
 
 
@@ -297,20 +322,22 @@ body {
     
     .formsControls {
         background-color: white;
-        width: 100%;
+        height: 33%;
+        width: 100% !important;
         margin-bottom: 20px;
         padding-top: 2%;
         padding-bottom: 2%;
         border-radius: 30px;
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: left;
         align-items: center;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
     .formsResults {
-        padding: 20px;
+        width: 48%;
+        padding: 1%;
     }
 
     .formsResults h2{
@@ -404,7 +431,6 @@ body {
 
 
     .makeReactionBox {
-        background-color: white;
         display: flex;
         justify-content: space-evenly;
         align-items: center;
@@ -423,12 +449,17 @@ body {
     .reactionsHolder {
         display: flex;
         flex-direction: column;
-<<<<<<< HEAD
-        justify-content: flex-start;
-=======
         justify-content: space-between;
         width: 70%;
->>>>>>> 1d2a300be4a35edf9cb09628c181f983b8b9a1b0
+    }
+
+    
+    .teacherVersion {
+        margin-right: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 55%;
     }
 
     .shadowBox {
@@ -475,6 +506,7 @@ body {
         border-radius: 40px;
         /* width: fit-content; */
         width: 100%;
+        height: 40%;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -490,7 +522,7 @@ body {
     /* Teacher CSS */
 
     .teacherReactionHolder {
-        width: 48%;
+        width: 45%;
         margin-right: 10px;
     }
 
@@ -608,6 +640,7 @@ body {
 
     .largeReactionHolder {
         background-color: white;
+        width: 96%;
         padding: 2%;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border-radius: 40px;
@@ -651,12 +684,8 @@ body {
         justify-content: flex-start;
         align-items: center;
         /* width: 100vw; */
-        height: 95vh;
-        /* width: 100%;
-        height: 100%; */
+        height: 90%;
         padding: 5%;
-        /* To account for navbar */
-        /* padding-bottom: 70px; */
     }
 
     .makeReactionBox {
@@ -676,15 +705,21 @@ body {
 
     .reactionsHolder {
         /*background-color: fuchsia;*/
-        width: 100%;
+        /* width: 100%; */
         height: 100%;
         /* max-width: 700px; */
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        align-items: center;
+        align-items: left;
     }
 
+    .teacherVersion {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 50%;
+    }
     .shadowBox {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
         height: 50px;
@@ -833,8 +868,18 @@ body {
     .paceBox, 
     #visualHolder,
     .attendanceSection,
-    .formsControls {
+    .formsControls,
+    .formHolder,
+    .largeReactionHolder {
         background-color: #233741 !important;
+    }
+
+    .makeForm, .viewForm {
+        background-color: #297499 !important;
+    }
+
+    .makeReactionBox {
+        background-color: transparent !important;
     }
 
     .thermometer, .thermometer_shell, .thermoCircle {

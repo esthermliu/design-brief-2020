@@ -19,23 +19,28 @@
                 <h2>Prompt: {{ f['question'] }}</h2>
                 <h3>Distributed at {{f['time']}}</h3>
                 <div id="{{ f['id'] }}" class="formData">
-                    <table id="table{{ f['id'] }}">
-                        {% for r in f['responses']  %}
-                            <tr>
-                                <td>{{ r[0] }}</td>
-                                <td>{{ r[1] }}</td>
-                                <td>{{r[2]}}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                    <p id="summary{{ f['id'] }}"> <br>
+                    <p> <br>
                         <b>Summary</b>
-                        <ul>
+                        <ul id="summary{{ f['id'] }}">
                             <li>Yes: {{ f['summary'][0] }}</li>
                             <li>Maybe: {{ f['summary'][1] }}</li>
                             <li>No: {{ f['summary'][2] }}</li>
                         </ul>
                     </p>
+                    <table id="table{{ f['id'] }}" class="responsesTable">
+                        <tr>
+                            <th>Student</th>
+                            <th>Response</th>
+                            <th>Time</th>
+                        </tr>
+                        {% for r in f['responses']  %}
+                            <tr>
+                                <td>{{ r[0] }}</td>
+                                <td>{{ r[1] }}</td>
+                                <td>{{ r[2] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </div>
             </div>
         {% endfor %}

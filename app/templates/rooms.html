@@ -71,43 +71,6 @@
             </div>
             {% if current_user.role == 1 %} <!-- Speeds displayed for student --> <!-- start here-->
             <div class = "keepClose">
-                <div id = "visualHolder", class="studentVisualHolder">
-                    <!--<div id = "paceTitle">   
-                    </div>-->
-                    <div class="speedLine studentSpeedLine">
-                        <div class = "visual_slow all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-                        </div>
-                        <div class = "visual_slow all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-                        </div>
-                        <div class = "visual_slow all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-                        </div>
-                        <div class = "visual_slow all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-                        </div>
-                        <div class = "visual_slow all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
-                        </div>
-    
-                        <div class = "visual_fast all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-                        </div>
-                        <div class = "visual_fast all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-                        </div>
-                        <div class = "visual_fast all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-                        </div>
-                        <div class = "visual_fast all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-                        </div>
-                        <div class = "visual_fast all studentSpeed">
-                            <img class = "turtle" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
-                        </div>
-                    </div>
-                </div>
             {% endif %}
 
             {% if current_user.role == 1 %} <!-- If the current user is a student, then show all the reaction choices -->
@@ -115,35 +78,6 @@
                 <!--<a href="{{ url_for('form_response', session_id=session_id) }}">Respond to Form</a>-->
             </div>
             <div id="responseBoxHolder">
-<<<<<<< HEAD
-                
-                <div id="responseBox" class = "makeReactionBox">
-                    {% if forms_exist and (not has_responded)%} <!-- If a form exists in the session, allow the student to respond -->
-                        <div id="formHolder">
-                            <a class="respondForm" href="{{ url_for('form_response', session_id=session_id) }}">Respond to Form</a>
-                        </div>
-                    {% endif %}
-                    <!-- Emotions -->
-                    <!-- <form id='reaction_form'> Form for feeling good :) -->
-                    <label for="temp" class="shadowBox">
-                        <img src="{{ url_for('static', filename='images/Happy.png')}}" class = "reactionImage">
-                        <button id="temp" name="react" onclick="submitFormGeneral({{ session_id }}, 0)">Good</button> <!-- name is react -->
-                    </label>
-                    <!-- </form>  -->
-                    <!--<form action="/classes/rooms/{{ course.id }}/okay" method='post'> --><!-- Form for feeling meh :| -->
-                    <label for="okay" class="shadowBox">
-                        <img src="{{ url_for('static', filename='images/Meh.png')}}" class = "reactionImage">
-                        <button id="okay" name="react" onclick="submitFormGeneral({{ session_id }}, 1)">Okay</button>
-                    </label>
-                    <!--</form>-->
-                    <!--<form action="/classes/rooms/{{ course.id }}/bad" method='post'> --><!-- Form for feeling sad :( -->
-                    <label for="bad" class="shadowBox">
-                        <img src="{{ url_for('static', filename='images/Sad.png')}}" class = "reactionImage">
-                        <button id="bad" name="react" onclick="submitFormGeneral({{ session_id }}, 2)">Bad</button>
-                    </label>
-                    
-                    <!--</form>-->
-=======
                 <!--{% if forms_exist %}--> <!-- If a form exists in the session, allow the student to respond -->
                 <!--{% endif %}-->
                 <div class = "largeReactionHolder">
@@ -168,7 +102,6 @@
                         </label>
                         
                         <!--</form>-->
->>>>>>> 1d2a300be4a35edf9cb09628c181f983b8b9a1b0
 
                         <!-- Speeds-->
                         <!--<form action="/classes/rooms/{{ course.id }}/slow" method='post'>--> <!-- Form for feeling meh :| -->
@@ -190,26 +123,34 @@
             {% endif %}
             
             
-            {% if current_user.role == 0 %}<!-- Only show this if the current user is a teacher-->
-            {% if forms_exist %} <!-- Will only show forms results if a form even exists in the session-->
-                <div class = "formsControls">
+            {% if current_user.role == 0 %} <!-- Only show this if the current user is a teacher-->
+                <div style="width: 100%;" class ="formsControls">
                     <div class="formsResults">
-                        <h2>Forms Results</h2>
-                        <div id = "formsBox" class = "formsBox"></div>
+                        {% if forms_exist %} <!-- Will only show forms results if a form even exists in the session-->
+                                <h2>Forms Results</h2>
+                                <div id = "formsBox" class = "formsBox"></div>
+                        {% endif %}
                     </div>
-                    <div id="formsButtonsHolder">
-                        <div class = "makeForm">
-                            <a href="{{ url_for('create_form', session_id=session_id) }}">Create Form</a>
+                        <div id="formsButtonsHolder">
+                            <div class = "makeForm">
+                                <a class="formLink" href="{{ url_for('create_form', session_id=session_id) }}" title="Create a new form">
+                                    <img class="formButtonImg" src="{{ url_for('static', filename='images/make_form.svg') }}">
+                                </a>
+                            </div>
+                            <div class = "viewForm">
+                                <a class="formLink" href="{{ url_for('form_data', session_id=session_id) }}" target = "_blank" title="View all forms data for this session">
+                                    <img class="formButtonImg" src="{{ url_for('static', filename='images/data.svg') }}"></img>
+                                </a>
+                            </div>
                         </div>
-                        <div class = "viewForm">
-                            <a href="{{ url_for('form_data', session_id=session_id) }}" target = "_blank">View Forms Data</a>
-                        </div>
-                    </div>
                 </div>
-            {% endif %}
                 <div class = "bigReactionBox">
                     <!-- Will only show the most recent form's results-->
                     <div class = "teacherReactionHolder">
+                        <div class = "vibeHolder teacherVibe">
+                            <div id = "room_vibe" class = "teacherVibeInside">
+                            </div>
+                        </div>
                         <div class = "reactionResultsHolder">
                             <h2> Reactions: </h2> <!-- Shows the reaction results-->
                             <div id = "reactionResults">
@@ -226,26 +167,10 @@
                         </div>
 
                         <!-- Overall room vibe  displayed for the teacher-->
-                        <div class = "vibeHolder teacherVibe">
-                            <div id = "room_vibe" class = "teacherVibeInside">
-                            </div>
-                        </div>
                     </div>
 
                     <div class = "speedHolder">
-                        <div class = "paceBox">
-                            <h2> Pace: </h2> <!-- Shows the speed results -->
-                            <div id = "speedResults"> 
-                            <!--{% for s in speeds_all %}
-                                {% if s.speed == 0 %} --><!-- Making it easier to see what each speed number represents, 0=faster, 1=slower-->
-                                    <!--<p>Faster | {{ s.speeder.username }}</p>
-                                {% else %}
-                                    <p>Slower | {{ s.speeder.username }}</p>
-                                {% endif %}
-                            {% endfor %}-->
-                            </div>
-                        </div>
-
+                        
                         <!-- Speeds displayed for teacher -->
                         <div id = "visualHolder" class = "teacherVisualHolder">
                             <div id = "paceTitle">   
@@ -284,6 +209,11 @@
                                 </div>
                             </div>
                         </div>
+                        <div class = "paceBox">
+                            <h2> Pace: </h2> <!-- Shows the speed results -->
+                            <div id = "speedResults"> 
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -317,7 +247,7 @@
                 </div>  
             </div>
             <div class = "openReportSection">
-                <button title="Download a Report for this Session" id="openReport" type="button" onclick="redirectToDownloadPage( {{ session_id }})">
+                <button title="Download a Report for this Session" id="openReport" type="button" onclick="redirectToDownloadPage({{ session_id }})">
                     <img id="downloadImg" src="{{ url_for('static', filename='images/download.svg') }}" alt="Download Report">
                 </button>
             </div>

@@ -120,7 +120,7 @@
 	left: 0;
     right: 0;
 	width: 4%;
-	background: #3aafa9;
+	background: #297499;
 }
 
 .formHolder {
@@ -186,4 +186,18 @@
 
 .radioBox input {
     margin-top: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .classTitle h1 {
+        color: #e6e6e6;
+    }
+
+    .newCourseInput {
+        color: #e6e6e6;
+    }
+
+    .heading {
+        background-color: #297499 !important;
+    }
 }

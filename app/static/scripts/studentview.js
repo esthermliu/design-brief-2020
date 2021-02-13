@@ -233,13 +233,13 @@ function displayFormResultsAll(forms) {
 
         var summary_div = document.getElementById("summary" + key)
         summary_div.innerHTML = ""
-        summary_div.innerHTML = ('<p class="editedSummary"><b>Summary</b><ul><li>' +
+        summary_div.innerHTML = ('<li>' +
             "Yes: " + summary["Yes"] + 
             "</li><li>Maybe: " + summary["Maybe"] +
-            "</li><li>No: " + summary["No"] + "</li></ul></p>")
+            "</li><li>No: " + summary["No"] + "</li>")
         
         var table_div = document.getElementById("table" + key)
-        table_div.innerHTML = ""
+        table_div.innerHTML = "<tr><th>Student</th><th>Response</th><th>Time</th></tr>"
         response_list = forms[key]["responses"]
         // console.log("RESPONSE LIST: " + response_list)
         for (r=response_list.length - 1; r >= 0; r--) {
@@ -250,48 +250,6 @@ function displayFormResultsAll(forms) {
         }
     }
 }
-
-
-// function displayFormResultsAll(forms) {
-//     forms_html2 = document.getElementById("formsBox2");
-//     console.log("HELLO??")
-//     // document.getElementById("formsBox2").innerHTML = ""; // Clearing all the content in the div
-//     for (f=forms.length - 1; f >= 0; f--) {
-//         // forms_html2.innerHTML += ('<div class="singleFormHolder">')
-//         form_question = forms[f]["form_question"] // getting the form question, teacher, timestamp
-//         form_teacher = forms[f]["teacher_id"]
-//         form_timestamp = forms[f]["timestamp"]
-//         responses_list = forms[f]["responses"] // responses list from the json file
-//         // forms_html2.innerHTML += ('<h2>' + form_question + '</h2><h3>' + form_teacher + '</h3><h4>' + moment(form_timestamp).format('MMMM Do YYYY, h:mm a') + '</h4>')
-//         forms_html2.innerHTML += ('<h2>' + form_question + '</h2><h4>' + moment(form_timestamp).format('MMMM Do YYYY, h:mm a') + '</h4>')
-//         forms_html2.innerHTML += ('<div class="chartHolder" style="width: 500px;"><canvas id="chart' + f +  '" width="400" height="300"></canvas>')
-//         response_counts = [0, 0, 0]
-//         for (r = responses_list.length - 1; r >=0; r--) { // going through responses to get the student id and their responses
-//             user_responder = responses_list[r]["student_id"]
-//             response_user = responses_list[r]["form_responses"]            
-//             timestamp_response = responses_list[r]["form_responses"]    
-//             response_counts[response_user] += 1;
-//             if (response_user == 0) {
-//                 response_user = "Yes"
-//             } else if (response_user == 1) {
-//                 response_user = "Maybe"
-//             } else if (response_user == 2){
-//                 response_user = "No"
-//             }   
-//             forms_html2.innerHTML += ('<p>' +  user_responder + ' | ' + response_user + ' | ' + moment(timestamp_response).format('hh:mm a') + '</p>')
-//         }
-
-//         forms_html2.innerHTML += ("<p><b>Data Summary</b>Yes: " + response_counts[0] + "\nMaybe: " + response_counts[1] + "\nNo: " + response_counts[2]);
-//         console.log(form_question + " " + response_counts.join(', '));
-//         console.log("chart" + f);
-
-//         // form_canvas = document.getElementById('chart' + form_timestamp).getContext('2d');
-//         // console.log(form_canvas)
-
-//         // document.getElementById('chart' + form_timestamp).innerHTML = (myChart)
-//         forms_html2.innerHTML += ('</div>')
-//     }
-// }
 
 function displayReactions(reactions) {
     // First have to delete all the existing reactions on the page
