@@ -70,7 +70,9 @@
                 <div id = "visual"></div>
             </div>
             {% if current_user.role == 1 %} <!-- Speeds displayed for student --> <!-- start here-->
+            
             <div class = "keepClose">
+                <div class = "visualFormHolder">
                 <div id = "visualHolder", class="studentVisualHolder">
                     <!--<div id = "paceTitle">   
                     </div>-->
@@ -111,8 +113,9 @@
             {% endif %}
 
             {% if current_user.role == 1 %} <!-- If the current user is a student, then show all the reaction choices -->
-            <div id="formHolder" class = "formHolder showForm">
-                <!--<a href="{{ url_for('form_response', session_id=session_id) }}">Respond to Form</a>-->
+                <div id="formHolder" class = "formHolder showForm">
+                    <!--<a href="{{ url_for('form_response', session_id=session_id) }}">Respond to Form</a>-->
+                </div>
             </div>
             <div id="responseBoxHolder">
                 <!--{% if forms_exist %}--> <!-- If a form exists in the session, allow the student to respond -->
