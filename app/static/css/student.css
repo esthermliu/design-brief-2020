@@ -68,6 +68,15 @@ body {
     width: 65%;
 }
 
+.formsBox p {
+    font-size: 14px;
+}
+
+.formsBoxChart {
+    width: 200px;
+    height: 150px;
+}
+
 .teacherVibe {
     height: auto !important;
     margin-bottom: 20px;
@@ -351,6 +360,7 @@ body {
 
     .formsResults {
         width: 48%;
+        height: 96%;
         padding: 1%;
     }
 
@@ -504,6 +514,7 @@ body {
         flex-direction: column;
         justify-content: flex-start;
         width: 55%;
+        max-width: 600px;
     }
 
     .shadowBox {

@@ -218,28 +218,94 @@ function singleFormResults(form) {
 function displayFormResults(form) {
     console.log(">>> DISPLAYING FORMS")
     forms_html = document.getElementById("formsBox");
-    document.getElementById("formsBox").innerHTML = ""; // Clearing all the content in the div
+    // document.getElementById("formsBox").innerHTML = ""; // Clearing all the content in the div
     console.log("YIP YOP")
     summary = singleFormResults(form)["summary"]
-    forms_html.innerHTML = "<p><b>Summary - " + form["form_question"] +
-        "</b><ul><li>Yes: " + summary["Yes"] + 
-        "</li><li>Maybe: " +  summary["Maybe"] + 
-        "</li><li>No: " +  summary["No"] + "</li></ul></p>"
+    
+    chart_colors = {
+        "Yes": 'rgba(104, 254, 101, 0.7)',
+        "Maybe": 'rgba(255, 206, 86, 0.7)',
+        "No": 'rgba(255, 99, 132, 0.7)'
+    }
+
+    summary_labels = []
+    summary_data = []
+    summary_colors = [chart_colors["Yes"], chart_colors["Maybe"], chart_colors["No"]]
+
+    for (var response in summary) {
+        summary_labels.push(response)
+        summary_data.push(summary[response])
+    }
+    
+    console.log("Summary Data: " + summary_data)
+    console.log("Summary Labels: " + summary_labels)
+    console.log("Summary Labels: " + summary_labels)
+    var ctx = document.getElementById("formChartCanvas")
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: summary_data,
+                backgroundColor: summary_colors
+            }],                
+            labels: summary_labels,
+        },
+        options: {
+            animation: {
+                duration: 0
+            }
+            // legend: {
+            //     labels: {
+            //         fontSize: '10'
+            //     }
+            // }
+        }
+    });
+
+    forms_html.innerHTML = "<p><b>Summary - " + form["form_question"]
+        // "</b><ul><li>Yes: " + summary["Yes"] + 
+        // "</li><li>Maybe: " +  summary["Maybe"] + 
+        // "</li><li>No: " +  summary["No"] + "</li></ul></p>"
 }
 
 function displayFormResultsAll(forms) {
     console.log('Updating individual form data divs')
+    chart_colors = {
+        "Yes": 'rgba(104, 254, 101, 0.7)',
+        "Maybe": 'rgba(255, 206, 86, 0.7)',
+        "No": 'rgba(255, 99, 132, 0.7)'
+    }
     for (var key in forms) {
         results = singleFormResults(forms[key])
         summary = results["summary"]
         keys = results["keys"]
+        
+        summary_labels = []
+        summary_data = []
+        summary_colors = [chart_colors["Yes"], chart_colors["Maybe"], chart_colors["No"]]
+        for (var response in summary) {
+            summary_labels.push(response)
+            summary_data.push(summary[response])
+        }
 
-        var summary_div = document.getElementById("summary" + key)
-        summary_div.innerHTML = ""
-        summary_div.innerHTML = ('<li>' +
-            "Yes: " + summary["Yes"] + 
-            "</li><li>Maybe: " + summary["Maybe"] +
-            "</li><li>No: " + summary["No"] + "</li>")
+        var ctx = document.getElementById("summaryChart" + key)
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: summary_data,
+                    backgroundColor: summary_colors
+                }],                
+                labels: summary_labels,
+            },
+        });
+
+        // var summary_div = document.getElementById("summary" + key)
+        // summary_div.innerHTML = ""
+        // summary_div.innerHTML = ('<li>' +
+        //     "Yes: " + summary["Yes"] + 
+        //     "</li><li>Maybe: " + summary["Maybe"] +
+        //     "</li><li>No: " + summary["No"] + "</li>")
         
         var table_div = document.getElementById("table" + key)
         table_div.innerHTML = "<tr><th>Student</th><th>Response</th><th>Time</th></tr>"
@@ -399,7 +465,7 @@ function initStudent(course_id, session_id, course_status) {
 // initFormsAll
 function initFormsAll(course_id, session_id, course_status) {
     console.log("Called INIT Forms");
-    // fetchSessionFormsInfo(course_id, session_id, course_status);
+    fetchSessionFormsInfo(course_id, session_id, course_status);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchSessionFormsInfo(course_id, session_id, course_status);
