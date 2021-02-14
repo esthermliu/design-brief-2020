@@ -269,6 +269,9 @@ function displayFormResults(form) {
 }
 
 function displayFormResultsAll(forms) {
+    
+
+
     console.log('Updating individual form data divs')
     chart_colors = {
         "Yes": 'rgba(104, 254, 101, 0.7)',

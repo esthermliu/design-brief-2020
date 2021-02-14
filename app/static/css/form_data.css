@@ -16,34 +16,39 @@ html {
 
 
 table {
-    border: 1px solid black;
     border-collapse: collapse;
 }
 
 th, td {
     padding: 15px;
     text-align: right;
+    text-align: center;
+}
+
+th {
+    background-color:#a8d0e6 !important;
 }
 
 tr {
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
+    text-align: center;
+    border-bottom: 2px solid #a8d0e6;
 }
 
 .summaryChartHolder {
-    height: 250px;
     width: 100%;
     margin-bottom: 20px;
-    
 }
 
 .tableHolder {
     margin-bottom: 20px;
 }
 
+.responsesTable {
+    width: 100%;
+}
+
 .formsResults {
-    margin: 5% 0 5% 0;
-    
+    margin: 3% 0 5% 0;
     width: 30%;
 }
 
@@ -51,6 +56,23 @@ tr {
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 12px 30px 0 rgba(0, 0, 0, 0.3);
     padding: 5%;
-    margin-bottom: 5%;
+    padding-bottom: 8%;
+    margin-bottom: 7%;
+    text-align: center;
 }
 
+.infoHolder h2 {
+    font-weight: 500;
+}
+
+.infoHolder h3 {
+    font-size: 17px;
+}
+
+.formsTitle {
+    color: white;
+    font-weight: 500;
+    text-align: center;
+    font-size: 40px;
+    letter-spacing: 2px;
+}
