@@ -61,7 +61,7 @@
         {% endif %}
             {% if current_user.role == 1 %} <!-- Vibes displayed for the student-->
                 <div class = "vibeHolder studentVibe">
-                    <div id = "room_vibe">
+                    <div id = "room_vibe" class = "studentRoomVibe">
                     </div>
                 </div>
             {% endif %}
@@ -74,49 +74,78 @@
             {% endif %}
 
             {% if current_user.role == 1 %} <!-- If the current user is a student, then show all the reaction choices -->
-                {% if forms_exist %} <!-- If a form exists in the session, allow the student to respond -->
-                <div class="formBox">
-                    <div id="formHolder" class = "formHolder showForm"></div>
-                </div>
-                {% endif %}
-                    <div class = "largeReactionHolder">
-                        <div id="responseBox" class = "makeReactionBox">
-                            <!-- Emotions -->
-                            <!-- <form id='reaction_form'> Form for feeling good :) -->
-                            <label for="temp" class="shadowBox">
-                                <img src="{{ url_for('static', filename='images/Happy.png')}}" class = "reactionImage">
-                                <button id="temp" name="react" onclick="submitFormGeneral({{ session_id }}, 0)">Good</button> <!-- name is react -->
-                            </label>
-                            <!-- </form>  -->
-                            <!--<form action="/classes/rooms/{{ course.id }}/okay" method='post'> --><!-- Form for feeling meh :| -->
-                            <label for="okay" class="shadowBox">
-                                <img src="{{ url_for('static', filename='images/Meh.png')}}" class = "reactionImage">
-                                <button id="okay" name="react" onclick="submitFormGeneral({{ session_id }}, 1)">Okay</button>
-                            </label>
-                            <!--</form>-->
-                            <!--<form action="/classes/rooms/{{ course.id }}/bad" method='post'> --><!-- Form for feeling sad :( -->
-                                <label for="bad" class="shadowBox">
-                                <img src="{{ url_for('static', filename='images/Sad.png')}}" class = "reactionImage">
-                                <button id="bad" name="react" onclick="submitFormGeneral({{ session_id }}, 2)">Bad</button>
-                            </label>
-                            
-                            <!--</form>-->
-                            <!-- Speeds-->
-                            <!--<form action="/classes/rooms/{{ course.id }}/slow" method='post'>--> <!-- Form for feeling meh :| -->
-                                <label for="slower" class="shadowBox">
-                                <img src="{{ url_for('static', filename='images/Slow.png')}}" class = "reactionImage">  
-                                <button id="slower" onclick="submitFormGeneral({{ session_id }}, 7)">Slower</button>
-                            </label>
-                            <!--</form>-->
-                            <!--<form action="/classes/rooms/{{ course.id }}/fast" method='post'>--> <!-- Form for feeling good :) -->
-                            <label for="faster" class="shadowBox">
-                                <img src="{{ url_for('static', filename='images/Fast.png')}}" class = "reactionImage">
-                                <button id="faster" onclick="submitFormGeneral({{ session_id }}, 6)">Faster</button>
-                            </label>
-                            <!--</form>-->
+            <!-- If a form exists in the session, allow the student to respond -->
+            <div class = "visualFormHolder">
+                <div id = "visualHolder" class = "studentVisualHolder">
+                    <div class = "speedLine studentSpeedLine">
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                        </div>
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                        </div>
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                        </div>
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                        </div>
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
                         </div>
                     </div>
                 </div>
+                <div id="formHolder" class = "formHolder showForm">
+                </div>
+            </div>
+            <div id="responseBoxHolder">
+                <div class = "largeReactionHolder">
+                    <div id="responseBox" class = "makeReactionBox">
+
+                        <label for="temp" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Happy.png')}}" class = "reactionImage">
+                            <button id="temp" name="react" onclick="submitFormGeneral({{ session_id }}, 0)">Good</button>
+                        </label>
+
+                        <label for="okay" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Meh.png')}}" class = "reactionImage">
+                            <button id="okay" name="react" onclick="submitFormGeneral({{ session_id }}, 1)">Okay</button>
+                        </label>
+
+                        <label for="bad" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Sad.png')}}" class = "reactionImage">
+                            <button id="bad" name="react" onclick="submitFormGeneral({{ session_id }}, 2)">Bad</button>
+                        </label>
+
+                        <label for="slower" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Slow.png')}}" class = "reactionImage">  
+                            <button id="slower" onclick="submitFormGeneral({{ session_id }}, 7)">Slower</button>
+                        </label>
+
+
+                        <label for="faster" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Fast.png')}}" class = "reactionImage">
+                            <button id="faster" onclick="submitFormGeneral({{ session_id }}, 6)">Faster</button>
+                        </label>
+                    </div> <!-- Start of changes-->
+                </div>
+            </div>
             </div>
             </div> <!-- end here-->
             {% endif %}
