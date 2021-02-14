@@ -117,11 +117,13 @@ function displayAll(status, data) {
 }
 
 // Only calls some of the functions to display certain features for the student
-function displaySome(status, data, session_id) { 
+function displaySome(status, data, session_id) {
+    console.log("displaySome() has been called") 
     checkIfShouldRefresh(status, data["course_status"]); // To check whether to refresh
     displayPercentage(data["percentage"]);  // For the percentage
-    displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
+    // displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
     if (data["forms"].length != 0) {
+        console.log("About to display forms link")
         displayFormLink(data["forms"], session_id);
     }
 }
@@ -149,11 +151,12 @@ function displayPercentage(data) {
 
 function displayFormLink(formData, session_id) {
     studentFormHTML = document.getElementById("formHolder"); // getting the HTML element for the forms button
-    document.getElementById("formHolder").innerHTML = ""; // clearing all content inside the div first
+    studentFormHTML.innerHTML = ""; // clearing all content inside the div first
     console.log("DISPLAY FORM LINK")
     if (formData.length != 0) {
         var form_url = formData[0]["forms_url"]
         studentFormHTML.innerHTML += ('<a class = "formAlertHolder" href="' + form_url + '"><img src = "/static/images/FormsAlert4.png"></a>');
+        console.log("DISPLAYED FORM LINK")
     }
 }
 
