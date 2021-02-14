@@ -100,6 +100,25 @@ body {
     padding: 0 !important;
     justify-content: flex-start !important;
     align-items: flex-end !important;
+    margin-bottom: 0 !important;
+    height: 100% !important;
+}
+
+.visualFormHolder {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 40%;
+    width: 100%;
+}
+
+.keepClose {	
+    height: 50%;	
+    width: 100%;	
+    display: flex;	
+    flex-direction: column;	
+    justify-content: space-between;	
+    align-items: left;	
 }
 
 #speedResults {
@@ -255,6 +274,10 @@ body {
     height: 100% !important;
 }
 
+.studentRoomVibe .faceHolder img {
+    width: auto !important;
+}
+
 .faceHolder {
     width: 100%;
     height: 85%;
@@ -305,7 +328,7 @@ body {
         padding: 2%;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border-radius: 40px;
-        height: 50%;
+        height: 45%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -370,7 +393,7 @@ body {
     }
 
     .visual_slow, .visual_fast {
-        width: 18%;
+        width: 14%;
     }
 
     .thermometer, .thermometer_shell {
@@ -437,7 +460,7 @@ body {
 
     .all {
         /* width: 50px; */
-        /* display: none; */
+        display: none;
         margin-bottom: 10px;
     }
 
@@ -448,7 +471,7 @@ body {
 
     .roomsBox {
         width: 95%;
-        max-width: 1000px;
+        max-width: 1200px;
     }
 
     .contentHolder {
@@ -484,7 +507,7 @@ body {
     }
 
     .shadowBox {
-        width: 18%;
+        width: 16%;
         border-radius: 50%;
         cursor: pointer;
         transition-duration: 0.3s;
@@ -511,6 +534,7 @@ body {
         flex-wrap: wrap;
         justify-content: center;
         height: 100%;
+        width: 100%;
         max-width: 700px;
         padding-top: 10px;
         padding-bottom: 10px;
@@ -533,7 +557,6 @@ body {
         align-items: center;
         width: 100%;
         height: 100%;
-        /* height: 40%; */
     }
 
     #vibe {
@@ -557,15 +580,16 @@ body {
 
     .studentVibe {
         background-color: transparent;
-        height: 30%;
+        height: 40%;
     }
 
     .keepClose {
-        height: 45%;
+        height: 50%;
+        width: 100%;
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
         justify-content: space-between;
+        align-items: left;
     }
 
     /* Teacher CSS */
@@ -705,7 +729,7 @@ body {
         /* justify-content: flex-end; */
         /*background-color: lightsalmon;*/
         width: 100%;
-        height: 90%;
+        height: 85%;
     }
 
     .overallThermoContainer {
@@ -819,8 +843,8 @@ body {
 
     .shadowBox {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
-        width: 50px;
-        height: 50px;
+        width: 55px;
+        height: 55px;
         border-radius: 50%;
         transition-duration: 0.3s;
         -webkit-transition-duration: 0.3s;
@@ -872,7 +896,6 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100%;
     }    
 
     .vibeHolder {
@@ -890,7 +913,7 @@ body {
 
     .studentVibe {
         background-color: transparent;
-        height: 40%;
+        height: 25% !important;
         margin-top: 20px;
     }
 

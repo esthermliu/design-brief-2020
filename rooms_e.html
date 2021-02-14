@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
+{% endblock %}
+
+{% block content %}
+<!--<h1>
+    This session is currently {{ 'active' if session.timestamp_end == None else 'inactive' }}--> <!-- Prints out whether the session is active or not-->
+<!--</h1>-->
+<div class = "roomsBox">
+    <div class = "titleHolder">
+        <h1>Welcome to <span class = "white">{{ course.course_name }}</span>, {{ current_user.username }}!</h1> 
+    </div>
+    <div class = "overallContainer">
+
+        <!-- Thermometer/Temperature Visualization -->
+        <div class = "overallThermoContainer">
+            <div class = "numHolder">
+                <div class = "numbers">
+                    <div class = "num"> 
+                        <p>100</p>
+                    </div>
+                    <div class = "num">
+                        <p>50</p>
+                    </div>
+                    <div class = "num">
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+            <div class = "dashHolder">
+                <div class = "dashes">
+                    <div id = "long" class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div id = "long" class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div class = "dash"></div>
+                    <div id = "long" class = "dash"></div>
+                </div>
+            </div>
+            <div class = "tempVisual">
+                <div class = "thermometer_shell">
+                </div>
+                <div class = "thermoCircle">
+                </div>
+                <div class = "thermometer">
+                </div>
+            </div>
+        </div>
+    
+        {% if current_user.role == 1 %}
+        <div class = "reactionsHolder">
+        {% else %}
+        <div class = "reactionsHolder teacherVersion">
+        {% endif %}
+            {% if current_user.role == 1 %} <!-- Vibes displayed for the student-->
+                <div class = "vibeHolder studentVibe">
+                    <div id = "room_vibe" class = "studentRoomVibe">
+                    </div>
+                </div>
+            {% endif %}
+            <!-- Speed stuff -->
+            <div id = "speedVisual">
+                <div id = "visual"></div>
+            </div>
+            {% if current_user.role == 1 %} <!-- Speeds displayed for student --> <!-- start here-->
+            <div class = "keepClose">
+            {% endif %}
+
+            {% if current_user.role == 1 %} <!-- If the current user is a student, then show all the reaction choices -->
+            <!-- If a form exists in the session, allow the student to respond -->
+            <div class = "visualFormHolder">
+                <div id = "visualHolder" class = "studentVisualHolder">
+                    <div class = "speedLine studentSpeedLine">
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+                        <div class = "visual_slow all studentSpeed">
+                            <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                        </div>
+
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                        </div>
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                        </div>
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                        </div>
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                        </div>
+                        <div class = "visual_fast all studentSpeed">
+                            <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                        </div>
+                    </div>
+                </div>
+                <div id="formHolder" class = "formHolder showForm">
+                </div>
+            </div>
+            <div id="responseBoxHolder">
+                <div class = "largeReactionHolder">
+                    <div id="responseBox" class = "makeReactionBox">
+
+                        <label for="temp" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Happy.png')}}" class = "reactionImage">
+                            <button id="temp" name="react" onclick="submitFormGeneral({{ session_id }}, 0)">Good</button>
+                        </label>
+
+                        <label for="okay" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Meh.png')}}" class = "reactionImage">
+                            <button id="okay" name="react" onclick="submitFormGeneral({{ session_id }}, 1)">Okay</button>
+                        </label>
+
+                        <label for="bad" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Sad.png')}}" class = "reactionImage">
+                            <button id="bad" name="react" onclick="submitFormGeneral({{ session_id }}, 2)">Bad</button>
+                        </label>
+
+                        <label for="slower" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Slow.png')}}" class = "reactionImage">  
+                            <button id="slower" onclick="submitFormGeneral({{ session_id }}, 7)">Slower</button>
+                        </label>
+
+
+                        <label for="faster" class="shadowBox">
+                            <img src="{{ url_for('static', filename='images/Fast.png')}}" class = "reactionImage">
+                            <button id="faster" onclick="submitFormGeneral({{ session_id }}, 6)">Faster</button>
+                        </label>
+                    </div> <!-- Start of changes-->
+                </div>
+            </div>
+            </div>
+            </div> <!-- end here-->
+            {% endif %}
+            
+            
+            {% if current_user.role == 0 %} <!-- Only show this if the current user is a teacher-->
+                <div style="width: 100%;" class ="formsControls">
+                    <div class="formsResults">
+                        {% if forms_exist %} <!-- Will only show forms results if a form even exists in the session-->
+                                <h2>Forms Results</h2>
+                                <div id = "formsBox" class = "formsBox"></div>
+                        {% endif %}
+                    </div>
+                        <div id="formsButtonsHolder">
+                            <div class = "makeForm">
+                                <a class="formLink" href="{{ url_for('create_form', session_id=session_id) }}" title="Create a new form">
+                                    <img class="formButtonImg" src="{{ url_for('static', filename='images/make_form.svg') }}">
+                                </a>
+                            </div>
+                            <div class = "viewForm">
+                                <a class="formLink" href="{{ url_for('form_data', session_id=session_id) }}" target = "_blank" title="View all forms data for this session">
+                                    <img class="formButtonImg" src="{{ url_for('static', filename='images/data.svg') }}"></img>
+                                </a>
+                            </div>
+                        </div>
+                </div>
+                <div class = "bigReactionBox">
+                    <!-- Will only show the most recent form's results-->
+                    <div class = "teacherReactionHolder">
+                        <div class = "vibeHolder teacherVibe">
+                            <div id = "room_vibe" class = "teacherVibeInside">
+                            </div>
+                        </div>
+                        <div class = "reactionResultsHolder">
+                            <h2> Reactions: </h2> <!-- Shows the reaction results-->
+                            <div id = "reactionResults">
+                                <!--{% for r in reactions_all %}
+                                    {% if r.emotions == 0 %} -->   <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
+                                        <!--<p>Good | {{ r.reactor.username }}</p>
+                                    {% elif r.emotions == 1 %}
+                                        <p>Okay | {{ r.reactor.username }}</p>
+                                    {% else %}
+                                        <p>Bad | {{ r.reactor.username }}</p>
+                                    {% endif %}
+                                {% endfor %}-->
+                            </div>
+                        </div>
+
+                        <!-- Overall room vibe  displayed for the teacher-->
+                    </div>
+
+                    <div class = "speedHolder">
+                        
+                        <!-- Speeds displayed for teacher -->
+                        <div id = "visualHolder" class = "teacherVisualHolder">
+                            <div id = "paceTitle">   
+                            </div>
+                            <div class = "speedLine">
+                                <div class = "visual_slow all teacherSpeed">
+                                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                                </div>
+                                <div class = "visual_slow all teacherSpeed">
+                                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                                </div>
+                                <div class = "visual_slow all teacherSpeed">
+                                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                                </div>
+                                <div class = "visual_slow all teacherSpeed">
+                                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                                </div>
+                                <div class = "visual_slow all teacherSpeed">
+                                    <img class = "turtle" src = "{{ url_for('static', filename='images/Turtle.gif') }}">
+                                </div>
+
+                                <div class = "visual_fast all teacherSpeed">
+                                    <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                                </div>
+                                <div class = "visual_fast all teacherSpeed">
+                                    <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                                </div>
+                                <div class = "visual_fast all teacherSpeed">
+                                    <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                                </div>
+                                <div class = "visual_fast all teacherSpeed">
+                                    <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                                </div>
+                                <div class = "visual_fast all teacherSpeed">
+                                    <img class = "bunny" src = "{{ url_for('static', filename='images/Bunny.gif') }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "paceBox">
+                            <h2> Pace: </h2> <!-- Shows the speed results -->
+                            <div id = "speedResults"> 
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div id = "paceTitle" class = "paceStudent"> <!-- So the JS doesn't cause an error -->           
+        </div>
+        
+
+        {% if current_user.role == 0 %} <!-- If the current user is a teacher -->
+        <div class = "attendanceBox">
+            <div class = "attendanceSection">
+                <h2>Attendance: </h2> 
+                <div id = "attendance"> 
+                    <div id = "inside">
+                        <h3>Present Students</h3>
+                        <div id = "present">
+                        </div>
+                        <!--{% for p in present_list %}
+                            <p>{{ p }}</p>
+                        {% endfor %}-->
+                        <h3>Absent Students</h3>
+                        <div id = "absent">
+                        </div>
+                        <!--{% for a in absent_list %}
+                            <p>{{ a }}</p>
+                        {% endfor %}-->
+                    </div>
+                </div>  
+            </div>
+            <div class = "openReportSection">
+                <button title="Download a Report for this Session" id="openReport" type="button" onclick="redirectToDownloadPage({{ session_id }})">
+                    <img id="downloadImg" src="{{ url_for('static', filename='images/download.svg') }}" alt="Download Report">
+                </button>
+            </div>
+            {% if session.timestamp_end == None %} <!-- If the user is a teacher and the session is active --> 
+            <div class = "endSection">
+                <form action="/classes/rooms/{{ course.id }}/activate" method='post' class="endForm">
+                    <button title="End this Session" type="submit" formaction="/classes/rooms/{{ course.id }}/{{ session.id }}/end" class="endSessionButton">End Session</button>
+                    <!--<button type="submit" formaction="/classes/course/session/{{ session.id }}/attendance">Get Attendance</button>-->
+                </form>
+            </div>
+            {% endif %} 
+        </div>   
+        {% endif %}
+
+        <!-- Scripts -->
+        <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
+        {% if current_user.role == 0 %} <!-- if current user is a teacher -->
+            <script type="text/javascript">
+                initTeacher({{course.id}}, {{session.id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
+            </script>
+        {% else %} <!-- current user is a student-->
+            <script type="text/javascript">
+                initStudent({{course.id}}, {{session.id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
+            </script>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
