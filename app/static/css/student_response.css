@@ -1,0 +1,112 @@
+.contentHolder {
+    margin: 0 !important;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+html {
+    background-image: url("/static/images/RespondBackground.png");
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.largeHolder {
+    background-color:white;
+    padding: 5%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 12px 30px 0 rgba(0, 0, 0, 0.3);
+    max-width: 450px;
+}
+
+#submit {
+    text-decoration: none;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+    padding: 20px 40px;
+    border-radius: 50px;
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    font-size: 15px;
+    border: 0;
+    margin-top: 2%;
+    width: auto !important;
+    cursor: pointer;
+    background-color: #8ab5cc !important;
+    border-radius: 50px;
+    color: white;
+    border: 2px solid  #8ab5cc !important;
+    animation: MoveUpDown 2s linear infinite;
+    margin-top: 15%;
+}
+
+.promptTitle {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.promptTitle h2 {
+    line-height: 40px;
+}
+
+
+@keyframes MoveUpDown {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes MoveUpOther {
+    0%, 100% {
+        transform: translateY(-3px);
+    }
+    50% {
+        transform: translateY(0);
+    }
+}
+
+#options li {
+    list-style-type: none;
+    margin: 20px;
+    text-align: center;
+}
+
+#options {
+    padding-left: 0 !important;
+    margin-top: 15% !important;
+    margin-bottom: 15% !important;
+}
+
+#submit:hover {
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.15), 0 0px 0px 0 rgba(0, 0, 0, 0.1);
+}
+
+.errorSpan {
+    color: #f76c6c;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.radioOptions {
+    display: flex;
+    flex-direction: column;
+    letter-spacing: 1px;
+    justify-content: center;
+}
+
+.optionLabel {
+    margin-left: 25px;
+}

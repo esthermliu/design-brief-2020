@@ -2,6 +2,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/student_media.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -114,34 +115,36 @@
                     <div id="formHolder" class = "formHolder showForm">
                     </div>
                 </div>
-                <div class = "largeReactionHolder">
-                    <div id="responseBox" class = "makeReactionBox">
+                <div id = "responseBoxHolder">
+                    <div class = "largeReactionHolder">
+                        <div id="responseBox" class = "makeReactionBox">
 
-                        <label for="temp" class="shadowBox">
-                            <img src="{{ url_for('static', filename='images/Happy.png')}}" class = "reactionImage">
-                            <button id="temp" name="react" onclick="submitFormGeneral({{ session_id }}, 0)">Good</button> <!-- name is react -->
-                        </label>
-                        
-                        <label for="okay" class="shadowBox">
-                            <img src="{{ url_for('static', filename='images/Meh.png')}}" class = "reactionImage">
-                            <button id="okay" name="react" onclick="submitFormGeneral({{ session_id }}, 1)">Okay</button>
-                        </label>
-                        
-                        <label for="bad" class="shadowBox">
-                            <img src="{{ url_for('static', filename='images/Sad.png')}}" class = "reactionImage">
-                            <button id="bad" name="react" onclick="submitFormGeneral({{ session_id }}, 2)">Bad</button>
-                        </label>
-                        
-                        <label for="slower" class="shadowBox">
-                            <img src="{{ url_for('static', filename='images/Slow.png')}}" class = "reactionImage">  
-                            <button id="slower" onclick="submitFormGeneral({{ session_id }}, 7)">Slower</button>
-                        </label>
-                        
-                        <label for="faster" class="shadowBox">
-                            <img src="{{ url_for('static', filename='images/Fast.png')}}" class = "reactionImage">
-                            <button id="faster" onclick="submitFormGeneral({{ session_id }}, 6)">Faster</button>
-                        </label>
+                            <label for="temp" class="shadowBox">
+                                <img src="{{ url_for('static', filename='images/Happy.png')}}" class = "reactionImage">
+                                <button id="temp" name="react" onclick="submitFormGeneral({{ session_id }}, 0)">Good</button> <!-- name is react -->
+                            </label>
+                            
+                            <label for="okay" class="shadowBox">
+                                <img src="{{ url_for('static', filename='images/Meh.png')}}" class = "reactionImage">
+                                <button id="okay" name="react" onclick="submitFormGeneral({{ session_id }}, 1)">Okay</button>
+                            </label>
+                            
+                            <label for="bad" class="shadowBox">
+                                <img src="{{ url_for('static', filename='images/Sad.png')}}" class = "reactionImage">
+                                <button id="bad" name="react" onclick="submitFormGeneral({{ session_id }}, 2)">Bad</button>
+                            </label>
+                            
+                            <label for="slower" class="shadowBox">
+                                <img src="{{ url_for('static', filename='images/Slow.png')}}" class = "reactionImage">  
+                                <button id="slower" onclick="submitFormGeneral({{ session_id }}, 7)">Slower</button>
+                            </label>
+                            
+                            <label for="faster" class="shadowBox">
+                                <img src="{{ url_for('static', filename='images/Fast.png')}}" class = "reactionImage">
+                                <button id="faster" onclick="submitFormGeneral({{ session_id }}, 6)">Faster</button>
+                            </label>
 
+                        </div>
                     </div>
                 </div>
             </div> <!-- end here-->

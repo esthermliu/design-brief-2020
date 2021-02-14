@@ -1,19 +1,27 @@
 {% extends "base.html" %}
 
 {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/student_response.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/teacher_form.css') }}">
 {% endblock %}
 
 {% block content %}
-<form action="" method="post" class="teacherForm">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.prompt.label }}<br>
-        {{ form.prompt(size=120) }}
-        {% for error in form.prompt.errors %}
-            <span class="errorSpan">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>{{ form.submit() }}</p>
-</form>
+<div class = "largeHolder">
+    <div class = "responseHolder">
+        <div class = "promptTitle">
+            <h2>Create Form</h2>
+        </div>
+        <form action="" method="post" class="teacherForm">
+            {{ form.hidden_tag() }}
+            <div class = "promptHolder">
+                <!--{{ form.prompt.label }}-->
+                {{ form.prompt(size=120, placeholder="Enter Prompt Here") }}
+                {% for error in form.prompt.errors %}
+                    <span class="errorSpan">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>{{ form.submit() }}</div>
+        </form>
+    </div>
+</div>
 {% endblock %}
