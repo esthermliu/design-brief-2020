@@ -169,11 +169,13 @@
                                 <img class="formButtonImg" src="{{ url_for('static', filename='images/make_form.svg') }}">
                             </a>
                         </div>
-                        <div class = "viewForm">
-                            <a class="formLink" href="{{ url_for('form_data', session_id=session_id) }}" target = "_blank" title="View all forms data for this session">
-                                <img class="formButtonImg" src="{{ url_for('static', filename='images/data.svg') }}"></img>
-                            </a>
-                        </div>
+                        {% if forms_exist %}
+                            <div class = "viewForm">
+                                <a class="formLink" href="{{ url_for('form_data', session_id=session_id) }}" target = "_blank" title="View all forms data for this session">
+                                    <img class="formButtonImg" src="{{ url_for('static', filename='images/data.svg') }}"></img>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class = "bigReactionBox">
