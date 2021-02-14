@@ -33,12 +33,12 @@ function fetchPastSessionInfo(course_id, session_id, status) {
 
 // Fetches information for all of the forms
 function fetchSessionFormsInfo(course_id, session_id, status) {
-    let url = "/classes/course/session/" + session_id + "/session_json";
+    let url = "/classes/course/session/" + session_id + "/session_forms_json";
     console.log("FORMS INFO FETCHED");
     fetch(url, {method: "GET"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .then(response => response.json()) 
-        .then((data) => displayForms(status, data)) // Calls the displayData function, which will update the thermometer visually
+        .then((data) => displayForms(status, data)) // Calls the displayForms function, which will update the form data visually
         .catch(handleError);
 }
 
@@ -99,7 +99,7 @@ function displayPast(status, data) {
 // Calls function to display the FORMS information
 function displayForms(status, data) {
     console.log("DISPLAYED FORMS");
-    displayFormResultsAll(data["forms"]); 
+    displayFormResultsAll(data); 
 }
 
 
@@ -112,15 +112,18 @@ function displayAll(status, data) {
     displaySpeeds(data["speeds"]); // Display speeds
     displayCalculatedSpeed(data["speed_num"]); // Display the calculated speed number
     displayAttendance(data["attendance"]); // Display the attendance
-    displayFormResults(data["forms"][data["forms"].length - 1]["responses"]); // Display the Forms responses
+    // console.log("Passed to displaFormResults: "+ data["forms"][data["forms"].length - 1]["responses"])
+    displayFormResults(data["forms"][data["forms"].length - 1]); // Display the Forms responses
 }
 
 // Only calls some of the functions to display certain features for the student
-function displaySome(status, data, session_id) { 
+function displaySome(status, data, session_id) {
+    console.log("displaySome() has been called") 
     checkIfShouldRefresh(status, data["course_status"]); // To check whether to refresh
     displayPercentage(data["percentage"]);  // For the percentage
-    displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
+    // displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
     if (data["forms"].length != 0) {
+        console.log("About to display forms link")
         displayFormLink(data["forms"], session_id);
     }
 }
@@ -148,11 +151,12 @@ function displayPercentage(data) {
 
 function displayFormLink(formData, session_id) {
     studentFormHTML = document.getElementById("formHolder"); // getting the HTML element for the forms button
-    document.getElementById("formHolder").innerHTML = ""; // clearing all content inside the div first
+    studentFormHTML.innerHTML = ""; // clearing all content inside the div first
     console.log("DISPLAY FORM LINK")
     if (formData.length != 0) {
         var form_url = formData[0]["forms_url"]
         studentFormHTML.innerHTML += ('<a class = "formAlertHolder" href="' + form_url + '"><img src = "/static/images/FormsAlert4.png"></a>');
+        console.log("DISPLAYED FORM LINK")
     }
 }
 
@@ -197,50 +201,55 @@ function submitFormGeneral(session_id, react_num) {
         .catch(handleError); 
 }
 
+function singleFormResults(form) {
+    summary = {"Yes": 0, "Maybe": 0, "No": 0}
+    keys = {0: "Yes", 1: "Maybe", 2: "No"}
+    responses = form["responses"]
+    for (r = responses.length - 1; r >= 0; r--) {
+        // console.log(responses[r])
+        summary[keys[responses[r]["form_responses"]]] += 1
+    }
+
+    return {"summary": summary,"keys": keys}
+}
+
 
 // Display results to the form
 function displayFormResults(form) {
-    console.log("DISPLAYING FORMS")
+    console.log(">>> DISPLAYING FORMS")
     forms_html = document.getElementById("formsBox");
     document.getElementById("formsBox").innerHTML = ""; // Clearing all the content in the div
     console.log("YIP YOP")
-    for (f = form.length - 1; f >= 0; f--) {
-        user = form[f]["student_id"]
-        response = form[f]["form_responses"]
-        response_timestamp = form[f]["timestamp"]
-        if (response == 0) {
-            response = "Yes"
-        } else if (response == 1) {
-            response = "Maybe"
-        } else {
-            response = "No"
-        }
-        forms_html.innerHTML += ('<p>' +  user + ' | ' + response + ' | ' + moment(response_timestamp).format('hh:mm a') + '</p>')
-    }
+    summary = singleFormResults(form)["summary"]
+    forms_html.innerHTML = "<p><b>Summary - " + form["form_question"] +
+        "</b><ul><li>Yes: " + summary["Yes"] + 
+        "</li><li>Maybe: " +  summary["Maybe"] + 
+        "</li><li>No: " +  summary["No"] + "</li></ul></p>"
 }
 
-function displayFormResultsAll(form) {
-    forms_html2 = document.getElementById("formsBox2");
-    console.log("HELLO??")
-    document.getElementById("formsBox2").innerHTML = ""; // Clearing all the content in the div
-    for (f=form.length - 1; f >= 0; f--) {
-        form_question = form[f]["form_question"] // getting the form question, teacher, timestamp
-        form_teacher = form[f]["teacher_id"]
-        form_timestamp = form[f]["timestamp"]
-        responses_list = form[f]["responses"] // responses list from the json file
-        forms_html2.innerHTML += ('<h2>' + form_question + '</h2><h3>' + form_teacher + '</h3><h4>' + moment(form_timestamp).format('MMMM Do YYYY, h:mm a') + '</h4>')
-        for (r = responses_list.length - 1; r >=0; r--) { // going through responses to get the student id and their responses
-            user_responder = responses_list[r]["student_id"]
-            response_user = responses_list[r]["form_responses"]            
-            timestamp_response = responses_list[r]["form_responses"]    
-            if (response_user == 0) {
-                response_user = "Yes"
-            } else if (response_user == 1) {
-                response_user = "Maybe"
-            } else {
-                response_user = "No"
-            }   
-            forms_html2.innerHTML += ('<p>' +  user_responder + ' | ' + response_user + ' | ' + moment(timestamp_response).format('hh:mm a') + '</p>')
+function displayFormResultsAll(forms) {
+    console.log('Updating individual form data divs')
+    for (var key in forms) {
+        results = singleFormResults(forms[key])
+        summary = results["summary"]
+        keys = results["keys"]
+
+        var summary_div = document.getElementById("summary" + key)
+        summary_div.innerHTML = ""
+        summary_div.innerHTML = ('<li>' +
+            "Yes: " + summary["Yes"] + 
+            "</li><li>Maybe: " + summary["Maybe"] +
+            "</li><li>No: " + summary["No"] + "</li>")
+        
+        var table_div = document.getElementById("table" + key)
+        table_div.innerHTML = "<tr><th>Student</th><th>Response</th><th>Time</th></tr>"
+        response_list = forms[key]["responses"]
+        // console.log("RESPONSE LIST: " + response_list)
+        for (r=response_list.length - 1; r >= 0; r--) {
+            console.log("This response: " + response_list[r])
+            table_div.innerHTML += ("<tr><td>" + response_list[r]["student_id"] + "</td><td>" +
+                keys[response_list[r]["form_responses"]] + "</td><td>" +
+                moment(response_list[r]["timestamp"]).format('hh:mm A') + "</td></tr>")
         }
     }
 }
@@ -390,7 +399,7 @@ function initStudent(course_id, session_id, course_status) {
 // initFormsAll
 function initFormsAll(course_id, session_id, course_status) {
     console.log("Called INIT Forms");
-    fetchSessionFormsInfo(course_id, session_id, course_status);
+    // fetchSessionFormsInfo(course_id, session_id, course_status);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchSessionFormsInfo(course_id, session_id, course_status);

@@ -2,19 +2,55 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form_data.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js" integrity="sha512-zO8oeHCxetPn1Hd9PdDleg5Tw1bAaP0YmNvPY8CwcRyUk7d7/+nyElmFrB6f7vg4f7Fv4sui1mcep8RIEShczg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.css" integrity="sha512-C7hOmCgGzihKXzyPU/z4nv97W0d9bv4ALuuEbSf6hm93myico9qa0hv4dODThvCsqQUmKmLcJmlpRmCaApr83g==" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js" integrity="sha512-hZf9Qhp3rlDJBvAKvmiG+goaaKRZA6LKUO35oK6EsM0/kjPK32Yw7URqrq3Q+Nvbbt8Usss+IekL7CRn83dYmw==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous">
 {% endblock %}
-
+    
 {% block content %}
 <div class = "formsResults">
     <h2>Forms Results</h2>
     <div id = "formsBox2" class = "formsBox">
+        {% for f in forms_list|reverse %}
+            <div class="infoHolder">
+                <h2>Prompt: {{ f['question'] }}</h2>
+                <h3>Distributed at {{f['time']}}</h3>
+                <div id="{{ f['id'] }}" class="formData">
+                    <p> <br>
+                        <b>Summary</b>
+                        <ul id="summary{{ f['id'] }}">
+                            <li>Yes: {{ f['summary'][0] }}</li>
+                            <li>Maybe: {{ f['summary'][1] }}</li>
+                            <li>No: {{ f['summary'][2] }}</li>
+                        </ul>
+                    </p>
+                    <table id="table{{ f['id'] }}" class="responsesTable">
+                        <tr>
+                            <th>Student</th>
+                            <th>Response</th>
+                            <th>Time</th>
+                        </tr>
+                        {% for r in f['responses']  %}
+                            <tr>
+                                <td>{{ r[0] }}</td>
+                                <td>{{ r[1] }}</td>
+                                <td>{{ r[2] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 
 <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
 {% if current_user.role == 0 %} <!-- if current user is a teacher -->
     <script type="text/javascript">
-        initFormsAll({{course_id}}, {{session_id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
+        window.onload = initFormsAll({{course_id}}, {{session_id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
     </script>
 {% endif %}
 
