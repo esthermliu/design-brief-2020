@@ -3,6 +3,8 @@ changes to rooms.html to look better on small screens*/
 
 
 body {
+    height: 100vh;
+    width: 100vw;
     background-color: #A8D0E6;
     display: flex;
     flex-direction: column;
@@ -54,10 +56,6 @@ body {
     flex-direction: column;
 }
 
-.visual_slow, .visual_fast {
-    width: 10%;
-}
-
 .bigReactionBox {
     /* height: auto; */
     display: flex;
@@ -102,14 +100,6 @@ body {
     padding: 0 !important;
     justify-content: flex-start !important;
     align-items: flex-end !important;
-}
-
-.visualFormHolder {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    height: 40%;
-    width: 100%;
 }
 
 #speedResults {
@@ -273,13 +263,6 @@ body {
     align-items: center;
 }
 
-.formAlertHolder {
-    height: 90%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 
 /* For larger screens */
 @media all and (min-width: 600px) { 
@@ -353,6 +336,13 @@ body {
         line-height: normal;
     }
     
+    .formAlertHolder {
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .showForm {
         width: 100%;
         height: 100%;
@@ -363,11 +353,24 @@ body {
     }
 
     .formHolder {
+        width: 23%;
         padding: 1%;
     }
 
     .formButtonImg {
         width: 80%;
+    }
+
+    .visualFormHolder {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        height: 40%;
+        width: 100%;
+    }
+
+    .visual_slow, .visual_fast {
+        width: 18%;
     }
 
     .thermometer, .thermometer_shell {
@@ -434,7 +437,7 @@ body {
 
     .all {
         /* width: 50px; */
-        display: none;
+        /* display: none; */
         margin-bottom: 10px;
     }
 
@@ -509,7 +512,7 @@ body {
         flex-wrap: wrap;
         justify-content: center;
         height: 100%;
-        width: 100%;
+        width: 75%;
         max-width: 700px;
         padding-top: 10px;
         padding-bottom: 10px;
@@ -695,7 +698,7 @@ body {
         /* justify-content: flex-end; */
         /*background-color: lightsalmon;*/
         width: 100%;
-        height: 80%;
+        height: 90%;
     }
 
     .overallThermoContainer {
@@ -704,12 +707,12 @@ body {
 
     .titleHolder h1 {
         font-weight: 400;
-        font-size: large;
+        font-size: 30px;
     }
 
-    .all {
+    /* .all {
         margin-bottom: 10px;
-    }
+    } */
 
     .roomsBox {
         width: 100%;
@@ -717,11 +720,11 @@ body {
     }
 
     .contentHolder {
-        width: 100%;
-        height: 98vh;
+        width: 90%;
+        height: 70%;
         margin: 0;
         margin-bottom: 60px;
-        padding: 20px;
+        padding: 5%;
         display: flex;
         flex-direction: column;
         /* justify-content: flex-start; */
@@ -729,8 +732,16 @@ body {
         align-items: center;
     }
     
+    
+    .formAlertHolder {
+        height: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .showForm {
-        width: 90%;
+        width: 33%;
         height: 90%;
     }
 
@@ -739,11 +750,30 @@ body {
     }
     
     .formHolder {
-        padding: 5%;
+        padding: 1%;
+        width: 23%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
     }
 
     .formButtonImg {
-        width: 80%;
+        width: 60%;
+    }
+
+    .visualFormHolder {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        /* align-items: center; */
+        height: 30%;
+        min-height: 90px;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .visual_slow, .visual_fast {
+        width: 20%;
     }
 
     .makeReactionBox {
@@ -772,7 +802,7 @@ body {
     }
 
     .keepClose {
-        height: 66%;
+        height: 50%;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -804,15 +834,19 @@ body {
     #visualHolder {
         background-color: white;
         border-radius: 40px;
-        width: 100%;
+        width: 75%;
         /* max-width: 695px; */
         display: inline-flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-end;
         /* height: 20%; */
-        margin-bottom: 20px;
-        align-items: center;
+        /* margin-bottom: 20px; */
+        align-items: flex-end;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .studentVisualHolder {
+        margin: 0;
     }
 
     #room_vibe {
@@ -828,6 +862,7 @@ body {
         background-color: white;
         width: 100%;
         height: 20%;
+        min-height: 80px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border-radius: 40px;
         display: flex;
@@ -890,7 +925,6 @@ body {
         width: 100%;
     }
 
-
     .userReactionView p {
         font-size: 18px;
         font-family: 'Montserrat', sans-serif;
@@ -941,14 +975,11 @@ body {
 
     .overallThermoContainer, 
     .vibeHolder, 
-    .studentVisualHolder, 
     .makeReactionBox, 
     .reactionResultsHolder, 
     .paceBox, 
-    #visualHolder,
     .attendanceSection,
     .formsControls,
-    .formHolder,
     .largeReactionHolder {
         background-color: #233741 !important;
     }
