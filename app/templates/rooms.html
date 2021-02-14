@@ -3,6 +3,7 @@
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/student_media.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -157,20 +158,23 @@
                         {% if forms_exist %} <!-- Will only show forms results if a form even exists in the session-->
                                 <h2>Forms Results</h2>
                                 <div id = "formsBox" class = "formsBox"></div>
+                                <div class = "formsBoxChart">
+                                    <canvas id = "formChartCanvas" width="200" height="150"></canvas>
+                                </div>
                         {% endif %}
                     </div>
-                        <div id="formsButtonsHolder">
-                            <div class = "makeForm">
-                                <a class="formLink" href="{{ url_for('create_form', session_id=session_id) }}" title="Create a new form">
-                                    <img class="formButtonImg" src="{{ url_for('static', filename='images/make_form.svg') }}">
-                                </a>
-                            </div>
-                            <div class = "viewForm">
-                                <a class="formLink" href="{{ url_for('form_data', session_id=session_id) }}" target = "_blank" title="View all forms data for this session">
-                                    <img class="formButtonImg" src="{{ url_for('static', filename='images/data.svg') }}"></img>
-                                </a>
-                            </div>
+                    <div id="formsButtonsHolder">
+                        <div class = "makeForm">
+                            <a class="formLink" href="{{ url_for('create_form', session_id=session_id) }}" title="Create a new form">
+                                <img class="formButtonImg" src="{{ url_for('static', filename='images/make_form.svg') }}">
+                            </a>
                         </div>
+                        <div class = "viewForm">
+                            <a class="formLink" href="{{ url_for('form_data', session_id=session_id) }}" target = "_blank" title="View all forms data for this session">
+                                <img class="formButtonImg" src="{{ url_for('static', filename='images/data.svg') }}"></img>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class = "bigReactionBox">
                     <!-- Will only show the most recent form's results-->

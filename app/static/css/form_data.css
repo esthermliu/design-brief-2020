@@ -12,3 +12,24 @@ tr {
     border-top: 1px solid black;
     border-bottom: 1px solid black;
 }
+
+.summaryChartHolder {
+    height: 250px;
+    width: 300px;
+    margin-bottom: 20px;
+}
+
+.tableHolder {
+    margin-bottom: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+    table {
+        border: 1px solid #e6e6e6;
+    }
+
+    tr {
+        border-top: 1px solid #e6e6e6;
+        border-bottom: 1px solid #e6e6e6;
+    }
+}
