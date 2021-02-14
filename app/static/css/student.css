@@ -74,7 +74,7 @@ body {
 }
 
 .teacherStuff {
-    width: 20% !important;
+    width: 40% !important;
     height: auto !important;
     object-fit: contain;
 }
@@ -252,7 +252,7 @@ body {
 }
 
 #vibe {
-    height: 50% !important;
+    height: 100% !important;
 }
 
 .faceHolder {
@@ -541,20 +541,21 @@ body {
     }
 
     .vibeHolder {
-        background-color: white;
         border-radius: 40px;
-        /* width: fit-content; */
         width: 100%;
         height: 40%;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
+    }
+    
+    .teacherVibe {
+        background-color: white;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
     .studentVibe {
-        box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2);
         background-color: transparent;
         height: 30%;
     }
@@ -877,13 +878,21 @@ body {
     .vibeHolder {
         min-height: 120px;
         height: 25%;
-        background-color: white;
         width: 100%;
         border-radius: 40px;
         margin-bottom: 20px;
+    }
+    
+    .teacherVibe {
+        background-color: white;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
+    .studentVibe {
+        background-color: transparent;
+        height: 40%;
+        margin-top: 20px;
+    }
 
     /* Teacher CSS */
 
