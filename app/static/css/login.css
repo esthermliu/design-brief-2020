@@ -71,12 +71,12 @@ header {
     width: 100%; 
 }
 
-.signInBox {
+.signInBox, .resetPasswordBox {
     text-align: center;
     width: 100%;
 }
 
-.signInBox h1 {
+.signInBox h1, .resetPasswordBox h1 {
     font-weight: 500;
 }
 
