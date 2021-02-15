@@ -2,6 +2,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/student_media.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/previous_data.css') }}">
 {% endblock %}
 
@@ -60,9 +61,10 @@
                     <div class = "teacherReactionHolder">
                         <div class = "reactionResultsHolder">
                             <h2> Reactions: </h2> <!-- Shows the reaction results-->
-                            <div id = "reactionResults">
-                                <div class = "userReactionView">
+                            <div class = "scrollbar" id = "reactionResults">
+                                <div class = "testingBox">
                                     {% for r in reactions_specific %}
+                                    <div class = "userReactionView">
                                         {% if r.reactions == 0 %} <!-- Making it easier to see what each emotion number represents, 0=good, 1=okay, 2=bad-->
                                             <div class = "speedText">
                                                 <p>{{ moment(r.timestamp).format('hh:mm a') }}</p>
@@ -88,7 +90,7 @@
                                                 <img class = 'makeSmaller' src='../../../../static/images/Sad.png'>
                                             </div>
                                         {% endif %}
-                                    
+                                    </div>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -106,29 +108,29 @@
                     <div class = "speedHolder">
                         <div class = "paceBox">
                             <h2> Pace: </h2> <!-- Shows the speed results -->
-                            <div id = "speedResults"> 
-                                <div class = "userReactionView">
-                                    {% for s in speeds_specific %}
-
-                                            {% if s.reactions == 6 %} <!-- Making it easier to see what each speed number represents, 6=faster, 7=slower-->
+                            <div class = "scrollbar" id = "speedResults"> 
+                                <div class = "testingBox">
+                                {% for s in speeds_specific %}
+                                    <div class = "userReactionView">
+                                        {% if s.reactions == 6 %} <!-- Making it easier to see what each speed number represents, 6=faster, 7=slower-->
+                                        <div class = "speedText">
+                                            <p>{{ moment(s.timestamp).format('hh:mm a') }}</p>
+                                            <p>{{ s.reactor.username }}</p>
+                                        </div>
+                                        <div>
+                                            <img class = 'makeSmaller' src='../../../../static/images/Bunny.gif'>
+                                        </div>
+                                        {% else %}
                                             <div class = "speedText">
-                                                <p>{{ moment(s.timestamp).format('hh:mm a') }}</p>
+                                                <p>{{ moment( s.timestamp).format('hh:mm a') }}</p>
                                                 <p>{{ s.reactor.username }}</p>
                                             </div>
                                             <div>
-                                                <img class = 'makeSmaller' src='../../../../static/images/Bunny.gif'>
+                                                <img class = 'makeSmaller' src='../../../../static/images/Turtle.gif'>
                                             </div>
-                                            {% else %}
-                                                <div class = "speedText">
-                                                    <p>{{ moment( s.timestamp).format('hh:mm a') }}</p>
-                                                    <p>{{ s.reactor.username }}</p>
-                                                </div>
-                                                <div>
-                                                    <img class = 'makeSmaller' src='../../../../static/images/Turtle.gif'>
-                                                </div>
-                                            {% endif %}
-                                        
-                                    {% endfor %}  
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}  
                                 </div>
                             </div>
                         </div>
