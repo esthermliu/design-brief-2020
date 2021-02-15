@@ -516,7 +516,7 @@ def session_form_json(session_id):
             "session_id": f.session_id,
             "timestamp": f.timestamp
         }
-        
+
         all_forms_dict[f.id] = forms_dict
 
     return jsonify(all_forms_dict)

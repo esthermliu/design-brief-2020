@@ -246,7 +246,8 @@ function displayFormResults(form) {
         data: {
             datasets: [{
                 data: summary_data,
-                backgroundColor: summary_colors
+                backgroundColor: summary_colors,
+                borderWidth: 0.8,
             }],                
             labels: summary_labels,
         },
@@ -254,7 +255,7 @@ function displayFormResults(form) {
             animation: {
                 duration: 0
             },
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
         }
     });
 
@@ -272,6 +273,8 @@ function displayFormResultsAll(forms) {
         results = singleFormResults(forms[key])
         summary = results["summary"]
         keys = results["keys"]
+
+        //console.log(time)
         
         summary_labels = []
         summary_data = []
@@ -295,7 +298,8 @@ function displayFormResultsAll(forms) {
                 animation: {
                     duration: 0
                 }
-            }
+            },
+            maintainAspectRatio: false
         });
         
         var table_div = document.getElementById("table" + key)
