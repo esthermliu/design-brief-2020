@@ -15,6 +15,7 @@ from datetime import datetime, timedelta
 from dateutil import tz
 from collections import defaultdict
 from app.email import send_password_reset_email
+import re
 from flask_weasyprint import HTML, render_pdf
 
 @app.route('/')
@@ -292,7 +293,7 @@ def manage_course_page(course_id):
                             title='Manage ' + course.course_name,
                             form=form)
 
-@app.route('/classes/course/<course_id>/remove/<user_id>', methods=["POST"]) # POST method
+@app.route('/classes/course/<course_id>/manage/remove/<user_id>', methods=["POST"]) # POST method
 @login_required
 def remove(course_id, user_id):
     course = Courses.query.get(course_id) # gets the right course
@@ -302,6 +303,52 @@ def remove(course_id, user_id):
     db.session.commit()
     flash("Student removed", 'info')
 
+    return redirect(url_for('manage_course_page', course_id=course_id))
+
+@app.route('/classes/course/<course_id>/manage/add', methods=["POST"])
+@login_required
+def add_user(course_id):
+    # Getting form data from the request
+    form_data = request.form
+    username = form_data['addUsername']
+    email = form_data['addEmail']
+
+    addByEmail = False # Program should try adding by username before adding by email
+    if len(username) > 0:
+        user = User.query.filter_by(username=username).first() 
+        if user is not None: # If there is a user with the specified username try adding them
+            already_signed_up = Signups.query.filter_by(user_id=user.id, course=course_id).first() is not None # Checking if the student is already signed up
+            if already_signed_up:
+                flash('%s is already in this course' % (username), 'error')
+            else:
+                # Creating the new signup
+                new_signup = Signups(user_id = user.id, course=course_id)
+                db.session.add(new_signup)
+                db.session.commit()
+                flash('%s was successfully added' % (username))
+            return redirect(url_for('manage_course_page', course_id=course_id))
+        else:
+            addByEmail = True
+    else:
+        addByEmail = True
+    
+    # If adding by username failed, trying adding using the email
+    if addByEmail:
+        user = User.query.filter_by(email=email).first()
+        if user is None: # This means that both adding by username and by email has failed
+            flash('The user with the given username or email address does not exist', 'error')
+            return redirect(url_for('manage_course_page', course_id=course_id))
+        else:
+            already_signed_up = Signups.query.filter_by(user_id=user.id, course=course_id).first() is not None # Checking if the student is already signed up
+            if already_signed_up:
+                flash('%s is already in this course' % (username), 'error')
+            else:
+                # Creating the new signup
+                new_signup = Signups(user_id = user.id, course=course_id)
+                db.session.add(new_signup)
+                db.session.commit()
+                flash('%s was successfully added' % (user.username))
+            return redirect(url_for('manage_course_page', course_id=course_id))
     return redirect(url_for('manage_course_page', course_id=course_id))
 
 @app.route('/classes/course/<course_id>/manage/course_json', methods=["GET", "POST"])

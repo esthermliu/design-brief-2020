@@ -142,12 +142,22 @@ p {
 
 
 @media (prefers-color-scheme: dark) {
-    #role, #submit {
+    #role {
         filter: brightness(0.9)
+    }
+    
+    #submit {
+        background-color: #297499;
+        border: 2px solid #297499;
+        color: #e6e6e6;
     }
 
     input {
         color: #e6e6e6;
         border-bottom: 1px solid #e6e6e6;
+    }
+
+    .innerBox {
+        background-color: #12436b;
     }
 }

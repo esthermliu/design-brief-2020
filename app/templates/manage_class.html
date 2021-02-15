@@ -13,7 +13,22 @@
     <div class = "studentTitle">
         <h2>Students</h2>
     </div>
-    <table id = "studentRow" class = "studentTable">
+    <table class = "studentTable">
+        <tr class = "heading">
+            <th>Username</th>
+            <th>Email</th> 
+            <th>Actions</th>
+        </tr>
+        <tbody id = "studentRow"></tbody>
+        <tbody>
+            <tr class = studentRowEach>'
+                <form action="/classes/course/{{ course_id}}/manage/add" method="POST">
+                    <td><input type="text" id="addUsername" name="addUsername" placeholder="Add by username"></td>
+                    <td><input type="text" id="addEmail" name="addEmail" placeholder="Add by email"></td>
+                    <td><button type="submit" class="addButton">Add student</button></td>
+                </form>
+            </tr>
+        </tbody>
         <!--{% for s in students %}-->
             <!--<td class="usernameHolder">{{ s.username }}</td>
             <td class="emailHolder">{{ s.email }}</td>

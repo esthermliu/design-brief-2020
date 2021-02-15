@@ -71,10 +71,7 @@ function confirm_message(username) {
 function displayStudents(studentInfo, course_id) {
     studentHTML = document.getElementById("studentRow");
     console.log("Students")
-    studentHTML.innerHTML = '<tr class = "heading">' + '<th>Username</th>' + 
-                                    '<th>Email</th>' + 
-                                    '<th>Actions</th>' + 
-                            '</tr>'; // clearing all the content in the div
+    studentHTML.innerHTML = ""; // clearing all the content in the div
     for (s = 0; s < studentInfo.length; s++) {
         console.log("WOOT")
         var student_username = studentInfo[s]["username"] // Getting the student's username
@@ -474,7 +471,7 @@ function initManage(course_id) {
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
         console.log("Update");
         fetchCourseInfo(course_id);
-    }, 5000) 
+    }, 10000) 
 }
 
 function pastInfo(course_id, session_id, course_status) {

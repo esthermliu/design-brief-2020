@@ -17,7 +17,7 @@ html {
 
 table {
     width: 100%;
-    border: 1px solid black;
+    border: 1px solid #a8d0e6;
     border-collapse: collapse;
 }
 
@@ -33,6 +33,7 @@ th {
 
 tr {
     text-align: center;
+    border-top: 2px solid #a8d0e6;
     border-bottom: 2px solid #a8d0e6;
 }
 

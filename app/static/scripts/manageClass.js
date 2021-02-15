@@ -8,4 +8,3 @@ function removeUser(username, user_id, course_id) {
             .catch(handleError); 
     }
 }
-
