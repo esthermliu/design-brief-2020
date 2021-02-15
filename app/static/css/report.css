@@ -15,9 +15,21 @@ body {
     justify-content: right;
 }
 
+#formDataHolder {
+    page-break-before: always;
+}
+
 h2, h3 {
     /* font-weight: 400; */
-    font: normal normal 8000 25px/30px inherit
+    font: normal normal 8000 25px/30px inherit;
+    letter-spacing: 0px;
+    word-spacing: 3px;
+}
+
+h4 {
+    font: normal normal 8000 20px/25px inherit;
+    letter-spacing: 0px;
+    word-spacing: 3px;
 }
 
 .attendanceList {
@@ -25,8 +37,22 @@ h2, h3 {
     font-size: normal;
 }
 
-p {
-    line-height: 5px;
+.li {
+    font: normal normal 100 18px/18px inherit;
+    letter-spacing: 0px;
+    word-spacing: 5px;
+}
+
+p, table {
+    font: normal normal 100 15px/15px inherit;
+    letter-spacing: 0px;
+    word-spacing: 5px;
+}
+
+b {
+    font: normal normal 1000 15px/15px inherit;
+    letter-spacing: 0px;
+    word-spacing: 5px;
 }
 
 table {
@@ -62,6 +88,14 @@ th {
     background-color: rgb(253, 215, 215);
 }
 
-hr {
+.alignRight {
+    text-align: right;
+}
+
+.formsSeparator {
     border: 1px solid #A8D0E6;
+}
+
+.sectionSeparator {
+    border: 2px double #A8D0E6;
 }

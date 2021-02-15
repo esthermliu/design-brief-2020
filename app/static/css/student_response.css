@@ -18,6 +18,7 @@ html {
     background-color:white;
     padding: 5%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 12px 30px 0 rgba(0, 0, 0, 0.3);
+    width: 30%;
     max-width: 450px;
 }
 
@@ -109,4 +110,45 @@ form {
 
 .optionLabel {
     margin-left: 25px;
+}
+
+@media all and (max-width: 1200px) {
+
+    .largeHolder {
+        width: 30%;
+    }
+
+}
+
+@media all and (max-width: 950px) {
+
+    .largeHolder {
+        width: 40%;
+    }
+
+}
+
+@media all and (max-width: 750px) {
+
+    .largeHolder {
+        width: 50%;
+    }
+
+}
+
+@media all and (max-width: 600px) {
+    .largeHolder {
+        width: 80%;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .largeHolder {
+        background-color: #233741;
+    } 
+    
+    #submit {
+        background-color: #297499 !important;
+        border: 2px solid  #297499 !important;
+    }
 }

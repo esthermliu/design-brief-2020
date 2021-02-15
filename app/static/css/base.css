@@ -220,7 +220,7 @@ h2, h3 {
 @media (prefers-color-scheme: dark) {
     html {
         background-color: rgb(32, 30, 31);
-        color: #e6e6e6;
+        color: #e6e6e6 !important;
     }
 
     img {

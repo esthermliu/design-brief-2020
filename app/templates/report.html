@@ -9,9 +9,9 @@
     <body id="bodyAll">
         <div id="titleHolder">
             <h2>{{ title }}</h2>
-        </div> <hr>
+        </div> <hr class="sectionSeparator">
         <div id="sessionDataHolder">
-            <h3 class="sectionHeaders">Class and Session Information</h3>
+            <h2 class="sectionHeaders">Class and Session Information</h2>
             <div id="sessionData">
                 <div id="generalSessionData">
                     <p><b>Class:  </b>{{ course_name }}</p>
@@ -23,27 +23,27 @@
                     <p><b>End Time:  </b>{{ end_time }}</p>
                 </div>
             </div>
-        </div> <br> <hr>
+        </div> <br> <hr class="sectionSeparator">
         <div id="attendanceDataHolder">
             <div id="attendanceData">
-                <h3 class="sectionHeaders">Attendance</h3>
-                <h4>Present</h4>
+                <h2 class="sectionHeaders">Attendance</h2>
+                <h3>Present</h3>
                 <ul id="present" class="attendanceList">
                     {% for s in present_list %}
-                        <li> {{ s }}</li>
+                        <li> {{ student_keys[s] }}</li>
                     {% endfor %}
                 </ul>
-                <h4>Absent</h4>
+                <h3>Absent</h3>
                 <ul id="absent" class="attendanceList">
                     {% for s in absent_list %}
-                        <li> {{ s }}</li>
+                        <li> {{ student_keys[s] }}</li>
                     {% endfor %}
                 </ul>
             </div>
-        </div> <br> <hr>
+        </div> <br> <hr class="sectionSeparator">
         <div id="reactionDataHolder">
             <div id="reactionData">
-                <h3 class="sectionHeaders">Reaction Data</h3>
+                <h2 class="sectionHeaders">Reaction Data</h2>
                 <table id="reactionsTable">
                     <th>
                         Student
@@ -74,32 +74,42 @@
                         {% else %}
                             <tr>
                         {% endif %}
-                                <td>{{ s }}</td>
-                                <td>{{ r[0] }}</td>
-                                <td>{{ r[1] }}</td>
-                                <td>{{ r[2] }}</td>
-                                <td>{{ r[7] }}</td>
-                                <td>{{ r[6] }}</td>
+                                <td>{{ student_keys[s] }}</td>
+                                <td class="alignRight">{{ r[0] }}</td>
+                                <td class="alignRight">{{ r[1] }}</td>
+                                <td class="alignRight">{{ r[2] }}</td>
+                                <td class="alignRight">{{ r[7] }}</td>
+                                <td class="alignRight">{{ r[6] }}</td>
                             </tr>
                     {% endfor %}
                 </table>
             </div>
-        </div> <br> <hr>
-        <!-- {% for f in forms %}
-            <div>
-                <h2>f.prompt</h2>
-                <table>
-                    <th>Student</th>    
-                    <th>Response</th>
-                    {% for response in f %}
-                        <tr>
-                            <td> {{ response.student.username }}</td>
-                            <td> {{ response.response }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div> <br> <hr>
-        {% endfor %} -->
+        </div> <br> <hr class="sectionSeparator">
+        <div id="formDataHolder">
+            <h2 class="sectionHeaders">Forms Data</h2>
+            {% if num_forms > 0 %}
+                {% for f in form_data.values() %}
+                    <div class="singleFormHolder">
+                        <h3>Prompt: {{ f['question'] }}</h3>
+                        <h4>Released at {{ f['time'] }}</h4>
+                        <table>
+                            <th>Student</th>    
+                            <th>Response</th>
+                            <th>Timestamp</th>
+                            {% for student, response in f['responses'].items() %}
+                                <tr>
+                                    <td>{{ student_keys[student] }}</td>
+                                    <td class="alignRight">{{ response['response'] }}</td>
+                                    <td class="alignRight">{{ response['timestamp'] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div> <br> <hr class="formsSeparator">
+                {% endfor %}
+            {% else %}
+                <p>No forms to show</p>
+            {% endif %}
+        </div>
 
     </body>
 </html>

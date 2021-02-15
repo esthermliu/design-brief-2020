@@ -16,6 +16,8 @@ html {
 
 
 table {
+    width: 100%;
+    border: 1px solid black;
     border-collapse: collapse;
 }
 
@@ -26,7 +28,7 @@ th, td {
 }
 
 th {
-    background-color:#a8d0e6 !important;
+    background-color:#a8d0e6;
 }
 
 tr {
@@ -35,7 +37,8 @@ tr {
 }
 
 .summaryChartHolder {
-    width: 100%;
+    height: fit-content;
+    width: 95%;
     margin-bottom: 20px;
 }
 
@@ -48,8 +51,8 @@ tr {
 }
 
 .formsResults {
+    width: 50%;
     margin: 3% 0 5% 0;
-    width: 30%;
 }
 
 .infoHolder {
