@@ -269,9 +269,6 @@ function displayFormResults(form) {
 }
 
 function displayFormResultsAll(forms) {
-    
-
-
     console.log('Updating individual form data divs')
     chart_colors = {
         "Yes": 'rgba(104, 254, 101, 0.7)',
@@ -282,6 +279,8 @@ function displayFormResultsAll(forms) {
         results = singleFormResults(forms[key])
         summary = results["summary"]
         keys = results["keys"]
+
+        //console.log(time)
         
         summary_labels = []
         summary_data = []
