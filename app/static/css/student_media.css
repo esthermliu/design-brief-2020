@@ -1,6 +1,5 @@
 /* For phones and devices with smaller screens*/
 @media all and (max-width: 750px) {
-
     .overallContainer {
         flex-direction: column;
         margin-top: 10%;

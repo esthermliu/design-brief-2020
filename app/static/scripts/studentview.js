@@ -223,9 +223,9 @@ function displayFormResults(form) {
     summary = singleFormResults(form)["summary"]
     
     chart_colors = {
-        "Yes": 'rgba(104, 254, 101, 0.7)',
-        "Maybe": 'rgba(255, 206, 86, 0.7)',
-        "No": 'rgba(255, 99, 132, 0.7)'
+        "Yes": 'rgba(104, 254, 101, 0.8)',
+        "Maybe": 'rgba(255, 206, 86, 0.8)',
+        "No": 'rgba(255, 99, 132, 0.8)'
     }
 
     summary_labels = []
@@ -254,23 +254,19 @@ function displayFormResults(form) {
             animation: {
                 duration: 0
             },
-            responsive: true,
             maintainAspectRatio: false
         }
     });
 
     forms_html.innerHTML = "<p><b>Summary - " + form["form_question"]
-        // "</b><ul><li>Yes: " + summary["Yes"] + 
-        // "</li><li>Maybe: " +  summary["Maybe"] + 
-        // "</li><li>No: " +  summary["No"] + "</li></ul></p>"
 }
 
 function displayFormResultsAll(forms) {
     console.log('Updating individual form data divs')
     chart_colors = {
-        "Yes": 'rgba(104, 254, 101, 0.7)',
-        "Maybe": 'rgba(255, 206, 86, 0.7)',
-        "No": 'rgba(255, 99, 132, 0.7)'
+        "Yes": 'rgba(104, 254, 101, 0.8)',
+        "Maybe": 'rgba(255, 206, 86, 0.8)',
+        "No": 'rgba(255, 99, 132, 0.8)'
     }
     for (var key in forms) {
         results = singleFormResults(forms[key])
@@ -295,14 +291,12 @@ function displayFormResultsAll(forms) {
                 }],                
                 labels: summary_labels,
             },
+            options: {
+                animation: {
+                    duration: 0
+                }
+            }
         });
-
-        // var summary_div = document.getElementById("summary" + key)
-        // summary_div.innerHTML = ""
-        // summary_div.innerHTML = ('<li>' +
-        //     "Yes: " + summary["Yes"] + 
-        //     "</li><li>Maybe: " + summary["Maybe"] +
-        //     "</li><li>No: " + summary["No"] + "</li>")
         
         var table_div = document.getElementById("table" + key)
         table_div.innerHTML = "<tr><th>Student</th><th>Response</th><th>Time</th></tr>"

@@ -30,4 +30,10 @@ html {
     margin-top: 20px;
 }
 
+@media (prefers-color-scheme: dark) {
 
+    input {
+        color: #e6e6e6;
+    }
+
+}

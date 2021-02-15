@@ -4,11 +4,62 @@
     }
 
     table {
-        border: 1px solid #e6e6e6;
+        border: 1px solid rgba(230, 230, 230, 0.5) !important   ;
+    }
+    
+    th {
+        background-color: #297499 !important;
     }
 
     tr {
         border-top: 1px solid #e6e6e6;
         border-bottom: 1px solid #e6e6e6;
+    }
+
+    tr {
+        border-bottom: 2px solid #297499 !important;
+    }
+}
+
+@media all and (max-width: 1200px) {
+
+    .formsResults {
+        margin: 3% 0 20% 0;
+        width: 50%;
+    }
+
+}
+
+@media all and (max-width: 950px) {
+    
+    .formsResults {
+        margin: 3% 0 20% 0;
+        width: 60%;
+    }
+
+}
+
+@media all and (max-width: 750px) {
+
+    .formsResults {
+        margin: 3% 0 20% 0;
+        width: 70%;
+    }
+
+}
+
+@media all and (max-width: 600px) {
+
+    .formsResults {
+        margin: 3% 0 20% 0;
+        width: 90%;
+    }
+    
+    table {
+        font-size: 15px;
+    }
+
+    th, td {
+        padding: 10px;
     }
 }

@@ -8,15 +8,15 @@
     
 {% block content %}
 <div class = "formsResults">
-    <h2>Forms Results</h2>
+    <h2 class = "formsTitle">Forms Results</h2>
     <div id = "formsBox2" class = "formsBox">
         {% for f in forms_list|reverse %}
             <div class="infoHolder">
                 <h2>Prompt: {{ f['question'] }}</h2>
                 <h3>Distributed at {{f['time']}}</h3>
                 <div id="{{ f['id'] }}" class="formData">
-                    <p> <br>
-                        <b>Summary</b>
+                    <p>
+                        <h3>Summary</h3>
                         <div class="summaryChartHolder">
                             <canvas id="summaryChart{{ f['id'] }}" width="200" height="150"></canvas>
                         </div>
@@ -28,7 +28,7 @@
                     </p>
                     <div class="tableHolder">
                         <table id="table{{ f['id'] }}" class="responsesTable">
-                            <tr>
+                            <!--<tr>
                                 <th>Student</th>
                                 <th>Response</th>
                                 <th>Time</th>
@@ -39,7 +39,7 @@
                                     <td>{{ r[1] }}</td>
                                     <td>{{ r[2] }}</td>
                                 </tr>
-                            {% endfor %}
+                            {% endfor %}-->
                         </table>
                     </div>
                 </div>
