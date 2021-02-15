@@ -410,28 +410,53 @@ def generate_report(session_id):
     course_name = course.course_name # Gets the string course name
 
     # get all the students signed up for this course
-    students_all = Signups.query.filter_by(course=course_id).all()
+    signups_all = Signups.query.filter_by(course=course_id).all()
     
     # create a dictionary mapping the students' user ids to their usernames for easy access later.
-    ids_and_students = {student.user_id: User.query.get(student.user_id).username for student in students_all}
+    ids_and_usernames = {s.user_id: User.query.get(s.user_id).username for s in signups_all}
+    print("\nIDS AND STUDENTS: %s\n" % (ids_and_usernames))
 
     # get all reactions for this session
     reactions_all = Reactions.query.filter_by(session_id=session_id).all()
     
-    reaction_counts = {ids_and_students[s.user_id]:defaultdict(int) for s in students_all} # To store occurences of each reaction for each student
+    reaction_counts = {student_id:defaultdict(int) for student_id in ids_and_usernames.keys()} # To store occurences of each reaction for each student
 
     attendance_present = set()
     attendance_absent = set()
 
     for r in reactions_all:
         s_id = r.user_id
-        reaction_counts[ids_and_students[s_id]][r.reactions] += 1
-        attendance_present.add(ids_and_students[s_id])
+        reaction_counts[s_id][r.reactions] += 1
+        attendance_present.add(s_id)
 
-    for s in students_all:
-        s_name = User.query.get(s.user_id).username
-        if s_name not in attendance_present:
-            attendance_absent.add(s_name)
+    prompts_all = Prompts.query.filter_by(session_id=session_id).all() # Getting all prompts for this session
+    forms_dict = {}
+    responses_key = {
+        0: "Yes",
+        1: "Maybe",
+        2: "No"
+    }
+
+    for p in prompts_all:
+        forms_dict[p.id] = {}
+        forms_dict[p.id]['question'] = p.form_question
+        timestamp = utc_to_local(p.timestamp)
+        forms_dict[p.id]['time'] = timestamp.strftime("%I:%M %p")
+        forms_dict[p.id]['responses'] = {}
+        responses = Responses.query.filter_by(form_prompt_id=p.id)
+        print(ids_and_usernames)
+        for s in ids_and_usernames.keys():
+            forms_dict[p.id]['responses'][s] = {'response': "--", "timestamp": "--"}
+        for r in responses:
+            attendance_present.add(r.student_id) # Marking a student present if they responded to a form
+            forms_dict[p.id]['responses'][r.student_id]['response'] = responses_key[r.form_responses]
+            forms_dict[p.id]['responses'][r.student_id]['timestamp'] = utc_to_local(r.timestamp).strftime("%I:%M %p")
+
+    print(forms_dict)
+
+    for s in ids_and_usernames:
+        if s not in attendance_present:
+            attendance_absent.add(s)
     
     # converting the attendance sets to sorted lists
     attendance_absent = sorted(list(attendance_absent))
@@ -453,10 +478,13 @@ def generate_report(session_id):
                             start_date=start_date,
                             start_time=start_time,
                             end_time=end_time,
-                            session_id=session.id, 
+                            session_id=session.id,
+                            student_keys=ids_and_usernames,
                             present_list=attendance_present,
                             absent_list=attendance_absent,
-                            reactions=sorted(reaction_counts.items())) # Sorts so that reactions are accessed in alphabetical order of students' usernames
+                            reactions=sorted(reaction_counts.items()), # Sorts so that reactions are accessed in alphabetical order of students' usernames
+                            num_forms=len(forms_dict),
+                            form_data=forms_dict)
     
     
     # renders the html as a pdf using weasyprint
