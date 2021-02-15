@@ -16,6 +16,7 @@ html {
 
 
 table {
+    width: 100%;
     border: 1px solid black;
     border-collapse: collapse;
 }
@@ -31,8 +32,8 @@ tr {
 }
 
 .summaryChartHolder {
-    height: 250px;
-    width: 100%;
+    height: fit-content;
+    width: 95%;
     margin-bottom: 20px;
     
 }
@@ -43,8 +44,7 @@ tr {
 
 .formsResults {
     margin: 5% 0 5% 0;
-    
-    width: 30%;
+    width: 55%;
 }
 
 .infoHolder {

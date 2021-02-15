@@ -135,6 +135,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
+    .classTitle h1 {
+        color: #e6e6e6;
+    }
     .newCourseButton {
         background-color: #c75858;
     }

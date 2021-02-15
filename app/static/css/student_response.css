@@ -110,3 +110,14 @@ form {
 .optionLabel {
     margin-left: 25px;
 }
+
+@media (prefers-color-scheme: dark) {
+    .largeHolder {
+        background-color: #233741;
+    } 
+    
+    #submit {
+        background-color: #297499 !important;
+        border: 2px solid  #297499 !important;
+    }
+}

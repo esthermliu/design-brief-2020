@@ -81,7 +81,7 @@ body {
 }
 
 .formsBoxChart {
-    width: 200px;
+    width: 250px;
     height: 150px;
 }
 
@@ -726,4 +726,44 @@ h2 {
     width: 100%;
 }
 
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: transparent !important;
+    }
 
+    .overallThermoContainer, 
+    .teacherVibe, 
+    .makeReactionBox, 
+    .teacherVisualHolder,
+    .reactionResultsHolder, 
+    .paceBox, 
+    .attendanceSection,
+    .formsControls,
+    .largeReactionHolder {
+        background-color: #233741 !important;
+    }
+
+    .makeForm, .viewForm {
+        background-color: #297499 !important;
+    }
+
+    .makeReactionBox {
+        background-color: transparent !important;
+    }
+
+    .thermometer, .thermometer_shell, .thermoCircle {
+        filter: brightness(0.85)
+    }
+
+    #openReport {
+        background-color: rgb(58, 58, 129);
+    }
+
+    .endSessionButton {
+        background-color: #c75858;
+    }
+
+    #present p, #absent p {
+        background-color: #297499;   
+    }
+}

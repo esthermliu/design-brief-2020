@@ -253,12 +253,9 @@ function displayFormResults(form) {
         options: {
             animation: {
                 duration: 0
-            }
-            // legend: {
-            //     labels: {
-            //         fontSize: '10'
-            //     }
-            // }
+            },
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
 

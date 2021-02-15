@@ -1,4 +1,8 @@
 @media (prefers-color-scheme: dark) {
+    .infoHolder {
+        background-color: #233741 !important; 
+    }
+
     table {
         border: 1px solid #e6e6e6;
     }
