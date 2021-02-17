@@ -32,7 +32,8 @@ def index():
     #         'body': "My name is Susan!"
     #     }
     # ]
-    return render_template('index.html', title="Home")
+    return redirect(url_for('login'))
+    # return render_template('index.html', title="Home")
 
 def unauthorized_access(error_message=""):
     flash('Unauthorized access.\n{}'.format(error_message), 'error')

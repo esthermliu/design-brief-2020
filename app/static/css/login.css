@@ -1,3 +1,8 @@
+#appName {
+    font-family: 'Handlee', cursive;
+    font-weight: bold;
+}
+
 @media screen and (max-width: 600px) {
     .imageBox {
         display: none
