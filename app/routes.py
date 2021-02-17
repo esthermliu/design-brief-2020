@@ -325,7 +325,7 @@ def add_user(course_id):
                 new_signup = Signups(user_id = user.id, course=course_id)
                 db.session.add(new_signup)
                 db.session.commit()
-                flash('%s was successfully added' % (username))
+                flash('%s was successfully added' % (username), 'info')
             return redirect(url_for('manage_course_page', course_id=course_id))
         else:
             addByEmail = True

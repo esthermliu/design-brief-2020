@@ -374,6 +374,7 @@ h2 {
 .formsControls {
     background-color: white;
     height: 33%;
+    min-height: 250px; /* To fit forms with longer questions */
     width: 100% !important;
     margin-bottom: 20px;
     padding-top: 2%;
