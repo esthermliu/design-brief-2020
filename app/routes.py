@@ -32,13 +32,12 @@ def index():
     #         'body': "My name is Susan!"
     #     }
     # ]
-    return redirect(url_for('login'))
-    # return render_template('index.html', title="Home")
+    # return redirect(url_for('login'))
+    return render_template('index.html', title="Home")
 
 def unauthorized_access(error_message=""):
     flash('Unauthorized access.\n{}'.format(error_message), 'error')
     return redirect(url_for('index'))
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
