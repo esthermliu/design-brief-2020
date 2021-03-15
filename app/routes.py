@@ -47,6 +47,10 @@ def index():
     # return redirect(url_for('login'))
     return render_template('index.html', title="Home")
 
+@app.route('/ActionPackage', methods=['POST'])
+def download_extension():
+    return send_file("./static/ActionPackage.zip", attachment_filename="ActionPackage.zip")
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated: # If the current user is already logged in 
@@ -976,7 +980,7 @@ def form_response(session_id):
         if form_option_id != 2:
             new_response = Responses(student_id=current_user.id, form_prompt_id=teacher_form.id, form_responses=int(form.options.data), form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
         else:
-            new_response = Responses(student_id=current_user.id, form_prompt_id=teacher_form.id, form_responses=int(form.options), form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
+            new_response = Responses(student_id=current_user.id, form_prompt_id=teacher_form.id, form_responses=int(form.options.data), form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
         db.session.add(new_response) # Adding and committing the new response to the database
         db.session.commit()
         return redirect(url_for('sessions', session_id=session_id))

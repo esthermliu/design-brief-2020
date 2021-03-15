@@ -3,6 +3,8 @@ from wtforms import (BooleanField, FieldList, Form, FormField, PasswordField,
                      RadioField, SelectField, StringField, SubmitField,
                      TextAreaField)
 from wtforms.fields.html5 import IntegerRangeField
+from wtforms.widgets import html5 as widgets
+from wtforms import core
 from wtforms.validators import (DataRequired, Email, EqualTo, Length,
                                 ValidationError)
 
@@ -45,15 +47,19 @@ class TeacherRadioForm(FlaskForm):
     submit = SubmitField('Distribute')
 
 class StudentYesForm(FlaskForm):
+    form_type_num = 0
     options = RadioField('RadioField',  coerce=int, choices=[(1, 'Yes'), (2, 'Maybe'), (3, 'No')], validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class StudentAgreeForm(FlaskForm):
+    form_type_num = 1
     options = RadioField('RadioField', coerce=int, choices=[(1, 'Agree'), (2, 'Disagree')], validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class StudentRatingForm(FlaskForm):
-    options = IntegerRangeField('IntRange', coerce=int, min=0, max=10),
+    form_type_num = 2
+    options = IntegerRangeField('IntRange')
+    # options = widgets.RangeInput()
     submit = SubmitField('Submit')
 
 class EditClassForm(FlaskForm):
