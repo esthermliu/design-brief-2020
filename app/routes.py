@@ -3,7 +3,7 @@ from app import app
 from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
-from app.forms import EditProfileForm, TeacherRadioForm, StudentRadioForm, EditClassForm, ResetPasswordRequestForm, ResetPasswordForm
+from app.forms import EditProfileForm, TeacherRadioForm, StudentYesForm, StudentAgreeForm, StudentRatingForm, EditClassForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user, login_user
 from app.models import User, Reactions, Post, Courses, Signups, Session, Responses, Prompts
 from flask_login import logout_user
@@ -17,6 +17,18 @@ from collections import defaultdict
 from app.email import send_password_reset_email
 import re
 from flask_weasyprint import HTML, render_pdf
+
+
+def unauthorized_access(error_message=""):
+    flash('Unauthorized access.\n{}'.format(error_message), 'error')
+    return redirect(url_for('index'))
+
+def str_options_to_list(str_options):
+    options_list = []
+    individual_options = str_options.split(",")
+    for index in range(len(individual_options)):
+        options_list.append((index, individual_options[index]))
+    return options_list
 
 @app.route('/')
 @app.route('/index')
@@ -34,10 +46,6 @@ def index():
     # ]
     # return redirect(url_for('login'))
     return render_template('index.html', title="Home")
-
-def unauthorized_access(error_message=""):
-    flash('Unauthorized access.\n{}'.format(error_message), 'error')
-    return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -564,7 +572,6 @@ def session_form_json(session_id):
     all_forms_dict = {}
     forms_all = Prompts.query.filter_by(session_id=session_id).all() # Getting the entire list of forms for the session
     responses_all = Responses.query.filter_by(session_id=session_id).all()
-    
     for f in forms_all:
         responses_list=[]
         responses_dict = {}
@@ -579,7 +586,6 @@ def session_form_json(session_id):
                 "session_id": r.session_id,
                 "timestamp": r.timestamp
             }
-            
             responses_list.append(responses_dict)
 
         forms_dict = {
@@ -587,11 +593,14 @@ def session_form_json(session_id):
             "teacher_id": f.teacher_prompter.username,
             "form_question": f.form_question,
             "responses": responses_list,
+            "question_type": f.form_options,
+            "response_keys": get_response_keys(f.form_options),
             "form_course_id": f.form_course_id,
             "session_id": f.session_id,
-            "timestamp": f.timestamp
+            "timestamp": f.timestamp,
+            "forms_url": url_for('form_response', session_id=f.session_id)
         }
-
+        
         all_forms_dict[f.id] = forms_dict
 
     return jsonify(all_forms_dict)
@@ -655,6 +664,8 @@ def session_json(session_id):
             "teacher_id": f.teacher_prompter.username,
             "form_question": f.form_question,
             "responses": responses_list,
+            "question_type": f.form_options,
+            "response_keys": get_response_keys(f.form_options),
             "form_course_id": f.form_course_id,
             "session_id": f.session_id,
             "timestamp": f.timestamp,
@@ -924,7 +935,7 @@ def create_form(session_id):
 
     if form.validate_on_submit():
         flash('Form has been successfully distributed', 'info')
-        new_prompt = Prompts(teacher_id=current_user.id, form_question=form.prompt.data, form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
+        new_prompt = Prompts(teacher_id=current_user.id, form_question=form.prompt.data, form_options=form.options.data, form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
         db.session.add(new_prompt) # Adding and committing the new propmt to the database
         db.session.commit()
         return redirect(url_for('sessions', session_id=session_id))
@@ -932,31 +943,57 @@ def create_form(session_id):
     #     flash('Error in form', 'error')
     return render_template('teacher_form.html', form=form, session_id=session_id, title='Create Form')
 
+def form_type(form_type_num):
+    form_dict = {
+        0: StudentYesForm(),
+        1: StudentAgreeForm(),
+        2: StudentRatingForm(),
+    }
+    return form_dict[form_type_num]
+
+
 # student response to the form
 @app.route('/classes/course/session/<session_id>/form-response', methods=['GET', 'POST'])
 @login_required
 def form_response(session_id):
-    form = StudentRadioForm() # setting form to the TeaderRadioForm
-
+    # If the session has ended, then redirect
     session = Session.query.get(session_id) # Get the correct session
+    if (session.timestamp_end is not None):
+        return redirect(url_for('course_waiting_room', course_id=session.course_id))
     
     teacher_form = Prompts.query.order_by(Prompts.id.desc()).filter_by(session_id=session_id).first()
     prompt = teacher_form.form_question
-    # If the session has ended, then redirect
-    if (session.timestamp_end is not None):
-        return redirect(url_for('course_waiting_room', course_id=session.course_id))
-
+    print("FORM OPTIONS NUM: %s" % (teacher_form.form_options))
+    form_option_id = int(teacher_form.form_options)
+    form = form_type(form_option_id) # setting form to the TeaderRadioForm 
+    print("\nFORM OPTIONS %s\n" % (form.options))
+    
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
 
     if form.validate_on_submit():
         flash('Form has been successfully  submitted', 'info')
-        new_response = Responses(student_id=current_user.id, form_prompt_id=teacher_form.id, form_responses=form.options.data, form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
-        db.session.add(new_response) # Adding and committing the new propmt to the database
+        if form_option_id != 2:
+            new_response = Responses(student_id=current_user.id, form_prompt_id=teacher_form.id, form_responses=int(form.options.data), form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
+        else:
+            new_response = Responses(student_id=current_user.id, form_prompt_id=teacher_form.id, form_responses=int(form.options), form_course_id=course_id, session_id=session_id) # creating a new prompt from the information in the form
+        db.session.add(new_response) # Adding and committing the new response to the database
         db.session.commit()
         return redirect(url_for('sessions', session_id=session_id))
 
     return render_template('student_response.html', form=form, session_id=session_id, title='Form Response', prompt=prompt)
+
+def get_response_keys(form_type_num):
+    print("\n FORM TYPE NUM TYPE: %s\n" % (type(form_type_num)))
+    response_keys_dict = {
+        "0": {0: 'Yes', 1: 'Maybe', 2:'No'},
+        "1": {0: 'Agree', 1: 'Disagree'},
+    }
+
+    if form_type_num in response_keys_dict:
+        return response_keys_dict[form_type_num]
+    else:
+        return {0: "Didn't", 1: "Work"}
 
 @app.route('/classes/course/session/<session_id>/form-data', methods=['GET', 'POST'])
 @login_required
@@ -966,6 +1003,7 @@ def form_data(session_id):
     course_id = session.course_id # This will give you the course id
     prompts = Prompts.query.filter_by(session_id=session.id).all()
     forms_list = []
+    
     for p in prompts:
         form_info = {}
         form_info['id'] = p.id
@@ -973,8 +1011,8 @@ def form_data(session_id):
         form_info['time'] = utc_to_local(p.timestamp).strftime("%I:%M %p")
         form_info['responses'] = []
         form_info['summary'] = defaultdict(int)
-        response_keys = {0: 'Yes', 1: 'Maybe', 2:'No'}
-        # user_keys = {}
+        response_keys = get_response_keys(p.form_options)
+        
         for r in Responses.query.filter_by(form_prompt_id=p.id):
             form_info['responses'].append((User.query.get(r.student_id).username,
                                             response_keys[r.form_responses],

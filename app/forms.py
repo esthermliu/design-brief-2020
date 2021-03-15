@@ -1,7 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, RadioField, FormField, FieldList, Form
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
+from wtforms import (BooleanField, FieldList, Form, FormField, PasswordField,
+                     RadioField, SelectField, StringField, SubmitField,
+                     TextAreaField)
+from wtforms.fields.html5 import IntegerRangeField
+from wtforms.validators import (DataRequired, Email, EqualTo, Length,
+                                ValidationError)
+
 from app.models import User
+
 
 class LoginForm(FlaskForm): # Have to pass FLaskForm in as the default
     username = StringField("Username", validators=[DataRequired()]) # render_kw={"placeholder": "test"}
@@ -15,7 +21,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    role = SelectField('Teacher or Student?', choices=[(0, 'Teacher'),(1,'Student')], coerce=int)
+    role = SelectField('Teacher or Student?', choices=[(0, 'Teacher'), (1,'Student')], coerce=int)
     submit = SubmitField('Register')
 
     def validate_username(self, username):
@@ -35,11 +41,19 @@ class EditProfileForm(FlaskForm):
 
 class TeacherRadioForm(FlaskForm):
     prompt = StringField('Prompt', validators=[DataRequired()])
-    #options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
+    options = SelectField('Teacher or Student?', choices=[(0, 'Yes/Maybe/No'), (1,'Agree/Disagree'), (2, 'Rating')], coerce=int)
     submit = SubmitField('Distribute')
 
-class StudentRadioForm(FlaskForm):
-    options = RadioField('', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], coerce=int)
+class StudentYesForm(FlaskForm):
+    options = RadioField(label='RadioField', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], validators=[DataRequired()], coerce=int)
+    submit = SubmitField('Submit')
+
+class StudentAgreeForm(FlaskForm):
+    options = RadioField(label='RadioField', choices=[(0, 'Agree'), (1, 'Disagree')], validators=[DataRequired()], coerce=int)
+    submit = SubmitField('Submit')
+
+class StudentRatingForm(FlaskForm):
+    options = IntegerRangeField(label='IntRange', min=0, max=10, coerce=int),
     submit = SubmitField('Submit')
 
 class EditClassForm(FlaskForm):

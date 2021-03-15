@@ -110,7 +110,7 @@ function displayAll(status, data) {
     displayCalculatedSpeed(data["speed_num"]); // Display the calculated speed number
     displayAttendance(data["attendance"]); // Display the attendance
     // console.log("Passed to displaFormResults: "+ data["forms"][data["forms"].length - 1]["responses"])
-    displayFormResults(data["forms"][data["forms"].length - 1]); // Display the Forms responses
+    displayFormResults(data["forms"][data["forms"].length - 1], "formChartCanvas", "formsBox"); // Display the Forms responses
 }
 
 // Only calls some of the functions to display certain features for the student
@@ -198,46 +198,52 @@ function submitFormGeneral(session_id, react_num) {
         .catch(handleError); 
 }
 
-function singleFormResults(form) {
-    summary = {"Yes": 0, "Maybe": 0, "No": 0}
-    keys = {0: "Yes", 1: "Maybe", 2: "No"}
-    responses = form["responses"]
-    for (r = responses.length - 1; r >= 0; r--) {
-        // console.log(responses[r])
-        summary[keys[responses[r]["form_responses"]]] += 1
+function swap(dict) {
+    var swapped_dict = {};
+    for (var key in dict) {
+        swapped_dict[dict[key]] = key;
     }
 
-    return {"summary": summary,"keys": keys}
+    return swapped_dict;
 }
 
+function get_chart_colors(keys) {
+    all_colors = ['rgba(104, 254, 101, 0.8)', ]
+}
 
-// Display results to the form
-function displayFormResults(form) {
-    console.log(">>> DISPLAYING FORMS")
-    forms_html = document.getElementById("formsBox");
-    // document.getElementById("formsBox").innerHTML = ""; // Clearing all the content in the div
-    console.log("YIP YOP")
-    summary = singleFormResults(form)["summary"]
-    
-    chart_colors = {
-        "Yes": 'rgba(104, 254, 101, 0.8)',
-        "Maybe": 'rgba(255, 206, 86, 0.8)',
-        "No": 'rgba(255, 99, 132, 0.8)'
+function singleFormResults(form) {
+    keys = form["response_keys"];
+    console.log("\n\nRESPONSE KEYS\n\n" + JSON.stringify(keys));
+    summary = {};
+    for (var key in keys) {
+        summary[keys[key]] = 0;
     }
 
-    summary_labels = []
-    summary_data = []
-    summary_colors = [chart_colors["Yes"], chart_colors["Maybe"], chart_colors["No"]]
+    responses = form["responses"];
+    for (r = responses.length - 1; r >= 0; r--) {
+        // console.log("\n\nEEEEEEE\n\nRESPONSES[r] " + JSON.stringify(responses[r]));
+        summary[keys[responses[r]["form_responses"]]] += 1;
+    }
+
+    // console.log("\n\nSUMMARY\n\n" + JSON.stringify(summary));
+
+    return {"summary": summary,"keys": keys};
+}
+
+function displayYes(summary, prompt, elem_id, forms_html=null) {
+    summary_labels = [];
+    summary_data = [];
+    summary_colors = ['rgba(104, 254, 101, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(255, 99, 132, 0.8)'];
 
     for (var response in summary) {
-        summary_labels.push(response)
-        summary_data.push(summary[response])
+        summary_labels.push(response);
+        summary_data.push(summary[response]);
     }
     
-    console.log("Summary Data: " + summary_data)
-    console.log("Summary Labels: " + summary_labels)
-    console.log("Summary Labels: " + summary_labels)
-    var ctx = document.getElementById("formChartCanvas")
+    console.log("Summary Data: " + summary_data);
+    console.log("Summary Labels: " + summary_labels);
+    var ctx = document.getElementById(elem_id).getContext('2d');
+    console.log("CTX = " + ctx)
     var myPieChart = new Chart(ctx, {
         type: 'pie',
         data: {
@@ -256,59 +262,108 @@ function displayFormResults(form) {
         }
     });
 
-    forms_html.innerHTML = "<p><b>Summary - " + form["form_question"]
+    if (forms_html) {
+        forms_html.innerHTML = "<p><b>Summary - " + prompt;
+    }
+}
+
+function displayAgree(summary, prompt, elem_id, forms_html=null) {
+    chart_colors = {
+        "Agree": 'rgba(104, 254, 101, 0.8)',
+        "Disagree": 'rgba(255, 99, 132, 0.8)'
+    };
+
+    summary_labels = [];
+    summary_data = [];
+    summary_colors = [chart_colors["Agree"], chart_colors["Disagree"]];
+
+    for (var response in summary) {
+        summary_labels.push(response);
+        summary_data.push(summary[response]);
+    }
+    
+    console.log("Summary Data: " + summary_data);
+    console.log("Summary Labels: " + summary_labels);
+    console.log("Summary Labels: " + summary_labels);
+    var ctx = document.getElementById(elem_id).getContext('2d');
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: summary_data,
+                backgroundColor: summary_colors,
+                borderWidth: 0.8,
+            }],                
+            labels: summary_labels,
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            maintainAspectRatio: false,
+        }
+    });
+
+    if (forms_html) {
+        forms_html.innerHTML = "<p><b>Summary - " + prompt;
+    }
+}
+
+function displayRating(summary) {
+    
+}
+
+// Display results to the form
+function displayFormResults(form, elem_id, container_elem_id=null) {
+    console.log("\n" + "form\n" + JSON.stringify(form) + "\n")
+    console.log(">>> DISPLAYING FORMS")
+
+    forms_html = document.getElementById(container_elem_id);
+    // document.getElementById("formsBox").innerHTML = ""; // Clearing all the content in the div
+    console.log("YIP YOP")
+    summary = singleFormResults(form)["summary"]
+    
+    console.log("FORM QUESTION TYPE IS: " + form["question_type"]);
+    console.log("FORM QUESTION TYPE IS: " + typeof form["question_type"]);
+    console.log("FORM SUMMARY IS: " + JSON.stringify(summary));
+    switch(form["question_type"]) {
+        case "0":
+            displayYes(summary, form["form_question"], elem_id);
+            console.log("Displaying YES poll");
+            break;
+        
+        case "1":
+            displayAgree(summary, form["form_question"], elem_id);
+            console.log("Displaying AGREE poll");
+            break;
+
+        case "2":
+            displayRating(summary, form["form_question"], elem_id);
+            console.log("Displaying RATING poll");
+            break;
+    }
 }
 
 function displayFormResultsAll(forms) {
     console.log('Updating individual form data divs')
-    chart_colors = {
-        "Yes": 'rgba(104, 254, 101, 0.8)',
-        "Maybe": 'rgba(255, 206, 86, 0.8)',
-        "No": 'rgba(255, 99, 132, 0.8)'
-    }
+    // console.log("\n" + "> FORMSSSSS <\n" + JSON.stringify(forms) + "\n")
+    // console.log("\n" + "> FORM1 <\n" + JSON.stringify(forms[0]) + "\n")
     for (var key in forms) {
-        results = singleFormResults(forms[key])
-        summary = results["summary"]
-        keys = results["keys"]
-
-        //console.log(time)
-        
-        summary_labels = []
-        summary_data = []
-        summary_colors = [chart_colors["Yes"], chart_colors["Maybe"], chart_colors["No"]]
-        for (var response in summary) {
-            summary_labels.push(response)
-            summary_data.push(summary[response])
-        }
-
-        var ctx = document.getElementById("summaryChart" + key)
-        var myPieChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                datasets: [{
-                    data: summary_data,
-                    backgroundColor: summary_colors
-                }],                
-                labels: summary_labels,
-            },
-            options: {
-                animation: {
-                    duration: 0
-                }
-            },
-            maintainAspectRatio: false
-        });
+        form = forms[key]
+        keys = form["response_keys"]
+        displayFormResults(form, "summaryChart" + key)
         
         var table_div = document.getElementById("table" + key)
         table_div.innerHTML = "<tr><th>Student</th><th>Response</th><th>Time</th></tr>"
-        response_list = forms[key]["responses"]
-        // console.log("RESPONSE LIST: " + response_list)
+        response_list = form["responses"]
+        console.log("\nRESPONSE LIST: " + JSON.stringify(response_list) + "\n")
         for (r=response_list.length - 1; r >= 0; r--) {
             console.log("This response: " + response_list[r])
             table_div.innerHTML += ("<tr><td>" + response_list[r]["student_id"] + "</td><td>" +
                 keys[response_list[r]["form_responses"]] + "</td><td>" +
                 moment(response_list[r]["timestamp"]).format('hh:mm A') + "</td></tr>")
         }
+
     }
 }
 
@@ -485,13 +540,3 @@ function redirectToDownloadPage(session_id) {
     let url = "/classes/course/session/" + session_id + "/report"
     window.open(url)
 }
-
-// //download the pdf using jsPDF
-// function create_and_save_pdf(course_name, start_time, end_time) {
-//     pdf = new jsPDF('p', 'pt', 'letter')
-//     let url = "/classes/course/session/" + session_id + "/report"
-//     html_obj = fetch(url, {method: "GET"})
-//     pdf.addHTML(html_obj, function () {
-//         pdf.save('Test.pdf')
-//     })
-// }

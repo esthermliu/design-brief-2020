@@ -20,6 +20,12 @@
                     <span class="errorSpan">[{{ error }}]</span>
                 {% endfor %}
             </div>
+            <div class="formTypeHolder">
+                {{ form.options }}
+                {% for error in form.options.errors %}
+                    <span class="errorSpan">[{{ error }}]</span>
+                {% endfor %}
+            </div>
             <div>{{ form.submit() }}</div>
         </form>
     </div>
