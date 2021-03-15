@@ -45,15 +45,15 @@ class TeacherRadioForm(FlaskForm):
     submit = SubmitField('Distribute')
 
 class StudentYesForm(FlaskForm):
-    options = RadioField(label='RadioField', choices=[(0, 'Yes'), (1, 'Maybe'), (2, 'No')], validators=[DataRequired()], coerce=int)
+    options = RadioField('RadioField',  coerce=int, choices=[(1, 'Yes'), (2, 'Maybe'), (3, 'No')], validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class StudentAgreeForm(FlaskForm):
-    options = RadioField(label='RadioField', choices=[(0, 'Agree'), (1, 'Disagree')], validators=[DataRequired()], coerce=int)
+    options = RadioField('RadioField', coerce=int, choices=[(1, 'Agree'), (2, 'Disagree')], validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class StudentRatingForm(FlaskForm):
-    options = IntegerRangeField(label='IntRange', min=0, max=10, coerce=int),
+    options = IntegerRangeField('IntRange', coerce=int, min=0, max=10),
     submit = SubmitField('Submit')
 
 class EditClassForm(FlaskForm):

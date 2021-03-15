@@ -986,8 +986,8 @@ def form_response(session_id):
 def get_response_keys(form_type_num):
     print("\n FORM TYPE NUM TYPE: %s\n" % (type(form_type_num)))
     response_keys_dict = {
-        "0": {0: 'Yes', 1: 'Maybe', 2:'No'},
-        "1": {0: 'Agree', 1: 'Disagree'},
+        "0": {1: 'Yes', 2: 'Maybe', 3:'No'},
+        "1": {1: 'Agree', 2: 'Disagree'},
     }
 
     if form_type_num in response_keys_dict:
