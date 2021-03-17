@@ -157,8 +157,14 @@
                     <div class="formsResults">
                         {% if forms_exist %} <!-- Will only show forms results if a form even exists in the session-->
                                 <h2>Forms Results</h2>
-                                <div id = "formsBox" class = "formsBox"></div>
+                                <div class="participationHolder">
+                                    <div class="participationBarHolder">
+                                        <div id="participation" class="participationBar"></div>
+                                    </div>
+                                    <div id="participationLabel" class="participationLabel"></div>
+                                </div>
                                 <div class = "formsBoxChart">
+                                    <div id = "formsBox" class = "formsBox"></div>
                                     <canvas id = "formChartCanvas" width="200" height="150"></canvas>
                                 </div>
                         {% endif %}

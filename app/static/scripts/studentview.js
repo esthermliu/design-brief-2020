@@ -110,7 +110,7 @@ function displayAll(status, data) {
     displayCalculatedSpeed(data["speed_num"]); // Display the calculated speed number
     displayAttendance(data["attendance"]); // Display the attendance
     // // console.log("Passed to displaFormResults: "+ data["forms"][data["forms"].length - 1]["responses"])
-    displayFormResults(data["forms"][data["forms"].length - 1], "formChartCanvas", "formsBox"); // Display the Forms responses
+    displayFormResults(data["forms"][data["forms"].length - 1], "formChartCanvas", label_elem_id="formsBox"); // Display the Forms responses
 }
 
 // Only calls some of the functions to display certain features for the student
@@ -339,22 +339,33 @@ function displayRating(form, elem_id) {
 }
 
 // Display results to the form
-function displayFormResults(form, elem_id) {
+function displayFormResults(form, canvas_elem_id, label_elem_id=null) {
+    // If present, it is being called from the main rooms page
+    if (label_elem_id) {
+        var label_div = document.getElementById(label_elem_id);
+        label_div.innerHTML = ("<p><b>Summary</b> - " + form["form_question"] + "</p>");
+        displayParticipation(
+            Math.min(form["participation"], 100), 
+            "participation",
+            "participationLabel"
+        );
+    }
+
     switch(Number(form["question_type"])) {
         case 0:
             summary = singleFormResults(form)["summary"]
             console.log("Displaying YES poll");
-            displayYes(summary, form["form_question"], elem_id);
+            displayYes(summary, form["form_question"], canvas_elem_id);
             break;
         case 1:
             summary = singleFormResults(form)["summary"]
             console.log("Displaying AGREE poll");
-            displayAgree(summary, form["form_question"], elem_id);
+            displayAgree(summary, form["form_question"], canvas_elem_id);
             break;
 
         case 2:
             console.log("Displaying RATING poll");
-            displayRating(form, elem_id);
+            displayRating(form, canvas_elem_id);
             break;
         
         default:
@@ -363,8 +374,8 @@ function displayFormResults(form, elem_id) {
     };
 }
 
-function displayFormTable(form, elem_id) {
-    var table_div = document.getElementById(elem_id)
+function displayFormTable(form, table_elem_id) {
+    var table_div = document.getElementById(table_elem_id)
     table_div.innerHTML = "<tr><th>Student</th><th>Response</th><th>Time</th></tr>"
     response_list = form["responses"]
     
@@ -387,10 +398,25 @@ function displayFormTable(form, elem_id) {
     };
 }
 
+function displayParticipation(participation, p_elem_id, pl_elem_id) {
+    var participationBar = document.getElementById(p_elem_id);
+    console.log(participationBar);
+    participationBar.style.width = participation + "%";
+    console.log("Set participation to " + participation + "%");
+    var participationLabel = document.getElementById(pl_elem_id);
+    console.log(participationLabel);
+    participationLabel.innerHTML = ("<p><b>" + participation.toFixed(0) + "%</b> Particpation</p>");
+}
+
 function displayFormResultsAll(forms) {
     console.log("\n\n" + Object.keys(forms).length + " FORMS ARE PRESENT\n\n");
     for (var key in forms) {
         form = forms[key];
+        console.log("Displaying form " + key);
+        displayParticipation(
+            Math.min(form["participation"], 100), 
+            "participation" + key,
+            "participationLabel" + key);
         displayFormResults(form, "summaryChart" + key);
         displayFormTable(form, "table" + key);
     }

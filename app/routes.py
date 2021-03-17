@@ -572,12 +572,15 @@ def submit_reaction(session_id, reaction_num):
     db.session.commit() 
     return redirect(url_for('sessions', session_id=session_id)) # Redirects to the room page
 
+
 @app.route('/classes/course/session/<session_id>/session_forms_json', methods=["GET", "POST"])
 @login_required
 def session_form_json(session_id):
     all_forms_dict = {}
     forms_all = Prompts.query.filter_by(session_id=session_id).all() # Getting the entire list of forms for the session
     responses_all = Responses.query.filter_by(session_id=session_id).all()
+    course = Session.query.get(session_id).session_course_id
+    num_students = len(Signups.query.filter_by(course=course.id).all())
     for f in forms_all:
         responses_list=[]
         responses_dict = {}
@@ -606,8 +609,11 @@ def session_form_json(session_id):
             "form_course_id": f.form_course_id,
             "session_id": f.session_id,
             "timestamp": f.timestamp,
-            "forms_url": url_for('form_response', session_id=f.session_id)
+            "forms_url": url_for('form_response', session_id=f.session_id),
+            "participation": (len(responses_list) / num_students) * 100
         }
+
+        print("\nFORM %d participation is %d%%\n" % (forms_dict["forms_id"], forms_dict["participation"]))
         
         all_forms_dict[f.id] = forms_dict
 
@@ -655,6 +661,8 @@ def session_json(session_id):
         responses_list=[]
         responses_dict = {}
         responses_specific = Responses.query.filter_by(session_id=session_id, form_prompt_id=f.id).all() # These are the responses for each specific form
+        course = Session.query.get(session_id).session_course_id
+        num_students = len(Signups.query.filter_by(course=course.id).all())
         for r in responses_specific:
             responses_dict = {
                 "response_id": r.id,
@@ -677,7 +685,8 @@ def session_json(session_id):
             "form_course_id": f.form_course_id,
             "session_id": f.session_id,
             "timestamp": f.timestamp,
-            "forms_url": url_for('form_response', session_id=f.session_id)
+            "forms_url": url_for('form_response', session_id=f.session_id),
+            "participation": (len(responses_list) / num_students) * 100
         }
         
         forms_list.append(forms_dict)
