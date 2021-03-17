@@ -30,6 +30,15 @@ def str_options_to_list(str_options):
         options_list.append((index, individual_options[index]))
     return options_list
 
+
+# To convert the utc times from the database to local times within python
+def utc_to_local(utc_time):
+    from_zone = tz.tzutc()
+    to_zone = tz.gettz()
+
+    out = utc_time.replace(tzinfo=from_zone)
+    return out.astimezone(to_zone)
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -444,13 +453,6 @@ def end(course_id, session_id):
 
     return redirect(url_for('course_waiting_room', course_id=course.id))
 
-# To convert the utc times from the database to local times within python
-def utc_to_local(utc_time):
-    from_zone = tz.tzutc()
-    to_zone = tz.gettz()
-
-    out = utc_time.replace(tzinfo=from_zone)
-    return out.astimezone(to_zone)
 
 @app.route('/classes/course/session/<session_id>/report', methods=["GET", "POST"])
 @login_required
@@ -473,7 +475,7 @@ def generate_report(session_id):
     
     # create a dictionary mapping the students' user ids to their usernames for easy access later.
     ids_and_usernames = {s.user_id: User.query.get(s.user_id).username for s in signups_all}
-    print("\nIDS AND STUDENTS: %s\n" % (ids_and_usernames))
+    # print("\nIDS AND STUDENTS: %s\n" % (ids_and_usernames))
 
     # get all reactions for this session
     reactions_all = Reactions.query.filter_by(session_id=session_id).all()
@@ -490,11 +492,6 @@ def generate_report(session_id):
 
     prompts_all = Prompts.query.filter_by(session_id=session_id).all() # Getting all prompts for this session
     forms_dict = {}
-    responses_key = {
-        0: "Yes",
-        1: "Maybe",
-        2: "No"
-    }
 
     for p in prompts_all:
         forms_dict[p.id] = {}
@@ -503,12 +500,17 @@ def generate_report(session_id):
         forms_dict[p.id]['time'] = timestamp.strftime("%I:%M %p")
         forms_dict[p.id]['responses'] = {}
         responses = Responses.query.filter_by(form_prompt_id=p.id)
-        print(ids_and_usernames)
+        responses_key = get_response_keys(p.form_options)
+        # print(ids_and_usernames)
         for s in ids_and_usernames.keys():
             forms_dict[p.id]['responses'][s] = {'response': "--", "timestamp": "--"}
         for r in responses:
             attendance_present.add(r.student_id) # Marking a student present if they responded to a form
-            forms_dict[p.id]['responses'][r.student_id]['response'] = responses_key[r.form_responses]
+            if responses_key is not None:
+                print("\n\t>>>RESPONSE KEYS: %s\n" % (responses_key))
+                forms_dict[p.id]['responses'][r.student_id]['response'] = responses_key[r.form_responses]
+            else:
+                forms_dict[p.id]['responses'][r.student_id]['response'] = r.form_responses
             forms_dict[p.id]['responses'][r.student_id]['timestamp'] = utc_to_local(r.timestamp).strftime("%I:%M %p")
 
     print(forms_dict)
@@ -580,6 +582,7 @@ def session_form_json(session_id):
         responses_list=[]
         responses_dict = {}
         responses_specific = Responses.query.filter_by(session_id=session_id, form_prompt_id=f.id).all() # These are the responses for each specific form
+
         for r in responses_specific:
             responses_dict = {
                 "response_id": r.id,
@@ -590,6 +593,7 @@ def session_form_json(session_id):
                 "session_id": r.session_id,
                 "timestamp": r.timestamp
             }
+            
             responses_list.append(responses_dict)
 
         forms_dict = {
@@ -967,10 +971,10 @@ def form_response(session_id):
     
     teacher_form = Prompts.query.order_by(Prompts.id.desc()).filter_by(session_id=session_id).first()
     prompt = teacher_form.form_question
-    print("FORM OPTIONS NUM: %s" % (teacher_form.form_options))
+    # print("FORM OPTIONS NUM: %s" % (teacher_form.form_options))
     form_option_id = int(teacher_form.form_options)
     form = form_type(form_option_id) # setting form to the TeaderRadioForm 
-    print("\nFORM OPTIONS %s\n" % (form.options))
+    # print("\nFORM OPTIONS %s\n" % (form.options))
     
     course = session.session_course_id # This gives you the actual course
     course_id = session.course_id # This will give you the course id
@@ -988,16 +992,16 @@ def form_response(session_id):
     return render_template('student_response.html', form=form, session_id=session_id, title='Form Response', prompt=prompt)
 
 def get_response_keys(form_type_num):
-    print("\n FORM TYPE NUM TYPE: %s\n" % (type(form_type_num)))
+    # print("\n FORM TYPE NUM TYPE: %s\n" % (type(form_type_num)))
     response_keys_dict = {
-        "0": {1: 'Yes', 2: 'Maybe', 3:'No'},
-        "1": {1: 'Agree', 2: 'Disagree'},
+        0: {1: 'Yes', 2: 'Maybe', 3:'No'},
+        1: {1: 'Agree', 2: 'Disagree'},
     }
 
-    if form_type_num in response_keys_dict:
+    if int(form_type_num) in response_keys_dict:
         return response_keys_dict[form_type_num]
     else:
-        return {0: "Didn't", 1: "Work"}
+        return None
 
 @app.route('/classes/course/session/<session_id>/form-data', methods=['GET', 'POST'])
 @login_required
@@ -1018,12 +1022,17 @@ def form_data(session_id):
         response_keys = get_response_keys(p.form_options)
         
         for r in Responses.query.filter_by(form_prompt_id=p.id):
-            form_info['responses'].append((User.query.get(r.student_id).username,
+            if response_keys:
+                form_info['responses'].append((User.query.get(r.student_id).username,
                                             response_keys[r.form_responses],
                                             utc_to_local(r.timestamp).strftime("%I:%M %p")))
-            print("STU ID: %s" % (User.query.get(r.student_id).username))
+            else:
+                form_info['responses'].append((User.query.get(r.student_id).username,
+                                            r.form_responses,
+                                            utc_to_local(r.timestamp).strftime("%I:%M %p")))
+            # print("STU ID: %s" % (User.query.get(r.student_id).username))
             form_info['summary'][r.form_responses] +=1
-        print("\n%s\n" %(form_info['responses']))
+        # print("\n%s\n" %(form_info['responses']))
         forms_list.append(form_info)
 
 

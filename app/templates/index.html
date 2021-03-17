@@ -2,9 +2,9 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
     <div class="contentHolderInside">
         <h3>Welcome to Slate!</h3>
         <div id="carousel-container">
-            <div id="carousel" class="carousel slide" data-ride="carousel">
+            <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="7000">
                 <ol class="carousel-indicators">
                     <li data-target="#carousel" data-slide-to="0" class="active"></li>
                     <li data-target="#carousel" data-slide-to="1"></li>
@@ -20,24 +20,24 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                    <img class="d-block w-100" src="{{ url_for('static', filename='images/index_1.jpg') }}" alt="First slide">
+                        <img class="d-block w-100" src="{{ url_for('static', filename='images/index_1.jpg') }}" alt="First slide">
                         <div class="carousel-caption d-none d-md-block">
-                            <h5>Welcome to Slate!</h5>
-                            <p>An app designed to aid teachers and students in the virtual classroom</p>
+                            <h5 class="captionText">Welcome to Slate!</h5>
+                            <p class="captionText">An app designed to aid teachers and students in the virtual classroom</p>
                         </div>
                     </div>
                     <div class="carousel-item">
-                    <img class="d-block w-100" src="{{ url_for('static', filename='images/index_2.jpg') }}" alt="Second slide">
+                        <img class="d-block w-100" src="{{ url_for('static', filename='images/index_2.jpg') }}" alt="Second slide">
                         <div class="carousel-caption d-none d-md-block">
-                            <h5>Quick Reactions</h5>
-                            <p>Quickly react during live sessions</p>
+                            <h5 class="captionText">Quick Reactions</h5>
+                            <p class="captionText">Quickly react during live sessions</p>
                         </div>
                     </div>
                     <div class="carousel-item">
-                    <img class="d-block w-100" src="{{ url_for('static', filename='images/index_3.jpg') }}" alt="Third slide">
+                        <img class="d-block w-100" src="{{ url_for('static', filename='images/index_3.jpg') }}" alt="Third slide">
                         <div class="carousel-caption d-none d-md-block">
-                            <h5>Live polls</h5>
-                            <p>Create and send out live polls.</p>
+                            <h5 class="captionText">Live polls</h5>
+                            <p class="captionText">Create and send out live polls.</p>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
         </div>
     </div>
     <div>
-        <h6>Want to download our Microsoft Teams Extension instead?</h6>
+        <h4>Want to download our Microsoft Teams Extension instead?</h4>
         <ol>
             <li><form action="ActionPackage" method="post">First, click below to download our app extension by <button id="extension-download" type="submit">clicking here.</button></form></li>
             <li>Then, open Microsoft Teams and click on apps.</li>
@@ -63,7 +63,6 @@
         <p>Note: Your organization must have <a href="https://docs.microsoft.com/en-us/microsoftteams/admin-settings">app sideloading</a> available to use custom apps</p>
         
     </div>
-    <script src="{{ url_for('static', filename='scripts/carousel.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

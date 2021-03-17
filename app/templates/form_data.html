@@ -3,14 +3,13 @@
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form_data.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form_data_media.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-{% endblock %}
+    {% endblock %}
     
-{% block content %}
-<div class = "formsResults">
-    <h2 class = "formsTitle">Forms Results</h2>
-    <div id = "formsBox2" class = "formsBox">
-        {% for f in forms_list|reverse %}
+    {% block content %}
+    <div class = "formsResults">
+        <h2 class = "formsTitle">Forms Results</h2>
+        <div id = "formsBox2" class = "formsBox">
+            {% for f in forms_list|reverse %}
             <div class="infoHolder">
                 <h2>Prompt: {{ f['question'] }}</h2>
                 <h3">Distributed at {{f['time']}}</h3>
@@ -18,7 +17,7 @@
                     <div>
                         <h3>Summary</h3>
                         <div class="summaryChartHolder">
-                            <canvas id="summaryChart{{ f['id'] }}" width="200" height="150"></canvas>
+                            <canvas id="summaryChart{{ f['id'] }}"></canvas>
                         </div>
                     </div>
                     <div class="tableHolder">
@@ -27,15 +26,16 @@
                     </div>
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</div>
-
-<script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
-{% if current_user.role == 0 %} <!-- if current user is a teacher -->
+    
+    <script src="{{ url_for('static', filename='scripts/studentview.js') }}"></script>
+    {% if current_user.role == 0 %} <!-- if current user is a teacher -->
     <script type="text/javascript">
         window.onload = initFormsAll({{course_id}}, {{session_id}}, {{course.status}}); // Passing in course ID, session ID, and course status into the javascript
-    </script>
-{% endif %}
+        </script>
+    {% endif %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 
 {% endblock %}

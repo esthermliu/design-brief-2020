@@ -1,7 +1,7 @@
 // Fetches all the session info from the API (for the teacher)
 function fetchSessionInfoTeacher(course_id, session_id, status) {
     let url = "/classes/course/session/" + session_id + "/session_json";
-    console.log("HELLO TEACHER")
+    // console.log("HELLO TEACHER")
     fetch(url, {method: "GET"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .then(response => response.json()) 
@@ -12,7 +12,7 @@ function fetchSessionInfoTeacher(course_id, session_id, status) {
 // Fetches all the session info from the API (for the student)
 function fetchSessionInfoStudent(course_id, session_id, status) {
     let url = "/classes/course/session/" + session_id + "/session_json";
-    console.log("HELLO STUDENT")
+    // console.log("HELLO STUDENT")
     fetch(url, {method: "GET"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .then(response => response.json()) 
@@ -23,7 +23,7 @@ function fetchSessionInfoStudent(course_id, session_id, status) {
 // Fetches information from PAST sessions
 function fetchPastSessionInfo(course_id, session_id, status) {
     let url = "/classes/course/session/" + session_id + "/session_json";
-    console.log("PAST INFO FETCHED")
+    // console.log("PAST INFO FETCHED")
     fetch(url, {method: "GET"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .then(response => response.json()) 
@@ -34,7 +34,7 @@ function fetchPastSessionInfo(course_id, session_id, status) {
 // Fetches information for all of the forms
 function fetchSessionFormsInfo(course_id, session_id, status) {
     let url = "/classes/course/session/" + session_id + "/session_forms_json";
-    console.log("FORMS INFO FETCHED");
+    // console.log("FORMS INFO FETCHED");
     fetch(url, {method: "GET"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .then(response => response.json()) 
@@ -54,7 +54,7 @@ function fetchCourseInfo(course_id) {
 
 // Function for displaying the course information
 function displayCourseInfo(data, course_id) {
-    console.log("COURSE INFO DISPLAYED");
+    // console.log("COURSE INFO DISPLAYED");
     displayStudents(data["students"], course_id);
 }
 
@@ -70,10 +70,10 @@ function confirm_message(username) {
 // Displaying the students in the course
 function displayStudents(studentInfo, course_id) {
     studentHTML = document.getElementById("studentRow");
-    console.log("Students")
+    // console.log("Students")
     studentHTML.innerHTML = ""; // clearing all the content in the div
     for (s = 0; s < studentInfo.length; s++) {
-        console.log("WOOT")
+        // console.log("WOOT")
         var student_username = studentInfo[s]["username"] // Getting the student's username
         var student_email = studentInfo[s]["email"] // Getting the student's email
         var student_id = studentInfo[s]["student_id"] // Getting the student's ID
@@ -89,13 +89,13 @@ function displayStudents(studentInfo, course_id) {
 
 // Calls functions to display the PAST information
 function displayPast(status, data) {
-    console.log("DISPLAYED");
+    // console.log("DISPLAYED");
     displayPercentage(data["percentage"]); // Displays the percentage on the thermometer
 }
 
 // Calls function to display the FORMS information
 function displayForms(status, data) {
-    console.log("DISPLAYED FORMS");
+    // console.log("DISPLAYED FORMS");
     displayFormResultsAll(data); 
 }
 
@@ -104,23 +104,23 @@ function displayForms(status, data) {
 function displayAll(status, data) {
     checkIfShouldRefresh(status, data["course_status"]); // Checks whether to refresh the page
     displayPercentage(data["percentage"]); // Display percentage on the thermometer
-    console.log(data["percentage"]);
+    // console.log(data["percentage"]);
     displayReactions(data["reactions"]); // Display emotions
     displaySpeeds(data["speeds"]); // Display speeds
     displayCalculatedSpeed(data["speed_num"]); // Display the calculated speed number
     displayAttendance(data["attendance"]); // Display the attendance
-    // console.log("Passed to displaFormResults: "+ data["forms"][data["forms"].length - 1]["responses"])
+    // // console.log("Passed to displaFormResults: "+ data["forms"][data["forms"].length - 1]["responses"])
     displayFormResults(data["forms"][data["forms"].length - 1], "formChartCanvas", "formsBox"); // Display the Forms responses
 }
 
 // Only calls some of the functions to display certain features for the student
 function displaySome(status, data, session_id) {
-    console.log("displaySome() has been called") 
+    // console.log("displaySome() has been called") 
     checkIfShouldRefresh(status, data["course_status"]); // To check whether to refresh
     displayPercentage(data["percentage"]);  // For the percentage
     displayCalculatedSpeed(data["speed_num"]); // For the speed bunnies
     if (data["forms"].length != 0) {
-        console.log("About to display forms link")
+        // console.log("About to display forms link")
         displayFormLink(data["forms"], session_id);
     }
 }
@@ -129,7 +129,7 @@ function displaySome(status, data, session_id) {
 // Checks whether the page should be refreshed, oldStatus is the status passed in via init function, newStatus is the updated status in the API
 function checkIfShouldRefresh(oldStatus, newStatus) {
     if (oldStatus != newStatus) {  // If oldStatus is not equal to newStatus
-        console.log("SHOULD REFRESH THE PAGE", oldStatus, newStatus);
+        // console.log("SHOULD REFRESH THE PAGE", oldStatus, newStatus);
         location.reload(); // Then reload the page, and everyone should be kicked out
     }
 }
@@ -142,25 +142,25 @@ function checkStatus(response) {
 }
 
 function displayPercentage(data) { 
-    console.log(data); // shows the percent number in the console, the data is the percentage, e.g. 50 or 33.333
+    // console.log(data); // shows the percent number in the console, the data is the percentage, e.g. 50 or 33.333
     updateThermometer(data);// Calls the updateThermometer function, which updates the thermometer's height 
 }
 
 function displayFormLink(formData, session_id) {
     studentFormHTML = document.getElementById("formHolder"); // getting the HTML element for the forms button
     studentFormHTML.innerHTML = ""; // clearing all content inside the div first
-    console.log("DISPLAY FORM LINK")
+    // console.log("DISPLAY FORM LINK")
     if (formData.length != 0) {
         var form_url = formData[0]["forms_url"]
         studentFormHTML.innerHTML += ('<a class = "formAlertHolder" href="' + form_url + '"><img src = "/static/images/FormsAlert4.png"></a>');
-        console.log("DISPLAYED FORM LINK")
+        // console.log("DISPLAYED FORM LINK")
     }
 }
 
 //<a href="{{ url_for(' + "'" + 'form_response' + "'" + ', session_id=' + '' + session_id + ') }}
 
 function handleError(err) {
-    console.log("Ran into error:", err);
+    // console.log("Ran into error:", err);
 }
 
 function updateThermometer(temp) {
@@ -168,52 +168,38 @@ function updateThermometer(temp) {
     room_vibe = document.getElementById("room_vibe"); // Grabs the HTML div that will display the overall room vibe
     room_vibe.innerHTML = ""; // Clearing everything in the room_vibe div
     if (temp > 67) {
-        console.log("Happy Room Vibe");
+        // console.log("Happy Room Vibe");
         room_vibe.innerHTML += ('<div class = "faceHolder"><img id = "vibe" class = "teacherStuff" src="../../../../static/images/HappyShadow.png"><div>');
         room_vibe.innerHTML += ('<div class = "textVibe"><h2 class = "vibeHeader teacherVibeHeader">Happy Room Vibes!</h2></div>');
     } else if (temp > 34) {
-        console.log("Meh Room Vibe");
+        // console.log("Meh Room Vibe");
         room_vibe.innerHTML += ('<div class = "faceHolder"><img id = "vibe" class = "teacherStuff" src="../../../../static/images/MehShadow.png"></div>');
         room_vibe.innerHTML += ('<div class = "textVibe"><h2 class = "vibeHeader teacherVibeHeader">Unamused Room Vibes...</h2></div>');
     } else if (temp > 0) {
-        console.log("Sad Room Vibe");
+        // console.log("Sad Room Vibe");
         room_vibe.innerHTML += ('<div class = "faceHolder"><img id = "vibe" class = "teacherStuff" src="../../../../static/images/SadShadow2.png"></div>');
         room_vibe.innerHTML += ('<div class = "textVibe"><h2 class = "vibeHeader teacherVibeHeader">Struggling Room Vibes!</h2></div>');
     } else {
-        console.log("No Room Vibe");
+        // console.log("No Room Vibe");
         room_vibe.innerHTML += ('<div class = "faceHolder"><img id = "vibe" class = "teacherStuff" src="../../../../static/images/NoneShadow.png"></div>');
         room_vibe.innerHTML += ('<div class = "textVibe"><h2 class = "vibeHeader teacherVibeHeader">No Room Vibes Yet</h2></div>');
     }
-    console.log("Thermometer" + thermometer[0]) 
-    console.log("Temperature: " + temp)
+    // console.log("Thermometer" + thermometer[0]) 
+    // console.log("Temperature: " + temp)
     thermometer[0].style.height = temp + "%"; // Changes the height of the thermometer div to the temp value
 }
 
 // Page won't refresh when user reacts, submits/posts reactions to the database
 function submitFormGeneral(session_id, react_num) {
-    console.log("Submitting form")
+    // console.log("Submitting form")
     let url = "/classes/course/session/" + session_id + "/react/" + react_num;
     fetch(url, {method: "POST"})
         .then(checkStatus) // Calls the checkStatus function, which checks whether the response is successful, throws error otherwise
         .catch(handleError); 
 }
 
-function swap(dict) {
-    var swapped_dict = {};
-    for (var key in dict) {
-        swapped_dict[dict[key]] = key;
-    }
-
-    return swapped_dict;
-}
-
-function get_chart_colors(keys) {
-    all_colors = ['rgba(104, 254, 101, 0.8)', ]
-}
-
 function singleFormResults(form) {
     keys = form["response_keys"];
-    console.log("\n\nRESPONSE KEYS\n\n" + JSON.stringify(keys));
     summary = {};
     for (var key in keys) {
         summary[keys[key]] = 0;
@@ -221,11 +207,8 @@ function singleFormResults(form) {
 
     responses = form["responses"];
     for (r = responses.length - 1; r >= 0; r--) {
-        // console.log("\n\nEEEEEEE\n\nRESPONSES[r] " + JSON.stringify(responses[r]));
         summary[keys[responses[r]["form_responses"]]] += 1;
     }
-
-    // console.log("\n\nSUMMARY\n\n" + JSON.stringify(summary));
 
     return {"summary": summary,"keys": keys};
 }
@@ -240,10 +223,7 @@ function displayYes(summary, prompt, elem_id, forms_html=null) {
         summary_data.push(summary[response]);
     }
     
-    console.log("Summary Data: " + summary_data);
-    console.log("Summary Labels: " + summary_labels);
     var ctx = document.getElementById(elem_id).getContext('2d');
-    console.log("CTX = " + ctx)
     var myPieChart = new Chart(ctx, {
         type: 'pie',
         data: {
@@ -268,23 +248,15 @@ function displayYes(summary, prompt, elem_id, forms_html=null) {
 }
 
 function displayAgree(summary, prompt, elem_id, forms_html=null) {
-    chart_colors = {
-        "Agree": 'rgba(104, 254, 101, 0.8)',
-        "Disagree": 'rgba(255, 99, 132, 0.8)'
-    };
-
     summary_labels = [];
     summary_data = [];
-    summary_colors = [chart_colors["Agree"], chart_colors["Disagree"]];
+    summary_colors = ['rgba(104, 254, 101, 0.8)', 'rgba(255, 99, 132, 0.8)'];
 
     for (var response in summary) {
         summary_labels.push(response);
         summary_data.push(summary[response]);
     }
     
-    console.log("Summary Data: " + summary_data);
-    console.log("Summary Labels: " + summary_labels);
-    console.log("Summary Labels: " + summary_labels);
     var ctx = document.getElementById(elem_id).getContext('2d');
     var myPieChart = new Chart(ctx, {
         type: 'pie',
@@ -309,61 +281,118 @@ function displayAgree(summary, prompt, elem_id, forms_html=null) {
     }
 }
 
-function displayRating(summary) {
+function displayRating(form, elem_id) {
+    responses = form["responses"];
+    var total = 0;
+    var index;
+
+    for (index = 0; index < responses.length; index++) {
+        total += Number(form["responses"][index]["form_responses"]);
+    };
     
+    var avg = (total / responses.length).toFixed(0);
+    console.log("AVG: " + avg);
+
+    var ctx = document.getElementById(elem_id).getContext('2d');
+    var myBarChart = new Chart(ctx, {
+        type: 'horizontalBar',
+        curvature: 1,
+        data: {
+            datasets: [{
+                data: [avg],
+                backgroundColor: 'rgba(41, 118, 153, 0.8)',
+                borderWidth: 1,
+            }], 
+            labels: ["Average"]               
+        },
+        options: {
+            indexAxis: 'y',
+            animation: {
+                duration: 0
+            },
+            legend: {
+                display: false
+            },
+            maintainAspectRatio: false,
+            scales: {
+                xAxes: [{
+                    display: true,
+                    ticks: {
+                        min: 0,
+                        max: 100,
+                        stepSize: 10
+                    }
+                }],
+                yAxes: [{
+                    display: false
+                }]
+            },
+            title: {
+                display: true,
+                text: 'Average rating for \"' + form["form_question"] + "\""
+            }
+        }
+    });
+
+    summary_HTML = document.getElementById(elem_id)
+    summary_HTML.innerHTML = "<h2> Average is: " + avg + "<h2>";
 }
 
 // Display results to the form
-function displayFormResults(form, elem_id, container_elem_id=null) {
-    console.log("\n" + "form\n" + JSON.stringify(form) + "\n")
-    console.log(">>> DISPLAYING FORMS")
-
-    forms_html = document.getElementById(container_elem_id);
-    // document.getElementById("formsBox").innerHTML = ""; // Clearing all the content in the div
-    console.log("YIP YOP")
-    summary = singleFormResults(form)["summary"]
-    
-    console.log("FORM QUESTION TYPE IS: " + form["question_type"]);
-    console.log("FORM QUESTION TYPE IS: " + typeof form["question_type"]);
-    console.log("FORM SUMMARY IS: " + JSON.stringify(summary));
-    switch(form["question_type"]) {
-        case "0":
-            displayYes(summary, form["form_question"], elem_id);
+function displayFormResults(form, elem_id) {
+    switch(Number(form["question_type"])) {
+        case 0:
+            summary = singleFormResults(form)["summary"]
             console.log("Displaying YES poll");
+            displayYes(summary, form["form_question"], elem_id);
+            break;
+        case 1:
+            summary = singleFormResults(form)["summary"]
+            console.log("Displaying AGREE poll");
+            displayAgree(summary, form["form_question"], elem_id);
+            break;
+
+        case 2:
+            console.log("Displaying RATING poll");
+            displayRating(form, elem_id);
             break;
         
-        case "1":
-            displayAgree(summary, form["form_question"], elem_id);
-            console.log("Displaying AGREE poll");
+        default:
+            console.log("displayFormsResults couldn't match form type");
+            break;
+    };
+}
+
+function displayFormTable(form, elem_id) {
+    var table_div = document.getElementById(elem_id)
+    table_div.innerHTML = "<tr><th>Student</th><th>Response</th><th>Time</th></tr>"
+    response_list = form["responses"]
+    
+    switch (Number(form["question_type"])) {
+        case 2:
+            for (r = response_list.length - 1; r >= 0; r--) {
+                table_div.innerHTML += ("<tr><td>" + response_list[r]["student_id"] + "</td><td>" +
+                    response_list[r]["form_responses"] + "</td><td>" +
+                    moment(response_list[r]["timestamp"]).format('hh:mm A') + "</td></tr>")
+            }
             break;
 
-        case "2":
-            displayRating(summary, form["form_question"], elem_id);
-            console.log("Displaying RATING poll");
+        default:
+            for (r = response_list.length - 1; r >= 0; r--) {
+                table_div.innerHTML += ("<tr><td>" + response_list[r]["student_id"] + "</td><td>" +
+                    keys[response_list[r]["form_responses"]] + "</td><td>" +
+                    moment(response_list[r]["timestamp"]).format('hh:mm A') + "</td></tr>")
+            }
             break;
-    }
+    };
 }
 
 function displayFormResultsAll(forms) {
-    console.log('Updating individual form data divs')
-    // console.log("\n" + "> FORMSSSSS <\n" + JSON.stringify(forms) + "\n")
-    // console.log("\n" + "> FORM1 <\n" + JSON.stringify(forms[0]) + "\n")
+    console.log("\n\n" + Object.keys(forms).length + " FORMS ARE PRESENT\n\n");
     for (var key in forms) {
-        form = forms[key]
-        keys = form["response_keys"]
-        displayFormResults(form, "summaryChart" + key)
-        
-        var table_div = document.getElementById("table" + key)
-        table_div.innerHTML = "<tr><th>Student</th><th>Response</th><th>Time</th></tr>"
-        response_list = form["responses"]
-        console.log("\nRESPONSE LIST: " + JSON.stringify(response_list) + "\n")
-        for (r=response_list.length - 1; r >= 0; r--) {
-            console.log("This response: " + response_list[r])
-            table_div.innerHTML += ("<tr><td>" + response_list[r]["student_id"] + "</td><td>" +
-                keys[response_list[r]["form_responses"]] + "</td><td>" +
-                moment(response_list[r]["timestamp"]).format('hh:mm A') + "</td></tr>")
-        }
-
+        form = forms[key];
+        displayFormResults(form, "summaryChart" + key);
+        displayFormTable(form, "table" + key);
     }
 }
 
@@ -371,17 +400,17 @@ function displayReactions(reactions) {
     // First have to delete all the existing reactions on the page
     reaction_html = document.getElementById("reactionResults")
     document.getElementById("reactionResults").innerHTML = ""; // Clearing all the content in the div 
-    console.log("Testing")
+    // console.log("Testing")
     var reactions_counter = 0;
     var r_for;
     for (r_for = reactions.length - 1; r_for >= 0; r_for--) { // Gets the last five reactions
-        console.log("HELLO HERE", reactions.length);
+        // console.log("HELLO HERE", reactions.length);
         reactions_counter++;
         if (reactions_counter > 5) {
             break; // Breaks out of the for loop
         }
-        console.log("reactions: " + reactions[r_for]["emotions"]);
-        console.log("user ID: " + reactions[r_for]["user_id"]);
+        // console.log("reactions: " + reactions[r_for]["emotions"]);
+        // console.log("user ID: " + reactions[r_for]["user_id"]);
         var user_reaction = reactions[r_for]["emotions"];
         var username = reactions[r_for]["user_id"];
         var emotions_timestamp = reactions[r_for]["emotions_timestamp"];
@@ -406,7 +435,7 @@ function displaySpeeds(speeds) {
     // Whichever has more, go through that number and print out either bunnies or turtles
     document.getElementById("speedResults").innerHTML = ""; // Clears everything in the div first
     //document.getElementById("speedVisual").innerHTML = ""; // Clears everything in the div first 
-    console.log("Testing");
+    // console.log("Testing");
     var speeds_counter = 0;
     var s_for;
     for (s_for = speeds.length - 1; s_for >= 0; s_for--) { // Going backwards through the json list of speeds to only get 5 of them
@@ -414,8 +443,8 @@ function displaySpeeds(speeds) {
         if (speeds_counter > 5) {
             break; // Break out of the loop once 5 speeds have been grabbed
         }
-        console.log("speed: " + speeds[s_for]["speed"]);
-        console.log("user ID: " + speeds[s_for]["user_id"]);
+        // console.log("speed: " + speeds[s_for]["speed"]);
+        // console.log("user ID: " + speeds[s_for]["user_id"]);
         var user_speed = speeds[s_for]["speed"];
         var username = speeds[s_for]["user_id"];
         var speed_timestamp = speeds[s_for]["speed_timestamp"];
@@ -431,7 +460,7 @@ function displaySpeeds(speeds) {
 
 // How to display the calculated speed number
 function displayCalculatedSpeed(data) {
-    console.log("SPEED NUM");
+    // console.log("SPEED NUM");
     let visuals_slow = document.getElementsByClassName("visual_slow");
     let visuals_fast = document.getElementsByClassName("visual_fast");
     let visuals_all = document.getElementsByClassName("all");
@@ -440,7 +469,7 @@ function displayCalculatedSpeed(data) {
         visuals_all[i].style.display = "none";
     }
     let speed_num = data;
-    console.log(speed_num);
+    // console.log(speed_num);
     speed_html = document.getElementById("paceTitle");
     speed_html.innerHTML = "" // Clears everything in the div
     //speed_html.innerHTML += ('<p>' + speed_num + '</p>'); // Adds the speed num to the div
@@ -470,73 +499,73 @@ function displayCalculatedSpeed(data) {
 
 // Display the attendance
 function displayAttendance(attendance) {
-    console.log("Display Attendance");
+    // console.log("Display Attendance");
     present_html = document.getElementById("present"); // Grabs the HTML div with the ID present
     absent_html = document.getElementById("absent");
     document.getElementById("present").innerHTML = ""; // Clears everything in the present div first
     document.getElementById("absent").innerHTML = ""; // Clears everything in the absent div first
-    console.log("Attendance TESTING")
-    console.log("Present Students: ")
+    // console.log("Attendance TESTING")
+    // console.log("Present Students: ")
     for (let a in attendance[0]["Present"]) {
-        console.log(attendance[0]["Present"][a]);
+        // console.log(attendance[0]["Present"][a]);
         present_student = attendance[0]["Present"][a];
         present_html.innerHTML += ("<p>" + present_student + "</p>"); // Adding content to the present div
     }
-    console.log("Absent Students: ")
+    // console.log("Absent Students: ")
     for (let a in attendance[1]["Absent"]) {
-        console.log(attendance[1]["Absent"][a]);
+        // console.log(attendance[1]["Absent"][a]);
         absent_student = attendance[1]["Absent"][a];
         absent_html.innerHTML += ("<p>" + absent_student + "</p>"); // Adding the content to the absent div
     }
 }
 
 function initTeacher(course_id, session_id, course_status) { // Course ID, session ID, and course status are all passed in through the rooms html page
-    console.log("Called INIT Teacher", "Previous course status", course_status);
+    // console.log("Called INIT Teacher", "Previous course status", course_status);
     fetchSessionInfoTeacher(course_id, session_id, course_status);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
-        console.log("Update");
+        // console.log("Update");
         fetchSessionInfoTeacher(course_id, session_id, course_status);
     }, 5000) // The fetchSessionInfo function will be called every 5 seconds  
 }
 
 // Have separate functions: initTeacher and initStudent
 function initStudent(course_id, session_id, course_status) {
-    console.log("Called INIT Student");
+    // console.log("Called INIT Student");
     fetchSessionInfoStudent(course_id, session_id, course_status);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
-        console.log("Update");
+        // console.log("Update");
         fetchSessionInfoStudent(course_id, session_id, course_status);
     }, 5000) 
 }
 
 // initFormsAll
 function initFormsAll(course_id, session_id, course_status) {
-    console.log("Called INIT Forms");
+    // console.log("Called INIT Forms");
     fetchSessionFormsInfo(course_id, session_id, course_status);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
-        console.log("Update");
+        // console.log("Update");
         fetchSessionFormsInfo(course_id, session_id, course_status);
     }, 5000) 
 }
 
 // function for manage class
 function initManage(course_id) {
-    console.log("Called INIT Forms");
+    // console.log("Called INIT Forms");
     fetchCourseInfo(course_id);
     const interval = setInterval(function() { // setInterval method calls a function or evaluates an expression at specified intervals
-        console.log("Update");
+        // console.log("Update");
         fetchCourseInfo(course_id);
     }, 10000) 
 }
 
 function pastInfo(course_id, session_id, course_status) {
-    console.log("Called PAST INFO");
+    // console.log("Called PAST INFO");
     fetchPastSessionInfo(course_id, session_id, course_status);
 }
 
 // Open a new page on which the teacher can download the report
 function redirectToDownloadPage(session_id) {
-    console.log("Opening DOWNLOAD Page")
+    // console.log("Opening DOWNLOAD Page")
     let url = "/classes/course/session/" + session_id + "/report"
     window.open(url)
 }
