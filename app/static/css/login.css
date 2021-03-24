@@ -1,35 +1,48 @@
+#appName {
+    font-family: 'Handlee', cursive;
+    font-weight: bold;
+}
+
 @media screen and (max-width: 600px) {
     .imageBox {
         display: none
     }
 
     .innerBox {
-        background-color: #A8d0E6;
-        width: 100%;
-        min-width: 350px;
+        background-color: white;
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 5% 4% 5% 4%;
     }
 }
 
 @media screen and (min-width: 600px) {
     .imageBox {
         width: 60%;
-        background-image: url("../images/Student.jpeg");
+        background-image: url("../images/Student2.jpeg");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
     }
 
     .innerBox {
-        background-color: #A8d0E6;
-        width: 40%;
-        min-width: 350px;
+        background-color: white;
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 5% 4% 5% 4%;
     }
+
+    
+}
+
+.forgot {
+    background-image: url("/static/images/Student5.jpeg") !important;
+}
+
+.giveSpace {
+    margin-top: 10px;
 }
 
 header {
@@ -38,18 +51,43 @@ header {
 
 .bigBox {
     display: flex;
-    justify-content: space-between;
-    height: 100vh;
+    justify-content: center;
     width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("/static/images/Student3.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.transparentBox {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(rgba(43, 122, 120, 0.6), rgba(145, 75, 173, 0.4));
 }
 
 .imageHolder img {
     width: 100%; 
 }
 
-.signInBox {
-    width: 90%;
+.signInBox, .resetPasswordBox {
     text-align: center;
+    width: 100%;
+}
+
+.signInBox h1, .resetPasswordBox h1 {
+    font-weight: 500;
+}
+
+.formError {
+    color: #f76c6c;
+    line-height: 45px;
 }
 
 input[type="text" i], input[type="password" i] {
@@ -57,7 +95,6 @@ input[type="text" i], input[type="password" i] {
     background-color: transparent;
     border-bottom: 2px solid gray;
     padding: 12px 0px;
-    border-radius: 4px;
     width: 220px;
 }
 
@@ -86,6 +123,14 @@ input[type="submit" i] {
     -webkit-transition-duration: 0.3s;
 }
 
+.formTitle {
+    margin-bottom: 10%;
+}
+
+.buttonSpace {
+    margin-top: 12%;
+}
+
 input {
     font-family: 'Montserrat', sans-serif;
     letter-spacing: 1.5px;
@@ -93,6 +138,7 @@ input {
     text-align: center;
     color: black ;
 }
+
 
 input[type="submit" i]:hover {
     background-color: transparent;
@@ -102,22 +148,24 @@ input[type="submit" i]:hover {
 .registerLink {
     color: black;
     text-decoration: none;
-    border: 2px solid white;
-    padding: 20px 20px;
-    border-radius: 4px;
-    background-color: white;
     transition-duration: 0.3s;
     -webkit-transition-duration: 0.3s;
+    line-height: 30px;
+    letter-spacing: 0.5px;
+    font-size: 15px;
 }
 
 .registerLink:hover {
-    background-color: transparent;
-    color: white;
+    color: #6d78a5 !important;
 }
 
 .newUser h3 {
     line-height: 40px;
     margin-bottom: 30px;
+}
+
+.newUser {
+    margin-top: 5%;
 }
 
 .imageHolder {
@@ -138,3 +186,122 @@ span {
     margin: 0 !important;
 }
 
+@media (prefers-color-scheme: dark){
+    .innerBox {
+        background-color: #12436b;
+    }
+
+    h1, h3 {
+        color: #e6e6e6;
+    }
+
+    label {
+        color: #e6e6e6;
+    }
+    
+    input[type="submit" i] {
+        background-color: #297499;
+        border: 2px solid #297499;
+    }
+    
+    input {
+        color: #e6e6e6;
+    }
+    
+    input[type="submit" i]:hover {
+        color: #297499;
+    }
+
+    input[type="text" i], input[type="password" i] {
+        border-bottom: 2px solid #e6e6e6;
+    }
+    
+    .registerLink {
+        color: #e6e6e6;
+    }
+    
+    .registerLink:hover {
+        color: #297499;
+        transform: translateY(-2px);
+    }
+    
+    span {
+        color: #e6e6e6;
+    }
+
+    img {
+        filter: brightness(.8) contrast(1.2);
+    }
+}
+
+@media (prefers-color-scheme: light){
+    .innerBox {
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 12px 30px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    h1, h3 {
+        color: black;
+    }
+    
+    label {
+        color: black;
+    }
+    
+    input[type="submit" i] {
+        background-color: #8ab5cc !important;
+        border-radius: 50px;
+        color: white;
+        border: 2px solid  #8ab5cc !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        animation: MoveUpDown 2s linear infinite;
+        cursor: pointer;
+    }
+
+
+    @keyframes MoveUpDown {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-3px);
+        }
+    }
+    
+    @keyframes MoveUpOther {
+        0%, 100% {
+          transform: translateY(-3px);
+        }
+        50% {
+          transform: translateY(0);
+        }
+    }
+    
+    
+    input[type="text" i], input[type="password" i] {
+        border-bottom: 2px solid gray;
+    }
+
+    input {
+        color: black;
+    }
+    
+    input[type="submit" i]:hover {
+        box-shadow: 0 0px 0px 0 rgba(0,0,0,0);
+    }
+    
+    .registerLink {
+        color: black;
+        background-color: white;
+        display: inline-block !important;
+    }
+    
+    .registerLink:hover {
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    span {
+        color: black;
+    }
+}

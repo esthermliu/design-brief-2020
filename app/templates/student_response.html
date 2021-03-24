@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/student_response.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class = "largeHolder">
+    <div class = "responseHolder">
+        <div class = "promptTitle">
+            <h2>{{ prompt }}</h2>
+        </div>
+        <form action="" method="post" class="studentResponse">
+            {{ form.hidden_tag() }}
+            <div class = "radioOptions">
+                <div class = "optionList">
+                    {{ form.options }}
+                </div>
+                {% for error in form.options.errors %}
+                    <span class="errorSpan">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>{{ form.submit() }}</div>
+        </form>
+    </div>
+</div>
+{% endblock %}

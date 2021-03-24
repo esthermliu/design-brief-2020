@@ -1,0 +1,119 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <title>{{ title }}</title> 
+        <!-- favicon -->
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}" size = "16x16"/>
+    </head>
+    <body id="bodyAll">
+        <div id="titleHolder">
+            <h2>{{ title }}</h2>
+        </div> <hr class="sectionSeparator">
+        <div id="sessionDataHolder">
+            <h2 class="sectionHeaders">Class and Session Information</h2>
+            <div id="sessionData">
+                <div id="generalSessionData">
+                    <p><b>Class:  </b>{{ course_name }}</p>
+                    <p><b>Session ID:  </b>{{ session_id }} </p>
+                    <p><b>Date:  </b>{{ start_date }}</p>
+                </div>
+                <div id="startEndTimes">
+                    <p><b>Start Time:  </b>{{ start_time }}</p>
+                    <p><b>End Time:  </b>{{ end_time }}</p>
+                </div>
+            </div>
+        </div> <br> <hr class="sectionSeparator">
+        <div id="attendanceDataHolder">
+            <div id="attendanceData">
+                <h2 class="sectionHeaders">Attendance</h2>
+                <h3>Present</h3>
+                <ul id="present" class="attendanceList">
+                    {% for s in present_list %}
+                        <li> {{ student_keys[s] }}</li>
+                    {% endfor %}
+                </ul>
+                <h3>Absent</h3>
+                <ul id="absent" class="attendanceList">
+                    {% for s in absent_list %}
+                        <li> {{ student_keys[s] }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div> <br> <hr class="sectionSeparator">
+        <div id="reactionDataHolder">
+            <div id="reactionData">
+                <h2 class="sectionHeaders">Reaction Data</h2>
+                <table id="reactionsTable">
+                    <th>
+                        Student
+                    </th>
+                    <th>
+                        <!-- <p>Good</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Happy.png')}}" class= "tableImage">
+                    </th>
+                    <th>
+                        <!-- <p>Okay</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Meh.png')}}" class= "tableImage">
+                    </th>
+                    <th>
+                        <!-- <p>Bad</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Sad.png')}}" class= "tableImage">
+                    </th>
+                    <th>
+                        <!-- <p>Slower</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Slow.png')}}" class= "tableImage">  
+                    </th>
+                    <th>
+                        <!-- <p>Faster</p><br> -->
+                        <img src="{{ url_for('static', filename='images/Fast.png')}}" class= "tableImage">
+                    </th>
+                    {% for s, r in reactions %}
+                        {% if r.values() | sum() == 0 %}
+                            <tr class="noReactions">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                                <td>{{ student_keys[s] }}</td>
+                                <td class="alignRight">{{ r[0] }}</td>
+                                <td class="alignRight">{{ r[1] }}</td>
+                                <td class="alignRight">{{ r[2] }}</td>
+                                <td class="alignRight">{{ r[7] }}</td>
+                                <td class="alignRight">{{ r[6] }}</td>
+                            </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div> <br> <hr class="sectionSeparator">
+        <div id="formDataHolder">
+            <h2 class="sectionHeaders">Forms Data</h2>
+            {% if num_forms > 0 %}
+                {% for f in form_data.values() %}
+                    <div class="singleFormHolder">
+                        <h3>Prompt: {{ f['question'] }}</h3>
+                        <h4>Released at {{ f['time'] }}</h4>
+                        <table>
+                            <th>Student</th>    
+                            <th>Response</th>
+                            <th>Timestamp</th>
+                            {% for student, response in f['responses'].items() %}
+                                {% if response['response'] == "--" %}
+                                    <tr class="noReactions">
+                                {% else %}
+                                    <tr>
+                                {% endif %}
+                                    <td>{{ student_keys[student] }}</td>
+                                    <td class="alignRight">{{ response['response'] }}</td>
+                                    <td class="alignRight">{{ response['timestamp'] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div> <br> <hr class="formsSeparator">
+                {% endfor %}
+            {% else %}
+                <p>No forms to show</p>
+            {% endif %}
+        </div>
+
+    </body>
+</html>

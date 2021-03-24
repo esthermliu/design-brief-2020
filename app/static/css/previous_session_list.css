@@ -90,3 +90,27 @@
     justify-content: space-between;
 }
 
+@media (prefers-color-scheme: dark){
+    .titleHolder h1 {
+        color: #e6e6e6;
+    }
+
+    .viewLink {
+        color: #e6e6e6;
+    }
+
+    .sessionBlock {
+        background-color: transparent !important;
+        border: 1px solid #e6e6e6;
+    }
+
+    .sessionBlock:hover {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .sessionBlock {
+        width: 100%;
+    }
+}

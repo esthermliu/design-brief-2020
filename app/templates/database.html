@@ -63,6 +63,7 @@
     {% endfor %}
     </table>
     <br>
+
     <!-- Speed-->
     <!--<h2>Speed</h2> 
     <table>
@@ -95,6 +96,8 @@
         <th>Course Code</th>
         <th>Teacher</th>
         <th>Course Status</th>
+        <th>Course Icon</th>
+        <th>Course Color</th>
         <th>Timestamp</th>
     </tr>
     {% for c in courses_all %}
@@ -104,6 +107,8 @@
             <td>{{ c.code }}</td>
             <td>{{ c.teacher }}</td>
             <td>{{ c.status }}</td>
+            <td>{{ c.icon }}</td>
+            <td>{{ c.color }}</td>
             <td>{{ c.timestamp }}</td>
         </tr>
     {% endfor %}
@@ -182,6 +187,7 @@
         <th>Course ID</th>
         <th>Course Name</th>
         <th>Teacher</th>
+        <th>Icon</th>
         <th>Timestamp</th>
     </tr>
     {% for u in user_signups %} <!-- user_signups will give you the User object, like <User Cat 1> -->
@@ -197,6 +203,60 @@
                 <td>{{ i.timestamp }}</td> 
             </tr>
         {% endfor %}
+    {% endfor %}
+    </table>
+    <br>
+
+    <h2>Responses</h2> 
+    <table>
+    <tr>
+        <th>ID</th>
+        <th>Student ID</th>
+        <th>Prompt ID</th>
+        <th>Responses</th>
+        <th>Course ID</th>
+        <th>Session ID</th>
+        <th>Timestamp</th>
+    </tr>
+    {% for r in responses_all %}
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.student_id }}</td>
+            <td>{{ r.responder }}</td>
+            <td>{{ r.form_responses }}</td>
+            <td>{{ r.course_response }}</td>
+            <td>{{ r.session_response }}</td>
+            <td>{{ r.timestamp }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+
+    <h2>Prompts</h2> 
+    <table>
+    <tr>
+        <th>ID</th>
+        <th>Teacher ID</th>
+        <th>Question</th>
+        <th>Responses</th>
+        <th>Course ID</th>
+        <th>Session ID</th>
+        <th>Timestamp</th>
+    </tr>
+    {% for r in prompts_all %}
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.teacher_id }}</td>
+            <td>{{ r.form_question }}</td>
+            <td>
+                {% for response in r.responses %}
+                    {{ response }}
+                {% endfor %}
+            </td>
+            <td>{{ r.course_form }}</td>
+            <td>{{ r.session_form }}</td>
+            <td>{{ r.timestamp }}</td>
+        </tr>
     {% endfor %}
     </table>
     <br>

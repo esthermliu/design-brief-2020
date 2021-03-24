@@ -1,0 +1,114 @@
+/* For phones and devices with smaller screens*/
+@media all and (max-width: 750px) {
+    .overallContainer {
+        flex-direction: column;
+        margin-top: 10%;
+        margin-bottom: 10%;
+    }
+
+    .overallThermoContainer {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10%;
+    }
+
+    .reactionsHolder {
+        width: 100%;
+        height: auto !important;
+    }
+
+    .visualFormHolder {
+        margin-bottom: 3%;
+    }
+
+    .visual_slow, .visual_fast {
+        width: 20%;
+    }
+
+    .studentVisualHolder {
+        width: 70%;
+    }
+
+    .showForm {
+        width: 30%;
+    }
+
+    .studentRoomVibe .faceHolder img {
+        width: 80% !important;
+        height: auto !important;
+    }
+
+    .teacherVibeInside .faceHolder {
+        width: 60% !important;
+    }
+
+    .showForm img {
+        width: 100%;
+    }
+
+    .largeReactionHolder {
+        padding: 5%;
+    }
+
+    .shadowBox {
+        width: 29%;
+        margin: 2%;
+    }
+
+    .dashes {
+        width: 100px;
+    }
+
+    .speedHolder, .teacherReactionHolder {
+        margin-right: 0 !important;
+        width: 48% !important;
+    }
+
+    .reactionResultsHolder, .paceBox {
+        min-width: auto !important;
+    }
+
+    #reactionResults, #speedResults {
+        padding-top: 10%; 
+        padding-bottom: 10%;
+    }
+
+    .userReactionView {
+        flex-direction: column-reverse;
+        justify-content: center;
+        text-align: center;
+        padding-bottom: 10%;
+        padding-top: 10%;
+    }
+
+    .attendanceBox {
+        width: 100%;
+        margin-top: 5%;
+    }
+
+    .teacherVibeInside {
+        height: auto !important;
+    }
+
+    
+    .textVibe {
+        text-align: center;
+    }
+
+}
+
+@media all and (max-width: 1100px) { 
+
+    #responseBoxHolder {
+        height: 45% !important;
+    }
+
+    .keepClose {
+        justify-content: flex-end;
+    }
+
+    .visual_slow, .visual_fast {
+        width: 15% !important;
+    }
+
+}

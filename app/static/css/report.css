@@ -1,0 +1,106 @@
+body {
+    font-family: "Montserrat", sans-serif !important;
+}
+
+#sessionDataHolder, #sessionData {
+    width: 100%;
+}
+
+#sessionData {
+    display: flex;
+    justify-content: space-between;
+}
+
+#startEndTimes {
+    justify-content: right;
+}
+
+#formDataHolder {
+    page-break-before: always;
+}
+
+h2, h3 {
+    font: normal normal 8000 25px/30px;
+    letter-spacing: 0.5px;
+    word-spacing: 3px;
+}
+
+h4 {
+    font: normal normal 8000 20px/25px;
+    letter-spacing: 0.5px;
+    word-spacing: 3px;
+}
+
+.attendanceList {
+    list-style-type: "\2023  ";
+    font-size: normal;
+}
+
+.li {
+    font: normal normal 100 18px/18px inherit;
+    letter-spacing: 0px;
+    word-spacing: 5px;
+}
+
+p, table {
+    font: normal normal 100 15px/15px inherit;
+    letter-spacing: 0px;
+    word-spacing: 5px;
+}
+
+b {
+    font: normal normal 1000 15px/15px inherit;
+    letter-spacing: 0px;
+    word-spacing: 5px;
+}
+
+p {
+    font: normal normal 200 15px/15px inherit;
+    letter-spacing: 0px;
+    word-spacing: 5px;
+}
+
+table {
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+td {
+    text-justify: right;
+}
+
+th {
+    /* padding-left: 15px; */
+    justify-content: center;
+    align-items: center;
+}
+
+.tableImage {
+    width: 35px;
+    justify-self: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.noReactions {
+    background-color: rgb(255, 236, 236);
+}
+
+.alignRight {
+    text-align: right;
+}
+
+.formsSeparator {
+    border: 1px solid #A8D0E6;
+}
+
+.sectionSeparator {
+    border: 2px double #A8D0E6;
+}

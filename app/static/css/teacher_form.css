@@ -1,0 +1,39 @@
+
+html {
+    background-image: url("/static/images/TeacherForm2.png");
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#prompt {
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+    border-bottom: 2px solid gray;
+    padding: 12px 0px;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.promptHolder {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
+.promptHolder label {
+    margin-top: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    input {
+        color: #e6e6e6;
+    }
+
+}

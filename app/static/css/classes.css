@@ -14,7 +14,7 @@
         margin-bottom: 1%;
         min-width: 150px;
         max-width: 200px;
-        width: 16.66%;
+        width: 33%;
         height: 250px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         transition-duration: 0.3s;
@@ -33,14 +33,14 @@
         align-items: center;
         justify-content: center;
         width: 95%;
+        height: 50%
     }
     
     .classImage img {
-        width: 100%;
+        height: 100%;
     }
     
     .classDescription {
-        color: black;
         margin-top: 15px;
         display: flex;
         flex-direction: column;
@@ -52,6 +52,7 @@
 
     .courseName {
         font-size: 30px;
+        text-align: center;
     }
 
         /* Title underline */
@@ -60,7 +61,6 @@
         position: relative;
         font-size: 40px;
         font-weight: 600;
-        color: black;
     }
 
     .titleHolder h1:after {
@@ -80,6 +80,8 @@
         justify-content: space-between;
         align-items: center;
     }
+
+    
     
 }
 
@@ -116,27 +118,30 @@
     .classImage {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: left;
+        padding-left: 20px;
         width: 33%;
+        height: 90%
     }
     
     .classImage img {
-        width: 100%;
+        /* width: 100%; */
+        height: 90%;
     }
 
     .classDescription {
-        color: black;
         margin: 15px;
         margin-right: 25px;
         align-items: flex-end;
         display: flex;
         flex-direction: column;
-        line-height: 35px;
+        line-height: 25px;
         width: 66%;
     }
 
     .courseName {
         font-size: 25px;
+        text-align: center;
     }
 
     /* Title underline */
@@ -145,7 +150,6 @@
         position: relative;
         font-size: 30px;
         font-weight: 600;
-        color: black;
         margin-bottom: 30px;
     }
 
@@ -225,3 +229,60 @@
     background-color: #a8d0e6 !important;
 }
 
+.orange {
+    background-color: rgb(245, 187, 111);
+}
+
+.green {
+    background-color: rgb(147, 218, 147);
+}
+
+.purple {
+    background-color: #808fca !important;
+}
+@media (prefers-color-scheme: dark){
+    .classDescription {
+        color: #e6e6e6;
+    }
+
+    .courseCode {
+        border-top: 2px solid #A8D0E6 !important;
+    }
+    
+    .titleHolder h1 {
+        color: #e6e6e6;
+    }
+
+    .classBlock {
+        background-color: transparent !important;
+        border: 1px solid #e6e6e6;
+    }
+
+    .classBlock:hover {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+    }
+    
+    .titleHolder h1:after {
+        background-color: #A8D0E6;
+    }
+    
+    .createLink, .joinClassButton {
+        background-color: #297499;
+        color: #e6e6e6;
+        box-shadow: 0 4px 2px 0 rgba(255, 255, 255, 0.15), 0 3px 7px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .createLink:hover, .joinClassButton:hover {
+        box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.15), 0 0px 0px 0 rgba(0, 0, 0, 0.1);
+    }
+    
+    .joinStudent {
+        border-bottom: 1px solid #e6e6e6;
+        background-color: transparent;
+        color: #e6e6e6;
+    }
+    
+    img {
+        filter: brightness(.8) contrast(1.2);
+    }
+}

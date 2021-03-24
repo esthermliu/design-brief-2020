@@ -1,6 +1,7 @@
 @media (max-width: 600px) {
     header {
-        height: 60px;
+        /* height: 60px; */
+        height: fit-content;
         width: 100%;
         position: fixed;
         bottom: 0;
@@ -40,12 +41,12 @@
         margin: 10px;
     }
 
-    .uppermost {
+    /* .uppermost {
         text-align: center;
         height: 80%;
         width: 60px;
         margin: 10px;
-    }
+    } */
 
     .imageLinkHolder {
         display: flex;
@@ -63,9 +64,14 @@
     .contentHolder {
         margin: 15px 15px 60px;   
     }
+
+    #themeBox {
+        bottom: 70px;
+        right: 10px;
+    }
 }
 
-@media screen and (min-width: 601px) {
+@media screen and (min-width: 600px) {
     header {
         height: 100vh;
         width: 80px;
@@ -76,19 +82,20 @@
         text-transform: uppercase;
         z-index: 100;
         font-family: "Montserrat", sans-serif;
+        background-color: #24305E;
         position: fixed;
         top: 0;
         box-shadow: 4px 2px 8px 0 rgba(0, 0, 0, 0.3);
     }
     
     nav {
-        background-color: #24305E;
         width: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
+        margin: 0;
         left: 0;
     }
     
@@ -139,6 +146,11 @@
     .contentHolder {
         margin: 45px 45px 45px 125px;   
     }
+
+    #themeBox {
+        bottom: 30px;
+        right: 10px;
+    }
 }
 
 body {
@@ -156,6 +168,25 @@ h2, h3 {
     font-weight: 400;
 }
 
+#themeBox {
+    background-color: white;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+#moon {
+    width: 90%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .flashHolder {
     position: absolute;
     top: 0;
@@ -166,10 +197,11 @@ h2, h3 {
     align-items: center;
     justify-content: center;
     margin-top: 2%;
+    padding-inline-start: 0px !important;
 }
 
 .flashHolder li {
-    width: 80%;
+    z-index: 100;
     max-width: 400px;
     display: flex;
     align-items: center;
@@ -177,7 +209,7 @@ h2, h3 {
     border-radius: 20px;
     list-style-type: none;
     background-color: #F76C6C;
-    padding: 1%;
+    padding: 20px;
     color: white;
     text-align: center;
     box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 7px 0 rgba(0, 0, 0, 0.1);
@@ -187,5 +219,17 @@ h2, h3 {
     background-color: #A9D099  !important;
 }
 
+@media (prefers-color-scheme: dark) {
+    html {
+        background-color: rgb(32, 30, 31);
+        color: #e6e6e6 !important;
+    }
 
+    img {
+        filter: brightness(0.9)
+    }
 
+    header {
+        background-color: #000000 !important;
+    }
+}
