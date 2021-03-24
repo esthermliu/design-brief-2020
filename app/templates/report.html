@@ -97,7 +97,11 @@
                             <th>Response</th>
                             <th>Timestamp</th>
                             {% for student, response in f['responses'].items() %}
-                                <tr>
+                                {% if response['response'] == "--" %}
+                                    <tr class="noReactions">
+                                {% else %}
+                                    <tr>
+                                {% endif %}
                                     <td>{{ student_keys[student] }}</td>
                                     <td class="alignRight">{{ response['response'] }}</td>
                                     <td class="alignRight">{{ response['timestamp'] }}</td>

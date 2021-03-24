@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block head %}
-     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -13,7 +15,8 @@
             <!--</div>-->
             <div class = "innerBox">
                 <div class = "signInBox">
-                    <h1>Welcome!</h1>
+                    <!-- <h1>Welcome!</h1> -->
+                    <h1 id="appName">Engage</h1>
                     <form action="" method="post" novalidate class = "signIn">
                         {{ form.hidden_tag() }}
                         <p class = "username">

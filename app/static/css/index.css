@@ -1,0 +1,41 @@
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: rgb(32, 30, 31) !important;
+        color: #e6e6e6;
+    }
+
+    button {
+        color: #e6e6e6;
+    }
+}
+
+@media (min-width: 600px) {
+    .contentHolder {
+        padding-left: 60px;
+    }
+}
+
+.contentHolder {
+    width: 90%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#carousel-container {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+}
+
+#extension-download {
+    border: 0;
+    background-color: transparent !important;
+    border-bottom: 2px solid #505AC9;
+    padding: 0;
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.35);
+    border-radius: 30px;
+}

@@ -1,3 +1,7 @@
+try:
+    import cPickle as pickle
+except:
+    import pickle
 from datetime import datetime
 from app import db
 from app import login
@@ -93,6 +97,7 @@ class Prompts(db.Model):
     id = db.Column(db.Integer, primary_key=True) # every new database should have an ID so it knows how to organize the info passed in
     teacher_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Taking the user ID from the user model, using the backref of teacher_prompter will show you the actual user
     form_question = db.Column(db.String(140))
+    form_options = db.Column(db.Integer, default=0)
     responses = db.relationship('Responses', backref='responder', lazy='dynamic') # This will show all responses to this form
     form_course_id = db.Column(db.Integer, db.ForeignKey('courses.id')) # Using backref of course_form will show you the actual course
     session_id = db.Column(db.Integer, db.ForeignKey('session.id')) # Using backref actual_session of will show you the actual session, e.g. <Session>

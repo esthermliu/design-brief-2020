@@ -1,6 +1,7 @@
 @media (max-width: 600px) {
     header {
-        height: 60px;
+        /* height: 60px; */
+        height: fit-content;
         width: 100%;
         position: fixed;
         bottom: 0;
@@ -40,12 +41,12 @@
         margin: 10px;
     }
 
-    .uppermost {
+    /* .uppermost {
         text-align: center;
         height: 80%;
         width: 60px;
         margin: 10px;
-    }
+    } */
 
     .imageLinkHolder {
         display: flex;
@@ -81,19 +82,20 @@
         text-transform: uppercase;
         z-index: 100;
         font-family: "Montserrat", sans-serif;
+        background-color: #24305E;
         position: fixed;
         top: 0;
         box-shadow: 4px 2px 8px 0 rgba(0, 0, 0, 0.3);
     }
     
     nav {
-        background-color: #24305E;
         width: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
+        margin: 0;
         left: 0;
     }
     

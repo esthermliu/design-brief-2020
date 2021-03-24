@@ -20,15 +20,14 @@ body {
 }
 
 h2, h3 {
-    /* font-weight: 400; */
-    font: normal normal 8000 25px/30px inherit;
-    letter-spacing: 0px;
+    font: normal normal 8000 25px/30px;
+    letter-spacing: 0.5px;
     word-spacing: 3px;
 }
 
 h4 {
-    font: normal normal 8000 20px/25px inherit;
-    letter-spacing: 0px;
+    font: normal normal 8000 20px/25px;
+    letter-spacing: 0.5px;
     word-spacing: 3px;
 }
 
@@ -51,6 +50,12 @@ p, table {
 
 b {
     font: normal normal 1000 15px/15px inherit;
+    letter-spacing: 0px;
+    word-spacing: 5px;
+}
+
+p {
+    font: normal normal 200 15px/15px inherit;
     letter-spacing: 0px;
     word-spacing: 5px;
 }
@@ -85,7 +90,7 @@ th {
 }
 
 .noReactions {
-    background-color: rgb(253, 215, 215);
+    background-color: rgb(255, 236, 236);
 }
 
 .alignRight {
