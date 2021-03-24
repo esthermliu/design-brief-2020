@@ -56,9 +56,9 @@ def index():
     # return redirect(url_for('login'))
     return render_template('index.html', title="Home")
 
-@app.route('/ActionPackage', methods=['POST'])
+@app.route('/microsoft-teams-engage-upload', methods=['POST'])
 def download_extension():
-    return send_file("./static/ActionPackage.zip", attachment_filename="ActionPackage.zip")
+    return send_file("./static/microsoft-teams-engage-upload.zip", attachment_filename="ActionPackage.zip")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

@@ -9,6 +9,19 @@
     }
 }
 
+@media (min-width: 600px) {
+    .contentHolder {
+        padding-left: 60px;
+    }
+}
+
+.contentHolder {
+    width: 90%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #carousel-container {
     width: 100%;
     display: block;

@@ -10,9 +10,9 @@
 {% block content %}
 <body>
     <div class="contentHolderInside">
-        <h3>Welcome to Slate!</h3>
+        <h3>Welcome to Engage!</h3>
         <div id="carousel-container">
-            <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="7000">
+            <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="5000">
                 <ol class="carousel-indicators">
                     <li data-target="#carousel" data-slide-to="0" class="active"></li>
                     <li data-target="#carousel" data-slide-to="1"></li>
@@ -22,7 +22,7 @@
                     <div class="carousel-item active">
                         <img class="d-block w-100" src="{{ url_for('static', filename='images/index_1.jpg') }}" alt="First slide">
                         <div class="carousel-caption d-none d-md-block">
-                            <h5 class="captionText">Welcome to Slate!</h5>
+                            <h5 class="captionText">Welcome to Engage!</h5>
                             <p class="captionText">An app designed to aid teachers and students in the virtual classroom</p>
                         </div>
                     </div>
@@ -55,11 +55,12 @@
     <div>
         <h4>Want to download our Microsoft Teams Extension instead?</h4>
         <ol>
-            <li><form action="ActionPackage" method="post">First, click below to download our app extension by <button id="extension-download" type="submit">clicking here.</button></form></li>
+            <li><form action="microsoft-teams-engage-upload" method="post">First, click below to download our app extension by <button id="extension-download" type="submit">clicking here.</button></form></li>
             <li>Then, open Microsoft Teams and click on apps.</li>
             <li>Click on Upload a custom app, and select the AppPackage.zip file when prompted.</li>
             <li>The app will now be available for users in your organization to add to a chat, channel, and meeting</li>
         </ol>
+        <p>Version: 1.1.21 (Last updated: 3/24/21)</p>
         <p>Note: Your organization must have <a href="https://docs.microsoft.com/en-us/microsoftteams/admin-settings">app sideloading</a> available to use custom apps</p>
         
     </div>
