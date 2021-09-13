@@ -903,28 +903,28 @@ def previous_session_data(course_id, session_id):
                                         title=course.course_name + " Session " + session_id) 
 
 # Just so I can see all the databases
-@app.route('/database') 
-def database():
-    user_all = User.query.all() # All the users are stored in this variable, to be used in the HTML 
-    reactions_all = Reactions.query.all()
-    courses_all = Courses.query.all()
-    signups_all = Signups.query.all()
-    session_all = Session.query.all()
-    prompts_all = Prompts.query.all()
-    responses_all = Responses.query.all()
+# @app.route('/database') 
+# def database():
+#     user_all = User.query.all() # All the users are stored in this variable, to be used in the HTML 
+#     reactions_all = Reactions.query.all()
+#     courses_all = Courses.query.all()
+#     signups_all = Signups.query.all()
+#     session_all = Session.query.all()
+#     prompts_all = Prompts.query.all()
+#     responses_all = Responses.query.all()
 
-    #user_signups = User.query.join(Signups, (Signups.user_id == User.id)) 
-    user_signups = User.query.join(Signups, (Signups.user_id == User.id)).join(Courses, (Courses.id == Signups.course)) 
-    return render_template('database.html', 
-                            user_all=user_all, 
-                            reactions_all=reactions_all, 
-                            courses_all=courses_all, 
-                            session_all=session_all, 
-                            signups_all=signups_all, 
-                            user_signups=user_signups, 
-                            title='Database',
-                            responses_all=responses_all,
-                            prompts_all=prompts_all) # Have to pass in your variables above in here
+#     #user_signups = User.query.join(Signups, (Signups.user_id == User.id)) 
+#     user_signups = User.query.join(Signups, (Signups.user_id == User.id)).join(Courses, (Courses.id == Signups.course)) 
+#     return render_template('database.html', 
+#                             user_all=user_all, 
+#                             reactions_all=reactions_all, 
+#                             courses_all=courses_all, 
+#                             session_all=session_all, 
+#                             signups_all=signups_all, 
+#                             user_signups=user_signups, 
+#                             title='Database',
+#                             responses_all=responses_all,
+#                             prompts_all=prompts_all) # Have to pass in your variables above in here
 
 # Testing javascript image reload
 @app.route('/image-reload')

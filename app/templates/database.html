@@ -19,17 +19,11 @@
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.password_hash }}</td>
-            {% if user.role == 0 %}
-                <td>Teacher</td>
-            {% else %}
-                <td>Student</td>
-            {% endif %}
-            <td>{{ user.about_me }}</td>
-            <td>{{ user.last_seen }}</td>
         </tr>
     {% endfor %}
     </table>
     <br>
+    
     <!-- Reactions -->
     <h2>Reactions</h2> 
     <table>

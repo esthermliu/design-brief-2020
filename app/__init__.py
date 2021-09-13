@@ -14,18 +14,15 @@ login = LoginManager(app)
 login.login_view = 'login'
 moment = Moment(app)
 mail = Mail(app)
+db.init_app(app)
+migrate.init_app(app, db)
+login.init_app(app)
+moment.init_app(app)
 
 
-def create_app(config_class=Config):
-    app = Flask(__name__)
-    app.config.from_object(config_class)
+# def create_app(config_class=Config):
 
-    db.init_app(app)
-    migrate.init_app(app, db)
-    login.init_app(app)
-    moment.init_app(app)
-
-    return app
+#     return app
 
 
 from app import routes, models 
